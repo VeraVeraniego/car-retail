@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { LoginForm } from "./components/LoginForm.component";
+import { LoginForm } from "./components/LoginForm";
 import { ProtectedOutlet } from "./components/ProtectedOutlet";
 import { TopBar } from "./components/TopBar.component";
 import { PATHNAME } from "./utils/constants";
