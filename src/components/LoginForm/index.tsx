@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { VALIDATE_EMAIL } from "../../graphql/queries";
 import { defaultTheme, GlobalStyle } from "../../theme";
+import { H1 } from "../styled";
 import {
   ButtonAndValidation,
   Form,
   Input,
   LoginButton,
+  LoginH1,
   ValidationText,
 } from "./styled";
 import { EmailVars, Response } from "./types";
@@ -31,9 +33,6 @@ export const LoginForm = () => {
       return;
     }
     setErrorMessage("Not Allowed");
-
-    // why the console.log commented below doesn't wait for the await?
-    // console.log("test", data);
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMessage("");
@@ -42,6 +41,7 @@ export const LoginForm = () => {
   return (
     <Form>
       <GlobalStyle />
+      <LoginH1>WELCOME!</LoginH1>
       <Input
         type="text"
         name="username"
@@ -51,7 +51,6 @@ export const LoginForm = () => {
       />
       <ButtonAndValidation>
         <LoginButton disabled={!credentials || loading} onClick={handleSubmit}>
-          {/* {loading ? "Loading..." : "Form"} */}
           {loading ? "Loading..." : "LOGIN"}
         </LoginButton>
         <ValidationText
