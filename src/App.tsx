@@ -1,23 +1,8 @@
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
-import { LoginForm } from "./components/LoginForm";
-import { ProtectedOutlet } from "./components/ProtectedOutlet";
-import { TopBar } from "./components/TopBar.component";
-import { PATHNAME } from "./utils/constants";
+import React from "react";
+import { AppRouter } from "./routes/AppRouter";
 
-function App() {
-  return (
-    <Routes>
-      <Route path={PATHNAME.LOGIN} element={<LoginForm />} />
-      <Route path="/" element={<TopBar />}>
-        <Route path={PATHNAME.HOME} element={<TopBar />} />
-      </Route>
-      {/* Protected Routes Below */}
-      <Route element={<ProtectedOutlet />}>
-        <Route path={PATHNAME.WATCH_LIST} element={<TopBar />} />
-      </Route>
-    </Routes>
-  );
-}
+const App = () => {
+  return <AppRouter />;
+};
 
 export default App;
