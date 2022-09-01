@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserContext } from "./context/UserContext";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 import { User } from "./interfaces/User";
 import { AppRouter } from "./routes/AppRouter";
+import { STORAGE_KEY } from "./utils/constants";
 
 const App = () => {
-  const [user, setUser] = useState<User | undefined>();
-  //TODO: get from local storage and put insedo provider
+  const [storedUser, setStoredUser] = useLocalStorage(STORAGE_KEY.USER, "");
+  const [loggedUser, setLoggedUser] = useState<User | false>(storedUser);
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <AppRouter />;
+    <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
+      <AppRouter />
     </UserContext.Provider>
   );
 };
