@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { PATHNAME, REPLACE } from "../../utils/constants";
 import { NavButton } from "../styled";
 

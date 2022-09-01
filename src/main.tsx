@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { UserContext } from "./context/UserContext";
+import { UserContext } from "./contexts/UserContext";
 
 const client = new ApolloClient({
   uri: import.meta.env.VITE_API_URL,

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { defaultTheme, GlobalStyle } from "../../theme";
 import { PATHNAME, REPLACE } from "../../utils/constants";
 import { H1, NavButton } from "../styled";
