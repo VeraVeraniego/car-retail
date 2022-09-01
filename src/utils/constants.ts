@@ -5,3 +5,7 @@ export const PATHNAME = {
   RETAIL_CARS: "/retail-cars",
   WATCH_LIST: "/watch-list",
 };
+export const STORAGE_KEY = {
+  USER: "user",
+};
+export const REPLACE = { replace: true };
