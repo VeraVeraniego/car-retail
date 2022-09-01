@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IUserContext, UserContext } from "../../contexts/UserContext";
+import { useUsersLazyQuery } from "../../graphql/generated/graphql";
 import { VALIDATE_EMAIL } from "../../graphql/queries";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { defaultTheme, GlobalStyle } from "../../theme";
@@ -30,11 +31,9 @@ export const LoginForm = () => {
     if (!data?.users.length) {
       return;
     }
-    console.log("data.users passed", data?.users[0]);
     setLoggedUser(data?.users[0]);
     navigate("/");
     setUserInStorage(data?.users[0]);
-    // NOTE: SAVE USER IN LOCALSTORAGE (CREATE CUSTOM HOOK)
   }, [data]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -44,14 +43,17 @@ export const LoginForm = () => {
       return;
     }
     const resp = await validateEmail({
-      // TODO: CHECK APOLLO CLIENT ERROR HANDLING
       variables: { where: { email: { _eq: emailInput } } },
     });
-    if (resp?.data?.users?.length) {
-      // TODO: AGREGAR LOGICA CONDICIONAL DE MODAL Y PAGE
-      return;
+    // Error Handling
+    if (resp?.data?.users?.length === 0) setErrorMessage("Not Allowed");
+    else {
+      if (error) setErrorMessage(`Error: ${error.message}`);
+      else setErrorMessage("Something went wrong.");
     }
-    setErrorMessage("Not Allowed");
+    return;
+
+    // TODO: AGREGAR LOGICA CONDICIONAL DE MODAL Y PAGE
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
