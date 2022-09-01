@@ -1,8 +1,9 @@
-import React from "react";
-import { Navigate, Outlet, Route, RouteProps } from "react-router-dom";
+import React, { useContext } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 export const ProtectedOutlet = (props: any) => {
-  const isLoggedIn: boolean = true;
-  return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
+  const { loggedUser } = useContext(UserContext);
+  return loggedUser ? <Outlet /> : <Navigate to="/login" />;
   // return <Route {...props} />;
 };
