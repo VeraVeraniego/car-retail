@@ -24,3 +24,16 @@ export const Button = styled.button`
     background-color: ${defaultTheme.palette.gray};
   }
 `;
+export const NavButton = styled(Button)`
+  margin-top: 8px;
+  align-self: flex-start;
+  color: ${defaultTheme.palette.darkblue};
+  width: auto;
+  height: auto;
+  padding: 8px;
+  border-radius: 4px;
+  &:hover {
+    color: ${defaultTheme.palette.white};
+    background-color: ${defaultTheme.palette.orange};
+  }
+`;
