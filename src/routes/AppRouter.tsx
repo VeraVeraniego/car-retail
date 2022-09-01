@@ -14,7 +14,7 @@ export function AppRouter() {
     <Routes>
       <Route path={PATHNAME.LOGIN} element={<Login />} />
       <Route path="/" element={<TopNavBar />}>
-        <Route path={PATHNAME.HOME} element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path={PATHNAME.RETAIL_CARS} element={<CarRetail />} />
         <Route path={PATHNAME.PUBLISH_FORM} element={<PublishCar />} />
         <Route element={<ProtectedOutlet />}>
