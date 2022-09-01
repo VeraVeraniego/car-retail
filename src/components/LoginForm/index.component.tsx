@@ -27,14 +27,12 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (!data) return;
-    // console.log("data.users", data?.users);
     if (!data?.users.length) {
-      console.log("!data.users");
       return;
     }
     console.log("data.users passed", data?.users[0]);
     setLoggedUser(data?.users[0]);
-    navigate(PATHNAME.HOME);
+    navigate("/");
     setUserInStorage(data?.users[0]);
     // NOTE: SAVE USER IN LOCALSTORAGE (CREATE CUSTOM HOOK)
   }, [data]);
