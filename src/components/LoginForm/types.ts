@@ -7,7 +7,7 @@ export interface Response {
 export interface EmailVars {
   where: {
     email: {
-      _ilike: string;
+      _eq: string;
     };
   };
 }
