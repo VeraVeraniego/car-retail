@@ -1,23 +1,16 @@
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
-import { LoginForm } from "./components/LoginForm";
-import { ProtectedOutlet } from "./components/ProtectedOutlet";
-import { TopBar } from "./components/TopBar.component";
-import { PATHNAME } from "./utils/constants";
+import React, { useState } from "react";
+import { UserContext } from "./context/UserContext";
+import { User } from "./interfaces/User";
+import { AppRouter } from "./routes/AppRouter";
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState<User | undefined>();
+  //TODO: get from local storage and put insedo provider
   return (
-    <Routes>
-      <Route path={PATHNAME.LOGIN} element={<LoginForm />} />
-      <Route path="/" element={<TopBar />}>
-        <Route path={PATHNAME.HOME} element={<TopBar />} />
-      </Route>
-      {/* Protected Routes Below */}
-      <Route element={<ProtectedOutlet />}>
-        <Route path={PATHNAME.WATCH_LIST} element={<TopBar />} />
-      </Route>
-    </Routes>
+    <UserContext.Provider value={{ user, setUser }}>
+      <AppRouter />;
+    </UserContext.Provider>
   );
-}
+};
 
 export default App;

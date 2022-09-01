@@ -1,16 +1,22 @@
 import styled from "styled-components";
 import { defaultTheme } from "../../theme";
+import { Button, H1 } from "../styled";
+
+export const LoginH1 = styled(H1)`
+  padding-top: 32px;
+`;
 
 export const Form = styled.form`
-  width: 300;
-  height: 100vh;
-  padding-top: 33vh;
-  background: ${defaultTheme.palette.green};
+  width: 700px;
+  height: 450px;
+  /* padding-top: 100px; */
+  background: ${defaultTheme.palette.darkblue};
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 56px;
   justify-content: flex-start;
   align-items: center;
+  border-radius: 8px;
 `;
 export const Title = styled.h1`
   width: 203px;
@@ -33,25 +39,16 @@ export const ButtonAndValidation = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-export const LoginButton = styled.button`
-  position: relative;
+export const LoginButton = styled(Button)`
   font-size: 24px;
-  line-height: 29px;
-  width: 530px;
-  height: 90px;
-  background: ${defaultTheme.palette.lightorange};
-  color: #fff;
-  border: 0px solid;
   font-weight: 400;
   line-height: 29px;
   letter-spacing: 0em;
-  line-height: 29px;
-  cursor: pointer;
-  :disabled {
-    background-color: ${defaultTheme.palette.gray};
-  }
+  width: 530px;
+  height: 90px;
 `;
 export const ValidationText = styled.p`
-  color: #fff;
+  font-size: 16px;
+  color: ${defaultTheme.palette.red};
   margin-top: 16px;
 `;

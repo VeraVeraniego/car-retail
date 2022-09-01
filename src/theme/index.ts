@@ -8,8 +8,8 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 	html{
-		font-size: 10px;
-    line-height: 12px;
+		font-size: 12px;
+    line-height: 14px;
 		font-weight: 400;
 		font-family: 'Roboto', sans-serif;
 	}
