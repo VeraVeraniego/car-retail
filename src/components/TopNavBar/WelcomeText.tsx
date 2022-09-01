@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { UserContext } from "../context/UserContext";
-import { defaultTheme } from "../theme";
+import { UserContext } from "../../context/UserContext";
+import { defaultTheme } from "../../theme";
 
 export const WelcomeText = () => {
   const { loggedUser } = useContext(UserContext);

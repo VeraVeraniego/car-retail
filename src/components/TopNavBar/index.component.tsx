@@ -5,8 +5,8 @@ import { UserContext } from "../../context/UserContext";
 import { defaultTheme, GlobalStyle } from "../../theme";
 import { PATHNAME, REPLACE } from "../../utils/constants";
 import { H1, NavButton } from "../styled";
-import { ToogleLoginButton } from "../ToogleLoginButton.component";
-import { WelcomeText } from "../WelcomeText";
+import { ToogleLoginButton } from "./ToogleLoginButton.component";
+import { WelcomeText } from "./WelcomeText";
 
 export const TopNavBar = () => {
   const navigate = useNavigate();

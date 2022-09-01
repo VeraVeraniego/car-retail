@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import { PATHNAME, REPLACE } from "../utils/constants";
-import { NavButton } from "./styled";
+import { UserContext } from "../../context/UserContext";
+import { PATHNAME, REPLACE } from "../../utils/constants";
+import { NavButton } from "../styled";
 
 export const ToogleLoginButton = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);
