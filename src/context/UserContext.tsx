@@ -1,15 +1,21 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { STORAGE_KEY } from "../utils/constants";
 interface User {
   email: string;
   first_name: string;
   id: number;
   last_name: string;
-  uuid: string;
+  uuid?: string;
 }
 export interface IUserContext {
-  user: User | undefined;
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  loggedUser: User | false;
+  setLoggedUser: React.Dispatch<React.SetStateAction<User | false>>;
 }
-const contextInitializer = { user: undefined, setUser: () => {} };
+// const [loggedUser, setLoggedUser] = useLocalStorage(STORAGE_KEY.USER, "");
+const contextInitializer = {
+  loggedUser: false,
+  setLoggedUser: () => {},
+} as IUserContext;
 
 export const UserContext = createContext<IUserContext>(contextInitializer);
