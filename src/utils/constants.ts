@@ -9,3 +9,4 @@ export const STORAGE_KEY = {
   USER: "user",
 };
 export const REPLACE = { replace: true };
+export const IMG_URL = "https://picsum.photos/id";
