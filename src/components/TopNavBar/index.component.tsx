@@ -44,8 +44,15 @@ const BarContainer = styled.section`
   gap: 16px;
   align-items: center;
   justify-content: flex-end;
+  max-height: 77px;
   button:last-of-type {
     margin-right: 8px;
   }
 `;
-const PageContainer = styled.div``;
+const PageContainer = styled.div`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+`;
