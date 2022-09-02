@@ -30,7 +30,9 @@ export const P = styled.p`
 `;
 export const FlexRow = styled.div`
   display: flex;
-  flex-direction: row;
+`;
+export const FlexColumn = styled(FlexRow)`
+  flex-direction: column;
 `;
 export const Form = styled.form`
   background: ${defaultTheme.palette.darkblue};
