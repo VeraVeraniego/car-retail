@@ -15,7 +15,7 @@ import { CarContainer } from "../components/CarContainer/index.component";
 
 export const CarRetail = () => {
   const HEADERS = [
-    "Imagen",
+    "Image",
     "Bach Info",
     "Vehicle Info",
     "Condition",
@@ -41,7 +41,7 @@ export const CarRetail = () => {
       </FirstRow>
       <HeadersRow>
         {HEADERS.map((ele, index) => (
-          <H4 key={index}>{ele}</H4>
+          <TableHead key={index}>{ele}</TableHead>
         ))}
       </HeadersRow>
       <CarContainer />
@@ -93,11 +93,17 @@ const OrderButton = styled(ButtonOnHoverOppacity)`
   width: 90px;
 `;
 const HeadersRow = styled(FlexRow)`
+  padding-left: 8px;
   margin-top: 24px;
   justify-content: flex-start;
-  gap: 15vw;
-`;
 
+  h4:first-of-type {
+    max-width: 160px;
+  }
+`;
+const TableHead = styled(H4)`
+  flex-grow: 1;
+`;
 const Container = styled.section`
   background-color: ${defaultTheme.palette.bglightgray};
   padding-left: 24px;
