@@ -108,5 +108,6 @@ const Container = styled.section`
   background-color: ${defaultTheme.palette.bglightgray};
   padding-left: 24px;
   padding-right: 24px;
-  height: 90vh;
+  min-height: calc(100vh - 93px);
+  height: auto;
 `;
