@@ -13,6 +13,25 @@ export const H2 = styled.h2`
   line-height: 30px;
   font-weight: 100;
 `;
+export const H3 = styled.h3`
+  color: ${defaultTheme.palette.darkblue};
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: 100;
+`;
+export const H4 = styled.h4`
+  color: ${defaultTheme.palette.darkgray};
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 100;
+`;
+export const P = styled.p`
+  /*  */
+`;
+export const FlexRow = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 export const Form = styled.form`
   background: ${defaultTheme.palette.darkblue};
   display: flex;
@@ -21,12 +40,13 @@ export const Form = styled.form`
   border-radius: 8px;
 `;
 export const Button = styled.button`
-  font-size: 16px;
+  font-size: 12px;
+  line-height: 15px;
   font-weight: 400;
-  line-height: 18px;
+  width: 120px;
+  height: 30px;
+  border-radius: 5px;
   letter-spacing: 0em;
-  width: 150px;
-  height: 50px;
   position: relative;
   background: ${defaultTheme.palette.lightorange};
   color: ${defaultTheme.palette.white};
@@ -34,6 +54,11 @@ export const Button = styled.button`
   cursor: pointer;
   :disabled {
     background-color: ${defaultTheme.palette.gray};
+  }
+`;
+export const ButtonOnHoverOppacity = styled(Button)`
+  &:hover {
+    opacity: 0.8;
   }
 `;
 export const Input = styled.input`
