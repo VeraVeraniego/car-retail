@@ -7,7 +7,7 @@ import { useUsersLazyQuery } from "../../graphql/generated/graphql";
 import { VALIDATE_EMAIL } from "../../graphql/queries";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { defaultTheme, GlobalStyle } from "../../theme";
-import { PATHNAME, STORAGE_KEY } from "../../utils/constants";
+import { PATHNAME, REPLACE, STORAGE_KEY } from "../../utils/constants";
 import { Button, Form, H1, Input } from "../styled";
 
 import { EmailVars, Response } from "./types";
@@ -27,6 +27,7 @@ export const LoginForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (loggedUser) navigate("/", REPLACE);
     if (!data) return;
     if (!data?.users.length) {
       return;
