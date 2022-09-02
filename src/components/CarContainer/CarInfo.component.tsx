@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { defaultTheme } from "../../theme";
-import { Button, FlexColumn, FlexRow, H3, H4 } from "../styled";
+import { Button, FlexColumn, FlexRow, H3, H4, P } from "../styled";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-interface CarInfoProps {
+interface CarRowInfo {
+  img: string;
   title: string;
   batch: string;
   odo: number;
@@ -23,7 +24,7 @@ export const CarInfo = ({
   damageType,
   saleDate,
   state,
-}: CarInfoProps) => {
+}: CarRowInfo) => {
   return (
     <Container>
       <CarImage></CarImage>
@@ -33,7 +34,7 @@ export const CarInfo = ({
         <Value>{batch}</Value>
         <FavoriteButton>
           <WatchIcon />
-          Favorite
+          Watch
         </FavoriteButton>
       </Column>
       <Column>
@@ -82,10 +83,9 @@ const FavoriteButton = styled(Button)`
     background-color: ${defaultTheme.palette.lightyellow};
   }
 `;
-const Value = styled(H4)`
+const Value = styled(P)``;
+const Title = styled(H4)`
   color: ${defaultTheme.palette.darkblue};
-`;
-const Title = styled(Value)`
   font-weight: 600;
 `;
 // TODO: change line below from div to img

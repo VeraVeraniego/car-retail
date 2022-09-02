@@ -26,7 +26,9 @@ export const H4 = styled.h4`
   font-weight: 100;
 `;
 export const P = styled.p`
-  /*  */
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 100;
 `;
 export const FlexRow = styled.div`
   display: flex;
