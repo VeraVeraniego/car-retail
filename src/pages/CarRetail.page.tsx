@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { MdSearch } from "react-icons/md";
 import {
-  Button,
   ButtonOnHoverOppacity,
   FlexRow,
   Form,
-  H3,
   H4,
   Input,
 } from "../components/styled";
 import { defaultTheme } from "../theme";
 import { CarContainer } from "../components/CarContainer/index.component";
+import { OrderBy } from "../components/OrderBy.component";
+import { CarRowInfo, Filters } from "../interfaces/Car";
 
 export const CarRetail = () => {
+  const [cars, setCars] = useState<CarRowInfo[] | null>(null);
+
+  const [filters, setFilters] = useState<Filters>({
+    searchInput: "",
+    orderBy: "",
+  });
   const HEADERS = [
     "Image",
     "Bach Info",
@@ -21,30 +27,42 @@ export const CarRetail = () => {
     "Condition",
     "Sell Info",
   ];
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
   }
+
   return (
     <Container>
       <FirstRow>
         <PublishNewCarButton>Publish New Car</PublishNewCarButton>
         <SearchForm onSubmit={handleSubmit}>
           <SearchVector />
-          <SearchInput placeholder="Search"></SearchInput>
+          <SearchInput
+            placeholder="Search"
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                searchInput: e.target.value,
+              })
+            }
+          ></SearchInput>
           {/* <SearchLogo /> */}
           <SearchButton>Search in Inventory</SearchButton>
         </SearchForm>
-        <H4>
-          Order By:
-          <OrderButton>Sale Date</OrderButton>
-        </H4>
+        <OrderBy
+          cars={cars}
+          setCars={setCars}
+          filters={filters}
+          setFilters={setFilters}
+        />
       </FirstRow>
       <HeadersRow>
         {HEADERS.map((ele, index) => (
           <TableHead key={index}>{ele}</TableHead>
         ))}
       </HeadersRow>
-      <CarContainer />
+      <CarContainer cars={cars} setCars={setCars} />
     </Container>
   );
 };
@@ -86,11 +104,6 @@ const SearchButton = styled(ButtonOnHoverOppacity)`
   width: 160px;
   color: ${defaultTheme.palette.darkblue};
   background-color: ${defaultTheme.palette.green};
-`;
-const OrderButton = styled(ButtonOnHoverOppacity)`
-  background-color: ${defaultTheme.palette.red};
-  margin-left: 8px;
-  width: 90px;
 `;
 const HeadersRow = styled(FlexRow)`
   padding-left: 8px;
