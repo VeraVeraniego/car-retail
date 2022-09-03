@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { LoginForm } from "../components/LoginForm/index.component";
-import { defaultTheme } from "../theme";
+import { LoginForm } from "../../components/LoginForm/index.component";
+import { defaultTheme } from "../../theme";
 
 export const Login = () => {
   return (

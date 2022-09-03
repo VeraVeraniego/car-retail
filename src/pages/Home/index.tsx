@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { H1, H2 } from "../components/styled";
-import { defaultTheme } from "../theme";
+import { H1, H2 } from "../../components/styled";
+import { defaultTheme } from "../../theme";
 
 export const Home = () => {
   return (

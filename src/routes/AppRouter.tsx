@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { TopNavBar } from "../components/TopNavBar/index.component";
-import { CarRetail } from "../pages/CarRetail.page";
-import { FavoriteCars } from "../pages/FavoriteCars.page";
-import { Home } from "../pages/Home.page";
-import { Login } from "../pages/Login.page";
-import { PublishCar } from "../pages/PublishCar.page";
+import { CarRetail } from "../pages/CarRetail";
+import { FavoriteCars } from "../pages/FavoriteCars";
+import { Home } from "../pages/Home";
+import { Login } from "../pages/Login";
+import { PublishCar } from "../pages/PublishCar";
+
 import { PATHNAME } from "../utils/constants";
 import { ProtectedOutlet } from "./ProtectedOutlet";
 
