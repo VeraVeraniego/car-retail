@@ -16,6 +16,7 @@ export const CarInfo = ({
   saleDate,
   place,
 }: CarRowInfo) => {
+  const now = new Date();
   return (
     <Container>
       <CarImage src={img} alt={title} />
@@ -50,7 +51,15 @@ export const CarInfo = ({
         <Title>
           Sale Date
           <br />
-          <Value>{saleDate}</Value>
+          {now < new Date(saleDate) ? (
+            <Value>{saleDate}</Value>
+          ) : (
+            <RedValue>{`${saleDate} - sold`}</RedValue>
+          )}
+          {/* <Value>
+            {saleDate}
+            {new Date(saleDate) < new Date() ? "gone" : ""}
+          </Value> */}
           <Value>{place}</Value>
         </Title>
       </Column>
@@ -77,6 +86,10 @@ const FavoriteButton = styled(Button)`
   }
 `;
 const Value = styled(P)``;
+const RedValue = styled(Value)`
+  color: ${defaultTheme.palette.red};
+`;
+
 const Title = styled(H4)`
   color: ${defaultTheme.palette.darkblue};
   font-weight: 600;
