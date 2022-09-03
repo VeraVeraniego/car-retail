@@ -10,3 +10,16 @@ export const STORAGE_KEY = {
 };
 export const REPLACE = { replace: true };
 export const IMG_URL = "https://picsum.photos/id";
+
+export const CAR_SKELETON_PROPS = {
+  id: 0,
+  img: "Loading",
+  title: "Loading",
+  batch: "Loading",
+  odo: "Loading",
+  price: "Loading",
+  condition: "Loading",
+  damageType: "Loading",
+  saleDate: "Loading",
+  place: "Loading",
+};
