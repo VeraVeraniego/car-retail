@@ -3,18 +3,7 @@ import styled from "styled-components";
 import { defaultTheme } from "../../theme";
 import { Button, FlexColumn, FlexRow, H3, H4, P } from "../styled";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-export interface CarRowInfo {
-  img?: string;
-  title: string;
-  batch: string;
-  vin?: string;
-  odo: string | number;
-  price: string;
-  condition: string;
-  damageType: string;
-  saleDate: string;
-  place: string;
-}
+import { CarRowInfo } from "../../interfaces/Car";
 
 export const CarInfo = ({
   img,
@@ -40,11 +29,13 @@ export const CarInfo = ({
         </FavoriteButton>
       </Column>
       <Column>
-        <Title>
-          ODOmeter
-          <br />
-          <Value>{odo}</Value>
-        </Title>
+        {odo && (
+          <Title>
+            ODOmeter
+            <br />
+            <Value>{odo}</Value>
+          </Title>
+        )}
         <Title>
           Estimated Price
           <br />
@@ -90,7 +81,6 @@ const Title = styled(H4)`
   color: ${defaultTheme.palette.darkblue};
   font-weight: 600;
 `;
-// TODO: change line below from div to img
 const CarImage = styled.img`
   margin-right: 8px;
   max-width: 160px;
@@ -98,7 +88,7 @@ const CarImage = styled.img`
   flex-grow: 1;
   border-radius: 8px;
   height: 104px;
-  background-color: ${defaultTheme.palette.red};
+  background-color: ${defaultTheme.palette.gray};
 `;
 const Column = styled(FlexColumn)`
   height: 100%;
