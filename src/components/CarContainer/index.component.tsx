@@ -1,14 +1,13 @@
-import { useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Cars, useCarsQuery } from "../../graphql/generated/graphql";
-import { GET_CARS } from "../../graphql/queries";
-import { IMG_URL } from "../../utils/constants";
-import { FlexColumn } from "../styled";
-import { CarInfo, CarRowInfo } from "./CarInfo.component";
-export const CarContainer = () => {
+import { CarRowInfo, CarState } from "../../interfaces/Car";
+import { CAR_SKELETON_PROPS, IMG_URL } from "../../utils/constants";
+import { FlexColumn, H2, ValidationText } from "../styled";
+import { CarInfo } from "./CarInfo.component";
+
+export const CarContainer = ({ cars, setCars }: CarState) => {
   const { data, error, loading } = useCarsQuery();
-  const [cars, setCars] = useState<CarRowInfo[] | null>(null);
 
   useEffect(() => {
     if (!data) return;
@@ -20,6 +19,7 @@ export const CarContainer = () => {
 
   function responseCarToCarComponent(queryCar: Cars) {
     const shapedCar: CarRowInfo = {
+      id: queryCar.id,
       title: `${queryCar.model.brand.name} ${queryCar.model.name} ${queryCar.year}`,
       batch: queryCar.batch,
       vin: queryCar.vin,
@@ -40,20 +40,33 @@ export const CarContainer = () => {
 
   return (
     <Container>
-      {cars?.map((ele, ind) => (
-        <CarInfo
-          key={ele.vin}
-          img={IMG_URL + "/10" + ind + "/300/200"}
-          title={ele.title}
-          batch={ele.batch}
-          odo={ele.odo}
-          price={ele.price}
-          condition={ele.condition}
-          damageType={ele.damageType}
-          saleDate={ele.saleDate}
-          place={ele.place}
-        />
-      ))}
+      {loading ? (
+        <>
+          <CarInfo {...CAR_SKELETON_PROPS} />
+          <CarInfo {...CAR_SKELETON_PROPS} />
+          <CarInfo {...CAR_SKELETON_PROPS} />
+          {/* <CarInfo {...CAR_SKELETON_PROPS} /> */}
+        </>
+      ) : error ? (
+        <ValidationText>
+          Error {error.message ? "- " + error.message : "- Unknown"}
+        </ValidationText>
+      ) : (
+        cars?.map((ele, ind) => (
+          <CarInfo
+            key={ele.vin}
+            img={`${IMG_URL}/10${ele.id}/300/200`}
+            title={ele.title}
+            batch={ele.batch}
+            odo={ele.odo}
+            price={ele.price}
+            condition={ele.condition}
+            damageType={ele.damageType}
+            saleDate={ele.saleDate}
+            place={ele.place}
+          />
+        ))
+      )}
       {/* <CarInfo />
       <CarInfo />
       <CarInfo />
