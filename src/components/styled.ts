@@ -82,3 +82,8 @@ export const NavButton = styled(Button)`
     background-color: ${defaultTheme.palette.orange};
   }
 `;
+export const ValidationText = styled.p`
+  font-size: 16px;
+  color: ${defaultTheme.palette.red};
+  margin: 16px;
+`;

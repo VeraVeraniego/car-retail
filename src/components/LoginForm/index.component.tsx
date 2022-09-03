@@ -8,7 +8,7 @@ import { VALIDATE_EMAIL } from "../../graphql/queries";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { defaultTheme, GlobalStyle } from "../../theme";
 import { PATHNAME, REPLACE, STORAGE_KEY } from "../../utils/constants";
-import { Button, Form, H1, Input } from "../styled";
+import { Button, Form, H1, Input, ValidationText } from "../styled";
 
 import { EmailVars, Response } from "./types";
 
@@ -122,9 +122,4 @@ const ButtonAndValidation = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-const ValidationText = styled.p`
-  font-size: 16px;
-  color: ${defaultTheme.palette.red};
-  margin-top: 16px;
 `;
