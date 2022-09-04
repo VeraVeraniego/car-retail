@@ -56,10 +56,6 @@ export const CarInfo = ({
           ) : (
             <RedValue>{`${saleDate} - sold`}</RedValue>
           )}
-          {/* <Value>
-            {saleDate}
-            {new Date(saleDate) < new Date() ? "gone" : ""}
-          </Value> */}
           <Value>{place}</Value>
         </Title>
       </Column>

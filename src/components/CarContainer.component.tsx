@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Cars, useCarsQuery } from "../../graphql/generated/graphql";
-import { CarRowInfo, CarsState } from "../../interfaces/Car";
-import { CAR_SKELETON_PROPS, IMG_URL } from "../../utils/constants";
-import { FlexColumn, H2, ValidationText } from "../styled";
+import { Cars, useCarsQuery } from "../graphql/generated/graphql";
+import { CarRowInfo, CarsState } from "../interfaces/Car";
+import { CAR_SKELETON_PROPS, IMG_URL } from "../utils/constants";
+import { FlexColumn, H2, ValidationText } from "./styled";
 import { CarInfo } from "./CarInfo.component";
 
 export const CarContainer = ({ carsState }: CarsState) => {

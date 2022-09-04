@@ -2,15 +2,14 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IUserContext, UserContext } from "../../contexts/UserContext";
-import { useUsersLazyQuery } from "../../graphql/generated/graphql";
-import { VALIDATE_EMAIL } from "../../graphql/queries";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { defaultTheme, GlobalStyle } from "../../theme";
-import { PATHNAME, REPLACE, STORAGE_KEY } from "../../utils/constants";
-import { Button, Form, H1, Input, ValidationText } from "../styled";
-
-import { EmailVars, Response } from "./types";
+import { IUserContext, UserContext } from "../contexts/UserContext";
+import { useUsersLazyQuery } from "../graphql/generated/graphql";
+import { VALIDATE_EMAIL } from "../graphql/queries";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { EmailVars, Response } from "../interfaces/User";
+import { defaultTheme, GlobalStyle } from "../theme";
+import { PATHNAME, REPLACE, STORAGE_KEY } from "../utils/constants";
+import { Button, Form, H1, Input, ValidationText } from "./styled";
 
 export const LoginForm = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);

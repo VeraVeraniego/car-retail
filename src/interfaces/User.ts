@@ -5,3 +5,14 @@ export interface User {
   last_name: string;
   uuid?: string;
 }
+export interface Response {
+  users: User[];
+}
+
+export interface EmailVars {
+  where: {
+    email: {
+      _eq: string;
+    };
+  };
+}

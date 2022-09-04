@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { GlobalStyle } from "../../theme";
-import { H1 } from "../styled";
+import { GlobalStyle } from "../theme";
+import { H1 } from "./styled";
 
 export const PublishCarForm = () => {
   return (
