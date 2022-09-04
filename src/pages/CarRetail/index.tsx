@@ -12,6 +12,7 @@ import { defaultTheme } from "../../theme";
 import { CarContainer } from "../../components/CarContainer.component";
 import { OrderBy } from "../../components/OrderBy.component";
 import { CarRowInfo, Filters } from "../../interfaces/Car";
+import { CarSearchForm } from "../../components/styled/CarSearchForm";
 
 export const CarRetail = () => {
   const carsState = useState<CarRowInfo[] | null>(null);
@@ -19,7 +20,6 @@ export const CarRetail = () => {
     searchInput: "",
     orderBy: "",
   });
-  const [filters, setFilters] = filtersState;
 
   const HEADERS = [
     "Image",
@@ -29,28 +29,11 @@ export const CarRetail = () => {
     "Sell Info",
   ];
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-  }
-
   return (
     <Container>
       <FirstRow>
         <PublishNewCarButton>Publish New Car</PublishNewCarButton>
-        <SearchForm onSubmit={handleSubmit}>
-          <SearchVector />
-          <SearchInput
-            placeholder="Search"
-            onChange={(e) =>
-              setFilters({
-                ...filters,
-                searchInput: e.target.value,
-              })
-            }
-          ></SearchInput>
-          {/* <SearchLogo /> */}
-          <SearchButton>Search in Inventory</SearchButton>
-        </SearchForm>
+        <CarSearchForm filtersState={filtersState} />
         <OrderBy carsState={carsState} filtersState={filtersState} />
       </FirstRow>
       <HeadersRow>
@@ -62,12 +45,6 @@ export const CarRetail = () => {
     </Container>
   );
 };
-
-const SearchVector = styled(MdSearch)`
-  font-size: 16px;
-  margin-left: 8px;
-  margin-right: 8px;
-`;
 
 const FirstRow = styled(FlexRow)`
   margin-top: 16px;
@@ -81,26 +58,7 @@ const PublishNewCarButton = styled(ButtonOnHoverOppacity)`
   background-color: ${defaultTheme.palette.blue};
   color: ${defaultTheme.palette.white};
 `;
-const SearchForm = styled(Form)`
-  background-color: ${defaultTheme.palette.white};
-  align-items: center;
-  flex-direction: row;
-  flex-grow: 1;
-  flex-basis: 500px;
 
-  width: 100%;
-  height: 29px;
-  border-radius: 4px;
-`;
-const SearchInput = styled(Input)`
-  width: 100%;
-  outline: none;
-`;
-const SearchButton = styled(ButtonOnHoverOppacity)`
-  width: 160px;
-  color: ${defaultTheme.palette.darkblue};
-  background-color: ${defaultTheme.palette.green};
-`;
 const HeadersRow = styled(FlexRow)`
   padding-left: 8px;
   margin-top: 24px;
