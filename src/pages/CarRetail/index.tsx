@@ -9,7 +9,7 @@ import {
   Input,
 } from "../../components/styled";
 import { defaultTheme } from "../../theme";
-import { CarContainer } from "../../components/CarContainer/index.component";
+import { CarContainer } from "../../components/CarContainer.component";
 import { OrderBy } from "../../components/OrderBy.component";
 import { CarRowInfo, Filters } from "../../interfaces/Car";
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { TopNavBar } from "../components/TopNavBar/index.component";
+import { TopNavBar } from "../components/TopNavBar.component";
 import { CarRetail } from "../pages/CarRetail";
 import { FavoriteCars } from "../pages/FavoriteCars";
 import { Home } from "../pages/Home";

@@ -1,5 +1,5 @@
 import React from "react";
-import { PublishCarForm } from "../../components/PublishCarForm/index.component";
+import { PublishCarForm } from "../../components/PublishCarForm.component";
 
 export const PublishCar = () => {
   return (

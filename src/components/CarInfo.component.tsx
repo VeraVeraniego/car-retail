@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { defaultTheme } from "../../theme";
-import { Button, FlexColumn, FlexRow, H3, H4, P } from "../styled";
+import { defaultTheme } from "../theme";
+import { Button, FlexColumn, FlexRow, H3, H4, P } from "./styled";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import { CarRowInfo } from "../../interfaces/Car";
+import { CarRowInfo } from "../interfaces/Car";
 
 export const CarInfo = ({
   img,
