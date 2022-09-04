@@ -13,13 +13,13 @@ export const IMG_URL = "https://picsum.photos/id";
 
 export const CAR_SKELETON_PROPS = {
   id: 0,
-  img: "Loading",
+  img: "",
   title: "Loading",
-  batch: "Loading",
-  odo: "Loading",
-  price: "Loading",
-  condition: "Loading",
-  damageType: "Loading",
-  saleDate: "Loading",
-  place: "Loading",
+  batch: "",
+  odo: "",
+  price: "",
+  condition: "",
+  damageType: "",
+  saleDate: "",
+  place: "",
 };
