@@ -14,6 +14,14 @@ export const CarSearchForm = ({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const filteredCars = cars?.filter((e) => {
+      if (e.title.includes(filters.searchInput)) {
+        console.log("existance");
+        return e;
+      }
+    });
+    if (filteredCars) setCars(filteredCars);
+    else setCars(null);
   }
   return (
     <SearchForm onSubmit={handleSubmit}>
