@@ -1,15 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { CarsAndFilters } from "../interfaces/Car";
+import { CarsAndFiltersState } from "../interfaces/Car";
 import { defaultTheme } from "../theme";
 import { ButtonOnHoverOppacity, H4 } from "./styled";
 
-export const OrderBy = ({
-  cars,
-  setCars,
-  filters,
-  setFilters,
-}: CarsAndFilters) => {
+export const OrderBy = ({ carsState, filtersState }: CarsAndFiltersState) => {
+  const [cars, setCars] = carsState;
+  const [filters, setFilters] = filtersState;
+
   function toogleOrderBy() {
     if (!cars) return console.error("Cars not available");
     // const saleDate = new Date(cars![0].saleDate);
@@ -25,6 +23,7 @@ export const OrderBy = ({
       const carsSortedDesc = cars?.sort((a, b) => {
         return new Date(a.saleDate).valueOf() - new Date(b.saleDate).valueOf();
       });
+
       setCars(carsSortedDesc);
       setFilters({ ...filters, orderBy: "ASC" });
     }
