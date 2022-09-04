@@ -2,11 +2,15 @@ import React from "react";
 import { MdSearch } from "react-icons/md";
 import styled from "styled-components";
 import { ButtonOnHoverOppacity, Form, Input } from ".";
-import { FiltersState } from "../../interfaces/Car";
+import { CarsAndFiltersState, FiltersState } from "../../interfaces/Car";
 import { defaultTheme } from "../../theme";
 
-export const CarSearchForm = ({ filtersState }: FiltersState) => {
+export const CarSearchForm = ({
+  carsState,
+  filtersState,
+}: CarsAndFiltersState) => {
   const [filters, setFilters] = filtersState;
+  const [cars, setCars] = carsState;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

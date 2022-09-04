@@ -33,7 +33,7 @@ export const CarRetail = () => {
     <Container>
       <FirstRow>
         <PublishNewCarButton>Publish New Car</PublishNewCarButton>
-        <CarSearchForm filtersState={filtersState} />
+        <CarSearchForm carsState={carsState} filtersState={filtersState} />
         <OrderBy carsState={carsState} filtersState={filtersState} />
       </FirstRow>
       <HeadersRow>
