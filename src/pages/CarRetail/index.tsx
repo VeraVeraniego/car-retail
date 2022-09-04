@@ -14,12 +14,13 @@ import { OrderBy } from "../../components/OrderBy.component";
 import { CarRowInfo, Filters } from "../../interfaces/Car";
 
 export const CarRetail = () => {
-  const [cars, setCars] = useState<CarRowInfo[] | null>(null);
-
-  const [filters, setFilters] = useState<Filters>({
+  const carsState = useState<CarRowInfo[] | null>(null);
+  const filtersState = useState<Filters>({
     searchInput: "",
     orderBy: "",
   });
+  const [filters, setFilters] = filtersState;
+
   const HEADERS = [
     "Image",
     "Bach Info",
@@ -50,19 +51,14 @@ export const CarRetail = () => {
           {/* <SearchLogo /> */}
           <SearchButton>Search in Inventory</SearchButton>
         </SearchForm>
-        <OrderBy
-          cars={cars}
-          setCars={setCars}
-          filters={filters}
-          setFilters={setFilters}
-        />
+        <OrderBy carsState={carsState} filtersState={filtersState} />
       </FirstRow>
       <HeadersRow>
         {HEADERS.map((ele, index) => (
           <TableHead key={index}>{ele}</TableHead>
         ))}
       </HeadersRow>
-      <CarContainer cars={cars} setCars={setCars} />
+      <CarContainer carsState={carsState} />
     </Container>
   );
 };
