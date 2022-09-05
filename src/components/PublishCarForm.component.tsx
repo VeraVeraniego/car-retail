@@ -29,8 +29,8 @@ export const PublishCarForm = () => {
   const onSubmit: SubmitHandler<any> = (data) => console.log(data);
 
   const TESTSELECT = (
-    <select>
-      <option disabled value="">
+    <select defaultValue={"none"}>
+      <option disabled value="none">
         Select an option
       </option>
       <option value="Toyota">Toyota</option>
