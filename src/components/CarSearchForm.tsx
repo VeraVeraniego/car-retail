@@ -1,9 +1,9 @@
 import React from "react";
 import { MdSearch } from "react-icons/md";
 import styled from "styled-components";
-import { ButtonOnHoverOppacity, Form, Input } from ".";
-import { CarsAndFiltersState, FiltersState } from "../../interfaces/Car";
-import { defaultTheme } from "../../theme";
+import { ButtonOnHoverOppacity, Form, Input } from "./styled";
+import { CarsAndFiltersState, FiltersState } from "../interfaces/Car";
+import { defaultTheme } from "../theme";
 
 export const CarSearchForm = ({
   carsState,
@@ -15,13 +15,13 @@ export const CarSearchForm = ({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const filteredCars = cars?.filter((e) => {
-      if (e.title.includes(filters.searchInput)) {
+      if (e.title.toLowerCase().includes(filters.searchInput.toLowerCase())) {
         console.log("existance");
         return e;
       }
     });
-    if (filteredCars) setCars(filteredCars);
-    else setCars(null);
+    if (!filteredCars) setCars(null);
+    else setCars(filteredCars);
   }
   return (
     <SearchForm onSubmit={handleSubmit}>

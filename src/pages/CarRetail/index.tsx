@@ -12,7 +12,7 @@ import { defaultTheme } from "../../theme";
 import { CarContainer } from "../../components/CarContainer.component";
 import { OrderBy } from "../../components/OrderBy.component";
 import { CarRowInfo, Filters } from "../../interfaces/Car";
-import { CarSearchForm } from "../../components/styled/CarSearchForm";
+import { CarSearchForm } from "../../components/CarSearchForm";
 
 export const CarRetail = () => {
   const carsState = useState<CarRowInfo[] | null>(null);
