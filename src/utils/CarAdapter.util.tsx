@@ -9,6 +9,7 @@ export function responseCarToCarComponent(queryCar: Cars) {
     vin: queryCar.vin,
     odo: queryCar.odometer ? queryCar.odometer : "",
     price: queryCar.price,
+    // TODO: utilize TS enums
     condition:
       queryCar.condition === "A"
         ? "Salvage Title"
