@@ -17,8 +17,8 @@ export const CarSearchForm = ({
     const filteredCars = cars?.filter((e) => {
       if (
         e.title.toLowerCase().includes(filters.searchInput.toLowerCase()) ||
-        e.batch == filters.searchInput ||
-        e.vin?.toUpperCase() == filters.searchInput.toUpperCase()
+        e.batch === filters.searchInput ||
+        e.vin?.toUpperCase() === filters.searchInput.toUpperCase()
       ) {
         return e;
       }
