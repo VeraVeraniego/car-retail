@@ -14,14 +14,6 @@ export const CarContainer = ({ carsState }: CarsState) => {
   const [cars, setCars] = carsState;
   const { data, error, loading } = useCarsQuery();
 
-  // useEffect(() => {
-  //   if (!data) return;
-  //   const adaptedCars = data.cars.map((elem) =>
-  //     responseCarToCarComponent(elem as Cars)
-  //   );
-  //   setCars(adaptedCars);
-  // }, [data]);
-
   return (
     <Container>
       {loading ? (
@@ -29,7 +21,6 @@ export const CarContainer = ({ carsState }: CarsState) => {
           <CarInfo {...CAR_SKELETON_PROPS} />
           <CarInfo {...CAR_SKELETON_PROPS} />
           <CarInfo {...CAR_SKELETON_PROPS} />
-          {/* <CarInfo {...CAR_SKELETON_PROPS} /> */}
         </>
       ) : error ? (
         <ValidationText>
