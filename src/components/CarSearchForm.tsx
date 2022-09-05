@@ -39,7 +39,9 @@ export const CarSearchForm = ({
         }
       ></SearchInput>
       {/* <SearchLogo /> */}
-      <SearchButton>Search in Inventory</SearchButton>
+      <SearchButton disabled={!filters.searchInput}>
+        Search in Inventory
+      </SearchButton>
     </SearchForm>
   );
 };
