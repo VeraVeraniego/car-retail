@@ -5,7 +5,7 @@ schema:
       x-hasura-admin-secret: rTisquXVdS2Ffxe5nK92OnNQjK72OpuKTPWUpM4kbr33bUF5zVHj63tET1N8jhez
 documents: src/**/!(*.d).{ts,tsx}
 generates:
-  src/generated/graphql.tsx:
+  src/graphql/generated/graphql.tsx:
     plugins:
       - "typescript"
       - "typescript-operations"

@@ -47,6 +47,43 @@ export const GET_CARS = gql`
     }
   }
 `;
+export const GET_ORDERED_CARS = gql`
+  query OrderedCars($orderBy: [cars_order_by!]) {
+    cars(order_by: $orderBy) {
+      batch
+      city {
+        name
+        id
+        state {
+          id
+          name
+        }
+      }
+      color {
+        id
+        name
+      }
+      condition
+      damage_type
+      description
+      id
+      odometer
+      price
+      sale_date
+      title
+      vin
+      year
+      model {
+        id
+        name
+        brand {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
 
 export const GET_BRANDS_AND_MODELS = gql`
   query Brands {

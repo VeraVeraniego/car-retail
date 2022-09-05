@@ -12,7 +12,7 @@ import {
   H4,
 } from "./styled";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useBrandsQuery } from "../generated/graphql";
+import { useBrandsQuery } from "../graphql/generated/graphql";
 
 export const PublishCarForm = () => {
   const {
