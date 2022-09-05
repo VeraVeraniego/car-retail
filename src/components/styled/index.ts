@@ -1,6 +1,14 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { defaultTheme } from "../../theme";
 
+export const CSSFlexCol = css`
+  display: flex;
+  flex-direction: column;
+`;
+export const CSSCenteredFlexCol = css`
+  ${CSSFlexCol};
+  align-items: center;
+`;
 export const H1 = styled.h1`
   color: ${defaultTheme.palette.white};
   font-size: 40px;
