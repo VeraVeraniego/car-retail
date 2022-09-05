@@ -4,30 +4,25 @@ import styled from "styled-components";
 import { ButtonOnHoverOppacity, Form, Input } from "./styled";
 import { CarsAndFiltersState, FiltersState } from "../interfaces/Car";
 import { defaultTheme } from "../theme";
-import { useCarsLazyQuery } from "../graphql/generated/graphql";
 
 export const CarSearchForm = ({
   carsState,
   filtersState,
-}: //TODO: refetchCars Props
-CarsAndFiltersState) => {
+}: CarsAndFiltersState) => {
   const [filters, setFilters] = filtersState;
   const [cars, setCars] = carsState;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // TODO: REFETCH DATA BEFORE FILTER
     const filteredCars = cars?.filter((e) => {
       if (
         e.title.toLowerCase().includes(filters.searchInput.toLowerCase()) ||
         e.batch == filters.searchInput ||
         e.vin?.toUpperCase() == filters.searchInput.toUpperCase()
       ) {
-        console.log("existance");
         return e;
       }
     });
-
     if (!filteredCars) setCars(null);
     else setCars(filteredCars);
   }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdSearch } from "react-icons/md";
 import {
@@ -13,14 +13,26 @@ import { CarContainer } from "../../components/CarContainer.component";
 import { OrderBy } from "../../components/OrderBy.component";
 import { CarRowInfo, Filters } from "../../interfaces/Car";
 import { CarSearchForm } from "../../components/CarSearchForm";
+import { responseCarToCarComponent } from "../../utils";
+import { Cars, useCarsQuery } from "../../graphql/generated/graphql";
 
 export const CarRetail = () => {
   const carsState = useState<CarRowInfo[] | null>(null);
+  const [cars, setCars] = carsState;
   const filtersState = useState<Filters>({
     searchInput: "",
     orderBy: "",
   });
+  const [filters, setFilters] = filtersState;
+  const { data, error, loading } = useCarsQuery();
 
+  useEffect(() => {
+    if (!data) return;
+    const adaptedCars = data.cars.map((elem) =>
+      responseCarToCarComponent(elem as Cars)
+    );
+    setCars(adaptedCars);
+  }, [data, filters.searchInput]);
   const HEADERS = [
     "Image",
     "Bach Info",
