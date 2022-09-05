@@ -13,8 +13,9 @@ import { CarContainer } from "../../components/CarContainer.component";
 import { OrderBy } from "../../components/OrderBy.component";
 import { CarRowInfo, Filters } from "../../interfaces/Car";
 import { CarSearchForm } from "../../components/CarSearchForm";
-import { responseCarToCarComponent } from "../../utils";
+import { PATHNAME, REPLACE, responseCarToCarComponent } from "../../utils";
 import { Cars, useCarsQuery } from "../../graphql/generated/graphql";
+import { useNavigate } from "react-router-dom";
 
 export const CarRetail = () => {
   const carsState = useState<CarRowInfo[] | null>(null);
@@ -25,6 +26,7 @@ export const CarRetail = () => {
   });
   const [filters, setFilters] = filtersState;
   const { data, error, loading } = useCarsQuery();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!data) return;
@@ -32,6 +34,7 @@ export const CarRetail = () => {
       responseCarToCarComponent(elem as Cars)
     );
     setCars(adaptedCars);
+    setFilters({ ...filters, orderBy: "" });
   }, [data, filters.searchInput]);
   const HEADERS = [
     "Image",
@@ -44,7 +47,11 @@ export const CarRetail = () => {
   return (
     <Container>
       <FirstRow>
-        <PublishNewCarButton>Publish New Car</PublishNewCarButton>
+        <PublishNewCarButton
+          onClick={() => navigate(PATHNAME.PUBLISH_FORM, REPLACE)}
+        >
+          Publish New Car
+        </PublishNewCarButton>
         <CarSearchForm carsState={carsState} filtersState={filtersState} />
         <OrderBy carsState={carsState} filtersState={filtersState} />
       </FirstRow>
