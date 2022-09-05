@@ -3,10 +3,23 @@ import styled from "styled-components";
 import { CarsAndFiltersState } from "../interfaces/Car";
 import { defaultTheme } from "../theme";
 import { ButtonOnHoverOppacity, H4 } from "./styled";
-
+import {
+  TiArrowUnsorted,
+  TiArrowSortedUp,
+  TiArrowSortedDown,
+} from "react-icons/ti";
 export const OrderBy = ({ carsState, filtersState }: CarsAndFiltersState) => {
   const [cars, setCars] = carsState;
   const [filters, setFilters] = filtersState;
+
+  const currentSort =
+    filters.orderBy === "ASC" ? (
+      <TiArrowSortedUp />
+    ) : filters.orderBy === "DESC" ? (
+      <TiArrowSortedDown />
+    ) : (
+      <TiArrowUnsorted />
+    );
 
   function toogleOrderBy() {
     if (!cars) return console.error("Cars not available");
@@ -32,13 +45,19 @@ export const OrderBy = ({ carsState, filtersState }: CarsAndFiltersState) => {
   return (
     <H4>
       Order By:
-      <OrderButton onClick={toogleOrderBy}>Sale Date</OrderButton>
+      <OrderButton onClick={toogleOrderBy}>{currentSort}Sale Date</OrderButton>
     </H4>
   );
 };
 
 const OrderButton = styled(ButtonOnHoverOppacity)`
-  background-color: ${defaultTheme.palette.red};
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: inherit;
+  border: 1px solid ${defaultTheme.palette.red};
+  color: ${defaultTheme.palette.red};
+  line-height: 12px;
   margin-left: 8px;
   width: 90px;
 `;
