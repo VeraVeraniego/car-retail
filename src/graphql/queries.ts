@@ -47,3 +47,17 @@ export const GET_CARS = gql`
     }
   }
 `;
+
+export const GET_BRANDS_AND_MODELS = gql`
+  query Brands {
+    brands {
+      name
+      id
+      cars_count
+      models {
+        name
+        id
+      }
+    }
+  }
+`;
