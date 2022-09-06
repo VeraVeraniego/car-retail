@@ -22,3 +22,9 @@ export function responseCarToCarComponent(queryCar: Cars) {
   };
   return shapedCar;
 }
+
+export function adaptResponse(cars: Cars[]) {
+  // if (!cars) return;
+  const mapped = cars.map((elem) => responseCarToCarComponent(elem as Cars));
+  return mapped;
+}
