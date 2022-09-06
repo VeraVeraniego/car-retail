@@ -16,31 +16,22 @@ import { CarSearchForm } from "../../components/CarSearchForm";
 import { PATHNAME, REPLACE, responseCarToCarComponent } from "../../utils";
 import { Cars, useCarsQuery } from "../../graphql/generated/graphql";
 import { useNavigate } from "react-router-dom";
+import { useHandleCars } from "../../hooks/useHandleCars";
+import { adaptResponse } from "../../utils/CarAdapter.util";
 
 // NOTE: response car could go here
 
 export const CarRetail = () => {
   // TODO: rewrap states to pass as props
-  const carsState = useState<CarRowInfo[] | null>(null);
-  const [cars, setCars] = carsState;
-  const filtersState = useState<Filters>({
-    searchInput: "",
-    orderBy: "",
-  });
-  const [filters, setFilters] = filtersState;
+  const { data, toogleOrder, searchInInventory } = useHandleCars();
+  //2 const {cars, error, loading} = data;
+  // const carsState = useState<CarRowInfo[] | null>(null);
+  // const [cars, setCars] = carsState;
+  const filtersState = "";
+  const carsState = "";
   // TODO: cars state could be removed and data below used instead
-  const { data, error, loading } = useCarsQuery();
-
+  // const { data, error, loading } = useCarsQuery();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!data) return;
-    const adaptedCars = data.cars.map((elem) =>
-      responseCarToCarComponent(elem as Cars)
-    );
-    setCars(adaptedCars);
-    setFilters({ ...filters, orderBy: "" });
-  }, [data, filters.searchInput]);
 
   const HEADERS = [
     "Image",
@@ -59,17 +50,16 @@ export const CarRetail = () => {
           Publish New Car
         </PublishNewCarButton>
         {/* TODO: change filtering to make api queries */}
-        <CarSearchForm carsState={carsState} filtersState={filtersState} />
+        <CarSearchForm searchInInventory={searchInInventory} />
         {/* TODO: states could be used as custom hook */}
-        <OrderBy carsState={carsState} filtersState={filtersState} />
+        <OrderBy toogleOrder={toogleOrder} />
       </FirstRow>
       <HeadersRow>
-        {/* TODO: INDEX SHOULDN'T BE USED AS KEY */}
         {HEADERS.map((ele, index) => (
           <TableHead key={index + ele}>{ele}</TableHead>
         ))}
       </HeadersRow>
-      <CarContainer carsState={carsState} />
+      <CarContainer data={data} />
     </Container>
   );
 };
