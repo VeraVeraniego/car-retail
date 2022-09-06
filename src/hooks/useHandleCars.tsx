@@ -1,15 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Cars, Order_By, useCarsQuery } from "../graphql/generated/graphql";
+import {
+  Cars,
+  Order_By,
+  useCarsLazyQuery,
+  useCarsQuery,
+} from "../graphql/generated/graphql";
+import {
+  orderVariables,
+  searchByBatchVariables,
+  searchByTitleVariables,
+  searchByVINVariables,
+} from "../graphql/variables";
 import { CarRowInfo, Filters, SortOrder } from "../interfaces/Car";
 import { adaptResponse } from "../utils/CarAdapter.util";
 
+function isUUID(text: string) {
+  return text.match(
+    /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
+  );
+}
 export const useHandleCars = () => {
   const [cars, setCars] = useState<CarRowInfo[] | null>(null);
   const [orderBy, setOrderBy] = useState<Order_By | "">("");
-  const { data, error, loading, refetch } = useCarsQuery();
+  const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery();
 
   useEffect(() => {
-    if (!data) return;
+    if (!data) {
+      getCars();
+      return;
+    }
     const adaptedCars = adaptResponse(data.cars as Cars[]);
     setCars(adaptedCars);
   }, [data]);
@@ -26,31 +45,28 @@ export const useHandleCars = () => {
         orderToSet = Order_By.Desc;
       }
     }
-    const response = await refetch({
-      orderBy: [
-        {
-          sale_date: orderToSet!,
-        },
-      ],
-    });
-    const carsSorted = adaptResponse(response.data.cars as Cars[]);
-    setCars(carsSorted);
+    await refetch(orderVariables(orderToSet!));
 
     return orderToSet!;
   }
 
-  function searchInInventory(searchText: string) {
-    const filteredCars = cars?.filter((e) => {
-      if (
-        e.title.toLowerCase().includes(searchText.toLowerCase()) ||
-        e.batch === searchText ||
-        e.vin?.toUpperCase() === searchText.toUpperCase()
-      ) {
-        return e;
+  async function searchInInventory(searchText: string) {
+    if (!searchText) {
+      await getCars();
+      return;
+    }
+    if (isUUID(searchText)) {
+      await refetch(searchByBatchVariables(searchText));
+      return;
+    } else {
+      const titleResponse = await refetch(searchByTitleVariables(searchText));
+      if (titleResponse.data.cars.length) return console.log("title found");
+      else {
+        const vinResponse = await refetch(searchByVINVariables(searchText));
+        if (vinResponse.data.cars.length) return console.log("vin found");
+        else return console.log("not found in api");
       }
-    });
-    if (!filteredCars) setCars(null);
-    else setCars(filteredCars);
+    }
   }
 
   return { data: { cars, error, loading }, toogleOrder, searchInInventory };
@@ -65,7 +81,7 @@ export const useHandleCars = () => {
 //     });
 //     setCars(carsSortedAsc);
 //   } else {
-//     // FIXME: bug on orderBy state when initialized on ""
+//     // NOTE: the bug on this commented code was fixed in the current code
 //     if (orderBy === "DESC" || orderBy === "") {
 //       setOrderBy("ASC");
 //       const carsSortedDesc = cars?.sort((a, b) => {
@@ -79,4 +95,18 @@ export const useHandleCars = () => {
 
 //   console.log("end", orderBy);
 //   return orderBy;
+// }
+
+// function searchInInventory(searchText: string) {
+//   const filteredCars = cars?.filter((e) => {
+//     if (
+//       e.title.toLowerCase().includes(searchText.toLowerCase()) ||
+//       e.batch === searchText ||
+//       e.vin?.toUpperCase() === searchText.toUpperCase()
+//     ) {
+//       return e;
+//     }
+//   });
+//   if (!filteredCars) setCars(null);
+//   else setCars(filteredCars);
 // }
