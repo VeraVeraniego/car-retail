@@ -1,47 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdSearch } from "react-icons/md";
 import styled from "styled-components";
 import { ButtonOnHoverOppacity, Form, Input } from "./styled";
 import { CarsAndFiltersState, FiltersState } from "../interfaces/Car";
 import { defaultTheme } from "../theme";
 
-export const CarSearchForm = ({
-  carsState,
-  filtersState,
-}: CarsAndFiltersState) => {
-  const [filters, setFilters] = filtersState;
-  const [cars, setCars] = carsState;
+export const CarSearchForm = ({ searchInInventory }: any) => {
+  const [searchInput, setSearchInput] = useState<string>("");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const filteredCars = cars?.filter((e) => {
-      if (
-        e.title.toLowerCase().includes(filters.searchInput.toLowerCase()) ||
-        e.batch === filters.searchInput ||
-        e.vin?.toUpperCase() === filters.searchInput.toUpperCase()
-      ) {
-        return e;
-      }
-    });
-    if (!filteredCars) setCars(null);
-    else setCars(filteredCars);
+    searchInInventory(searchInput);
   }
+  // function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  //   setSearchInput(e.target.value);
+  //   searchInInventory(searchInput);
+  // }
   return (
-    <SearchForm onSubmit={handleSubmit}>
+    <SearchForm onSubmit={(e) => handleSubmit(e)}>
       <SearchVector />
       <SearchInput
         placeholder="Search"
-        onChange={(e) =>
-          setFilters({
-            ...filters,
-            searchInput: e.target.value,
-          })
-        }
+        onChange={(e) => setSearchInput(e.target.value)}
       ></SearchInput>
       {/* <SearchLogo /> */}
-      <SearchButton disabled={!filters.searchInput}>
-        Search in Inventory
-      </SearchButton>
+      <SearchButton disabled={!searchInput}>Search in Inventory</SearchButton>
     </SearchForm>
   );
 };
