@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Cars, useCarsQuery } from "../graphql/generated/graphql";
 import { CarRowInfo, CarsState } from "../interfaces/Car";
@@ -9,10 +9,23 @@ import {
 } from "../utils/index";
 import { FlexColumn, H2, ValidationText } from "./styled";
 import { CarInfo } from "./CarInfo.component";
+import { ApolloError } from "@apollo/client";
 
-export const CarContainer = ({ carsState }: CarsState) => {
-  const [cars, setCars] = carsState;
-  const { data, error, loading } = useCarsQuery();
+interface Props {
+  data: {
+    cars: CarRowInfo[] | null;
+    error: ApolloError | undefined;
+    loading: boolean;
+  };
+}
+
+export const CarContainer = ({ data }: Props) => {
+  const { cars, error, loading } = data;
+  const [renderedCars, setRenderedCars] = useState<CarRowInfo[] | null>(null);
+
+  useEffect(() => {
+    setRenderedCars(cars);
+  }, [cars]);
 
   return (
     <Container>
@@ -27,7 +40,7 @@ export const CarContainer = ({ carsState }: CarsState) => {
           Error {error.message ? "- " + error.message : "- Unknown"}
         </ValidationText>
       ) : (
-        cars?.map((ele, ind) => (
+        renderedCars?.map((ele, ind) => (
           <CarInfo
             key={ele.vin}
             img={`${IMG_URL}/10${ele.id}/300/200`}
