@@ -5,12 +5,7 @@ import { adaptResponse } from "../utils/CarAdapter.util";
 
 export const useHandleCars = () => {
   const [cars, setCars] = useState<CarRowInfo[] | null>(null);
-  // const {
-  //   data: dataOnInit,
-  //   error: errorOnInit,
-  //   loading: loadingOnInit,
-  // } = useCarsQuery();
-  const [orderBy, setOrderBy] = useState<Order_By | "">(Order_By.Desc);
+  const [orderBy, setOrderBy] = useState<Order_By | "">("");
   const { data, error, loading, refetch } = useCarsQuery();
 
   useEffect(() => {
@@ -21,31 +16,27 @@ export const useHandleCars = () => {
 
   async function toogleOrder() {
     if (!cars) return "";
-    let order: Order_By;
+    let orderToSet: Order_By;
     if (orderBy === Order_By.Asc) {
+      orderToSet = Order_By.Asc;
       setOrderBy(Order_By.Desc);
-      order = Order_By.Desc;
     } else {
-      // FIXME: bug on orderBy state when initialized on ""
       if (orderBy === Order_By.Desc || orderBy === "") {
-        console.log("is empty string", orderBy === "");
-
         setOrderBy(Order_By.Asc);
-        order = Order_By.Asc;
+        orderToSet = Order_By.Desc;
       }
     }
     const response = await refetch({
       orderBy: [
         {
-          sale_date: order!,
+          sale_date: orderToSet!,
         },
       ],
     });
     const carsSorted = adaptResponse(response.data.cars as Cars[]);
     setCars(carsSorted);
-    console.log("order by ", orderBy);
 
-    return orderBy;
+    return orderToSet!;
   }
 
   function searchInInventory(searchText: string) {
