@@ -327,6 +327,22 @@ export type Brands_Stddev_Samp_Fields = {
   id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "brands" */
+export type Brands_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Brands_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Brands_Stream_Cursor_Value_Input = {
+  cars_count?: InputMaybe<Scalars['smallint']>;
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type Brands_Sum_Fields = {
   __typename?: 'brands_sum_fields';
@@ -851,6 +867,37 @@ export type Cars_Stddev_Samp_Order_By = {
   year?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "cars" */
+export type Cars_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Cars_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Cars_Stream_Cursor_Value_Input = {
+  batch?: InputMaybe<Scalars['uuid']>;
+  brand_id?: InputMaybe<Scalars['Int']>;
+  city_id?: InputMaybe<Scalars['Int']>;
+  color_id?: InputMaybe<Scalars['Int']>;
+  condition?: InputMaybe<Scalars['bpchar']>;
+  create_date?: InputMaybe<Scalars['date']>;
+  damage_type?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  model_id?: InputMaybe<Scalars['Int']>;
+  odometer?: InputMaybe<Scalars['Int']>;
+  price?: InputMaybe<Scalars['money']>;
+  sale_date?: InputMaybe<Scalars['date']>;
+  state_id?: InputMaybe<Scalars['Int']>;
+  title?: InputMaybe<Scalars['String']>;
+  update_date?: InputMaybe<Scalars['date']>;
+  uuid?: InputMaybe<Scalars['uuid']>;
+  vin?: InputMaybe<Scalars['String']>;
+  year?: InputMaybe<Scalars['Int']>;
+};
+
 /** aggregate sum on columns */
 export type Cars_Sum_Fields = {
   __typename?: 'cars_sum_fields';
@@ -1248,6 +1295,22 @@ export type Cities_Stddev_Samp_Order_By = {
   state_id?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "cities" */
+export type Cities_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Cities_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Cities_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  state_id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type Cities_Sum_Fields = {
   __typename?: 'cities_sum_fields';
@@ -1482,6 +1545,21 @@ export type Colors_Stddev_Samp_Fields = {
   id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "colors" */
+export type Colors_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Colors_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Colors_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type Colors_Sum_Fields = {
   __typename?: 'colors_sum_fields';
@@ -1523,6 +1601,14 @@ export type Colors_Variance_Fields = {
   __typename?: 'colors_variance_fields';
   id?: Maybe<Scalars['Float']>;
 };
+
+/** ordering argument of a cursor */
+export enum Cursor_Ordering {
+  /** ascending ordering of the cursor */
+  Asc = 'ASC',
+  /** descending ordering of the cursor */
+  Desc = 'DESC'
+}
 
 /** Boolean expression to compare columns of type "date". All fields are combined with logical 'AND'. */
 export type Date_Comparison_Exp = {
@@ -1776,6 +1862,22 @@ export type Models_Stddev_Samp_Fields = {
 export type Models_Stddev_Samp_Order_By = {
   brand_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "models" */
+export type Models_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Models_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Models_Stream_Cursor_Value_Input = {
+  brand_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['uuid']>;
 };
 
 /** aggregate sum on columns */
@@ -2816,6 +2918,21 @@ export type States_Stddev_Samp_Fields = {
   id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "states" */
+export type States_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: States_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type States_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type States_Sum_Fields = {
   __typename?: 'states_sum_fields';
@@ -2866,48 +2983,64 @@ export type Subscription_Root = {
   brands_aggregate: Brands_Aggregate;
   /** fetch data from the table: "brands" using primary key columns */
   brands_by_pk?: Maybe<Brands>;
+  /** fetch data from the table in a streaming manner : "brands" */
+  brands_stream: Array<Brands>;
   /** An array relationship */
   cars: Array<Cars>;
   /** An aggregate relationship */
   cars_aggregate: Cars_Aggregate;
   /** fetch data from the table: "cars" using primary key columns */
   cars_by_pk?: Maybe<Cars>;
+  /** fetch data from the table in a streaming manner : "cars" */
+  cars_stream: Array<Cars>;
   /** An array relationship */
   cities: Array<Cities>;
   /** An aggregate relationship */
   cities_aggregate: Cities_Aggregate;
   /** fetch data from the table: "cities" using primary key columns */
   cities_by_pk?: Maybe<Cities>;
+  /** fetch data from the table in a streaming manner : "cities" */
+  cities_stream: Array<Cities>;
   /** fetch data from the table: "colors" */
   colors: Array<Colors>;
   /** fetch aggregated fields from the table: "colors" */
   colors_aggregate: Colors_Aggregate;
   /** fetch data from the table: "colors" using primary key columns */
   colors_by_pk?: Maybe<Colors>;
+  /** fetch data from the table in a streaming manner : "colors" */
+  colors_stream: Array<Colors>;
   /** An array relationship */
   models: Array<Models>;
   /** An aggregate relationship */
   models_aggregate: Models_Aggregate;
   /** fetch data from the table: "models" using primary key columns */
   models_by_pk?: Maybe<Models>;
+  /** fetch data from the table in a streaming manner : "models" */
+  models_stream: Array<Models>;
   /** fetch data from the table: "states" */
   states: Array<States>;
   /** fetch aggregated fields from the table: "states" */
   states_aggregate: States_Aggregate;
   /** fetch data from the table: "states" using primary key columns */
   states_by_pk?: Maybe<States>;
+  /** fetch data from the table in a streaming manner : "states" */
+  states_stream: Array<States>;
   /** fetch data from the table: "user_cars" */
   user_cars: Array<User_Cars>;
   /** fetch aggregated fields from the table: "user_cars" */
   user_cars_aggregate: User_Cars_Aggregate;
   /** fetch data from the table: "user_cars" using primary key columns */
   user_cars_by_pk?: Maybe<User_Cars>;
+  /** fetch data from the table in a streaming manner : "user_cars" */
+  user_cars_stream: Array<User_Cars>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
   users_aggregate: Users_Aggregate;
   /** fetch data from the table: "users" using primary key columns */
   users_by_pk?: Maybe<Users>;
+  /** fetch data from the table in a streaming manner : "users" */
+  users_stream: Array<Users>;
 };
 
 
@@ -2934,6 +3067,13 @@ export type Subscription_RootBrands_By_PkArgs = {
 };
 
 
+export type Subscription_RootBrands_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Brands_Stream_Cursor_Input>>;
+  where?: InputMaybe<Brands_Bool_Exp>;
+};
+
+
 export type Subscription_RootCarsArgs = {
   distinct_on?: InputMaybe<Array<Cars_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -2954,6 +3094,13 @@ export type Subscription_RootCars_AggregateArgs = {
 
 export type Subscription_RootCars_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootCars_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Cars_Stream_Cursor_Input>>;
+  where?: InputMaybe<Cars_Bool_Exp>;
 };
 
 
@@ -2980,6 +3127,13 @@ export type Subscription_RootCities_By_PkArgs = {
 };
 
 
+export type Subscription_RootCities_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Cities_Stream_Cursor_Input>>;
+  where?: InputMaybe<Cities_Bool_Exp>;
+};
+
+
 export type Subscription_RootColorsArgs = {
   distinct_on?: InputMaybe<Array<Colors_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -3000,6 +3154,13 @@ export type Subscription_RootColors_AggregateArgs = {
 
 export type Subscription_RootColors_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootColors_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Colors_Stream_Cursor_Input>>;
+  where?: InputMaybe<Colors_Bool_Exp>;
 };
 
 
@@ -3026,6 +3187,13 @@ export type Subscription_RootModels_By_PkArgs = {
 };
 
 
+export type Subscription_RootModels_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Models_Stream_Cursor_Input>>;
+  where?: InputMaybe<Models_Bool_Exp>;
+};
+
+
 export type Subscription_RootStatesArgs = {
   distinct_on?: InputMaybe<Array<States_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -3046,6 +3214,13 @@ export type Subscription_RootStates_AggregateArgs = {
 
 export type Subscription_RootStates_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootStates_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<States_Stream_Cursor_Input>>;
+  where?: InputMaybe<States_Bool_Exp>;
 };
 
 
@@ -3072,6 +3247,13 @@ export type Subscription_RootUser_Cars_By_PkArgs = {
 };
 
 
+export type Subscription_RootUser_Cars_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<User_Cars_Stream_Cursor_Input>>;
+  where?: InputMaybe<User_Cars_Bool_Exp>;
+};
+
+
 export type Subscription_RootUsersArgs = {
   distinct_on?: InputMaybe<Array<Users_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -3092,6 +3274,13 @@ export type Subscription_RootUsers_AggregateArgs = {
 
 export type Subscription_RootUsers_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootUsers_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Users_Stream_Cursor_Input>>;
+  where?: InputMaybe<Users_Bool_Exp>;
 };
 
 /** columns and relationships of "user_cars" */
@@ -3264,6 +3453,22 @@ export type User_Cars_Stddev_Samp_Fields = {
   car_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   user_id?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "user_cars" */
+export type User_Cars_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: User_Cars_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type User_Cars_Stream_Cursor_Value_Input = {
+  car_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  user_id?: InputMaybe<Scalars['Int']>;
+  uuid?: InputMaybe<Scalars['uuid']>;
 };
 
 /** aggregate sum on columns */
@@ -3491,6 +3696,23 @@ export type Users_Stddev_Samp_Fields = {
   id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "users" */
+export type Users_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Users_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Users_Stream_Cursor_Value_Input = {
+  email?: InputMaybe<Scalars['String']>;
+  first_name?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  last_name?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type Users_Sum_Fields = {
   __typename?: 'users_sum_fields';
@@ -3557,7 +3779,10 @@ export type UsersQueryVariables = Exact<{
 
 export type UsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'users', email: string, first_name: string, id: number, last_name: string }> };
 
-export type CarsQueryVariables = Exact<{ [key: string]: never; }>;
+export type CarsQueryVariables = Exact<{
+  orderBy?: InputMaybe<Array<Cars_Order_By> | Cars_Order_By>;
+  where?: InputMaybe<Cars_Bool_Exp>;
+}>;
 
 
 export type CarsQuery = { __typename?: 'query_root', cars: Array<{ __typename?: 'cars', batch: any, condition: any, damage_type?: string | null, description?: string | null, id: number, odometer?: number | null, price: any, sale_date: any, title?: string | null, vin: string, year?: number | null, city: { __typename?: 'cities', name: string, id: number, state: { __typename?: 'states', id: number, name: string } }, color: { __typename?: 'colors', id: number, name: string }, model: { __typename?: 'models', id: number, name: string, brand: { __typename?: 'brands', id: number, name: string } } }> };
@@ -3566,13 +3791,6 @@ export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BrandsQuery = { __typename?: 'query_root', brands: Array<{ __typename?: 'brands', name: string, id: number, cars_count: any, models: Array<{ __typename?: 'models', name: string, id: number }> }> };
-
-export type OrderedCarsQueryVariables = Exact<{
-  orderBy?: InputMaybe<Array<Cars_Order_By> | Cars_Order_By>;
-}>;
-
-
-export type OrderedCarsQuery = { __typename?: 'query_root', cars: Array<{ __typename?: 'cars', batch: any, condition: any, damage_type?: string | null, description?: string | null, id: number, odometer?: number | null, price: any, sale_date: any, title?: string | null, vin: string, year?: number | null, city: { __typename?: 'cities', name: string, id: number, state: { __typename?: 'states', id: number, name: string } }, color: { __typename?: 'colors', id: number, name: string }, model: { __typename?: 'models', id: number, name: string, brand: { __typename?: 'brands', id: number, name: string } } }> };
 
 
 export const UsersDocument = gql`
@@ -3614,8 +3832,8 @@ export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
 export const CarsDocument = gql`
-    query Cars {
-  cars {
+    query Cars($orderBy: [cars_order_by!], $where: cars_bool_exp) {
+  cars(order_by: $orderBy, where: $where) {
     batch
     city {
       name
@@ -3663,6 +3881,8 @@ export const CarsDocument = gql`
  * @example
  * const { data, loading, error } = useCarsQuery({
  *   variables: {
+ *      orderBy: // value for 'orderBy'
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -3717,68 +3937,3 @@ export function useBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Bra
 export type BrandsQueryHookResult = ReturnType<typeof useBrandsQuery>;
 export type BrandsLazyQueryHookResult = ReturnType<typeof useBrandsLazyQuery>;
 export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVariables>;
-export const OrderedCarsDocument = gql`
-    query OrderedCars($orderBy: [cars_order_by!]) {
-  cars(order_by: $orderBy) {
-    batch
-    city {
-      name
-      id
-      state {
-        id
-        name
-      }
-    }
-    color {
-      id
-      name
-    }
-    condition
-    damage_type
-    description
-    id
-    odometer
-    price
-    sale_date
-    title
-    vin
-    year
-    model {
-      id
-      name
-      brand {
-        id
-        name
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useOrderedCarsQuery__
- *
- * To run a query within a React component, call `useOrderedCarsQuery` and pass it any options that fit your needs.
- * When your component renders, `useOrderedCarsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOrderedCarsQuery({
- *   variables: {
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useOrderedCarsQuery(baseOptions?: Apollo.QueryHookOptions<OrderedCarsQuery, OrderedCarsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OrderedCarsQuery, OrderedCarsQueryVariables>(OrderedCarsDocument, options);
-      }
-export function useOrderedCarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderedCarsQuery, OrderedCarsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OrderedCarsQuery, OrderedCarsQueryVariables>(OrderedCarsDocument, options);
-        }
-export type OrderedCarsQueryHookResult = ReturnType<typeof useOrderedCarsQuery>;
-export type OrderedCarsLazyQueryHookResult = ReturnType<typeof useOrderedCarsLazyQuery>;
-export type OrderedCarsQueryResult = Apollo.QueryResult<OrderedCarsQuery, OrderedCarsQueryVariables>;
