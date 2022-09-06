@@ -25,3 +25,4 @@ export interface Filters {
   searchInput: string;
   orderBy: string;
 }
+export type SortOrder = "" | "ASC" | "DESC";
