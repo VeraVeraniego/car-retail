@@ -24,7 +24,7 @@ export const CarSearchForm = ({ searchInInventory }: any) => {
         onChange={(e) => setSearchInput(e.target.value)}
       ></SearchInput>
       {/* <SearchLogo /> */}
-      <SearchButton disabled={!searchInput}>Search in Inventory</SearchButton>
+      <SearchButton>Search in Inventory</SearchButton>
     </SearchForm>
   );
 };
