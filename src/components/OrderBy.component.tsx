@@ -8,27 +8,29 @@ import {
   TiArrowSortedUp,
   TiArrowSortedDown,
 } from "react-icons/ti";
+import { Order_By } from "../graphql/generated/graphql";
 
 interface Props {
-  toogleOrder: () => SortOrder;
+  toogleOrder: () => Promise<Order_By | "">;
 }
 
 export const OrderBy = ({ toogleOrder }: Props) => {
-  const [orderBy, setOrderBy] = useState<SortOrder>("");
+  const [orderBy, setOrderBy] = useState<Order_By | "">("");
 
   const currentSort =
-    orderBy === "ASC" ? (
+    orderBy === Order_By.Asc ? (
       <TiArrowSortedUp />
-    ) : orderBy === "DESC" ? (
+    ) : orderBy === Order_By.Desc ? (
       <TiArrowSortedDown />
     ) : (
       <TiArrowUnsorted />
     );
 
-  function handleClick() {
-    const order = toogleOrder();
+  async function handleClick() {
+    const order = await toogleOrder();
     setOrderBy(order);
   }
+
   return (
     <H4>
       Order By:
