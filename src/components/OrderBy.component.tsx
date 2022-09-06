@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { CarsAndFiltersState } from "../interfaces/Car";
+import { CarsAndFiltersState, SortOrder } from "../interfaces/Car";
 import { defaultTheme } from "../theme";
 import { ButtonOnHoverOppacity, H4 } from "./styled";
 import {
@@ -8,44 +8,31 @@ import {
   TiArrowSortedUp,
   TiArrowSortedDown,
 } from "react-icons/ti";
-export const OrderBy = ({ carsState, filtersState }: CarsAndFiltersState) => {
-  const [cars, setCars] = carsState;
-  const [filters, setFilters] = filtersState;
+
+interface Props {
+  toogleOrder: () => SortOrder;
+}
+
+export const OrderBy = ({ toogleOrder }: Props) => {
+  const [orderBy, setOrderBy] = useState<SortOrder>("");
 
   const currentSort =
-    filters.orderBy === "ASC" ? (
+    orderBy === "ASC" ? (
       <TiArrowSortedUp />
-    ) : filters.orderBy === "DESC" ? (
+    ) : orderBy === "DESC" ? (
       <TiArrowSortedDown />
     ) : (
       <TiArrowUnsorted />
     );
 
-  function toogleOrderBy() {
-    if (!cars) return console.error("Cars not available");
-    // const saleDate = new Date(cars![0].saleDate);
-    // const offset = saleDate.getTimezoneOffset();
-    // const utcDate = new Date(saleDate.getTime() - offset * 60 * 1000);
-    if (filters.orderBy === "ASC") {
-      const carsSortedAsc = cars?.sort((a, b) => {
-        return new Date(b.saleDate).valueOf() - new Date(a.saleDate).valueOf();
-      });
-      setCars(carsSortedAsc);
-      setFilters({ ...filters, orderBy: "DESC" });
-    } else if (filters.orderBy === "DESC" || filters.orderBy === "") {
-      const carsSortedDesc = cars?.sort((a, b) => {
-        return new Date(a.saleDate).valueOf() - new Date(b.saleDate).valueOf();
-      });
-
-      setCars(carsSortedDesc);
-      setFilters({ ...filters, orderBy: "ASC" });
-    }
+  function handleClick() {
+    const order = toogleOrder();
+    setOrderBy(order);
   }
-
   return (
     <H4>
       Order By:
-      <OrderButton onClick={toogleOrderBy}>{currentSort}Sale Date</OrderButton>
+      <OrderButton onClick={handleClick}>{currentSort}Sale Date</OrderButton>
     </H4>
   );
 };
