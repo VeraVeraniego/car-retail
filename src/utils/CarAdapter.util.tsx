@@ -4,7 +4,8 @@ import { CarRowInfo } from "../interfaces/Car";
 export function responseCarToCarComponent(queryCar: Cars) {
   const shapedCar: CarRowInfo = {
     id: queryCar.id,
-    title: `${queryCar.model.brand.name} ${queryCar.model.name} ${queryCar.year}`,
+    title: queryCar.title!,
+    // title: `${queryCar.model.brand.name} ${queryCar.model.name} ${queryCar.year}`,
     batch: queryCar.batch,
     vin: queryCar.vin,
     odo: queryCar.odometer ? queryCar.odometer : "",
