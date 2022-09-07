@@ -4,6 +4,7 @@ export function orderVariables(order: Order_By) {
   return {
     orderBy: [
       {
+        year: null,
         sale_date: order,
       },
     ],

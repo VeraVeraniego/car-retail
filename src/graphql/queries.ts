@@ -47,8 +47,8 @@ export const GET_CARS = gql`
     }
   }
 `;
-export const GET_BRANDS_AND_MODELS = gql`
-  query Brands {
+export const GET_PUBLIS_FORM_VALUES = gql`
+  query PublishData {
     brands {
       name
       id
@@ -57,6 +57,18 @@ export const GET_BRANDS_AND_MODELS = gql`
         name
         id
       }
+    }
+    cities {
+      id
+      name
+      state {
+        id
+        name
+      }
+    }
+    colors {
+      id
+      name
     }
   }
 `;

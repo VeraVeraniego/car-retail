@@ -3792,6 +3792,11 @@ export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type BrandsQuery = { __typename?: 'query_root', brands: Array<{ __typename?: 'brands', name: string, id: number, cars_count: any, models: Array<{ __typename?: 'models', name: string, id: number }> }> };
 
+export type PublishDataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PublishDataQuery = { __typename?: 'query_root', brands: Array<{ __typename?: 'brands', name: string, id: number, cars_count: any, models: Array<{ __typename?: 'models', name: string, id: number }> }>, cities: Array<{ __typename?: 'cities', id: number, name: string, state: { __typename?: 'states', id: number, name: string } }>, colors: Array<{ __typename?: 'colors', id: number, name: string }> };
+
 
 export const UsersDocument = gql`
     query Users($where: users_bool_exp) {
@@ -3937,3 +3942,55 @@ export function useBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Bra
 export type BrandsQueryHookResult = ReturnType<typeof useBrandsQuery>;
 export type BrandsLazyQueryHookResult = ReturnType<typeof useBrandsLazyQuery>;
 export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVariables>;
+export const PublishDataDocument = gql`
+    query PublishData {
+  brands {
+    name
+    id
+    cars_count
+    models {
+      name
+      id
+    }
+  }
+  cities {
+    id
+    name
+    state {
+      id
+      name
+    }
+  }
+  colors {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __usePublishDataQuery__
+ *
+ * To run a query within a React component, call `usePublishDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePublishDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePublishDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePublishDataQuery(baseOptions?: Apollo.QueryHookOptions<PublishDataQuery, PublishDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PublishDataQuery, PublishDataQueryVariables>(PublishDataDocument, options);
+      }
+export function usePublishDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PublishDataQuery, PublishDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PublishDataQuery, PublishDataQueryVariables>(PublishDataDocument, options);
+        }
+export type PublishDataQueryHookResult = ReturnType<typeof usePublishDataQuery>;
+export type PublishDataLazyQueryHookResult = ReturnType<typeof usePublishDataLazyQuery>;
+export type PublishDataQueryResult = Apollo.QueryResult<PublishDataQuery, PublishDataQueryVariables>;
