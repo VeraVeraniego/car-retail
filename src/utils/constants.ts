@@ -5,6 +5,11 @@ export const PATHNAME = {
   RETAIL_CARS: "/retail-cars",
   WATCH_LIST: "/watch-list",
 };
+
+export const URL_PARAMS = {
+  SALE_DATE_SORT: "orderBySaleDate",
+};
+
 export const STORAGE_KEY = {
   USER: "user",
 };
