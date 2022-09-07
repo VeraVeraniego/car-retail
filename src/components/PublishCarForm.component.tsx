@@ -41,6 +41,7 @@ export const PublishCarForm = () => {
   }
   const TESTSELECT = <select></select>;
   console.log("watch", watch("brand_Id"));
+
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <GlobalStyle />
