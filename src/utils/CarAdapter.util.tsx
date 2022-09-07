@@ -1,6 +1,10 @@
 import { Cars } from "../graphql/generated/graphql";
 import { CarRowInfo } from "../interfaces/Car";
-
+enum Condition {
+  A = "Salvage Title",
+  N = "New",
+  O = "Other",
+}
 export function responseCarToCarComponent(queryCar: Cars) {
   const shapedCar: CarRowInfo = {
     id: queryCar.id,
@@ -13,10 +17,10 @@ export function responseCarToCarComponent(queryCar: Cars) {
     // TODO: utilize TS enums
     condition:
       queryCar.condition === "A"
-        ? "Salvage Title"
+        ? Condition.A
         : queryCar.condition === "N"
-        ? "New"
-        : "Other",
+        ? Condition.N
+        : Condition.O,
     damageType: queryCar.damage_type ? queryCar.damage_type : "",
     saleDate: queryCar.sale_date,
     place: `${queryCar.city.name}-${queryCar.city.state.name}`,
