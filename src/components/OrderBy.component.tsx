@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { CarsAndFiltersState, SortOrder } from "../interfaces/Car";
 import { defaultTheme } from "../theme";
 import { ButtonOnHoverOppacity, H4 } from "./styled";
 import {
@@ -13,28 +12,24 @@ import { useSearchParams } from "react-router-dom";
 import { URL_PARAMS } from "../utils/constants";
 
 interface Props {
-  toogleOrder: () => Promise<Order_By | "">;
+  toogleOrder: () => void;
 }
 
 export const OrderBy = ({ toogleOrder }: Props) => {
   const [search, setSearch] = useSearchParams();
-  const [orderBy, setOrderBy] = useState<Order_By | "">("");
   const activeSortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT);
 
   const currentSort =
-    orderBy === Order_By.Asc ? (
+    activeSortInUrl === Order_By.Asc ? (
       <TiArrowSortedUp />
-    ) : orderBy === Order_By.Desc ? (
+    ) : activeSortInUrl === Order_By.Desc ? (
       <TiArrowSortedDown />
     ) : (
       <TiArrowUnsorted />
     );
 
   async function handleClick() {
-    const order = await toogleOrder();
-    // TODO: ADD PARAMS PASSING
-
-    setOrderBy(order);
+    const order = toogleOrder();
   }
 
   return (
