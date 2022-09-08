@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Cars,
   Order_By,
@@ -13,16 +14,20 @@ import {
 } from "../graphql/variables";
 import { CarRowInfo, Filters, SortOrder } from "../interfaces/Car";
 import { adaptResponse } from "../utils/CarAdapter.util";
+import { URL_PARAMS } from "../utils/constants";
 
 function isUUID(text: string) {
   return text.match(
     /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
   );
 }
+
 export const useHandleCars = () => {
   const [cars, setCars] = useState<CarRowInfo[] | null>(null);
   const [orderBy, setOrderBy] = useState<Order_By | "">("");
   const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery();
+  const [search, setSearch] = useSearchParams();
+  const activeSortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT);
 
   useEffect(() => {
     if (!data) {
@@ -36,19 +41,25 @@ export const useHandleCars = () => {
   async function toogleOrder() {
     if (!cars) return "";
     let orderToSet: Order_By;
-    if (orderBy === Order_By.Asc) {
-      orderToSet = Order_By.Asc;
-      setOrderBy(Order_By.Desc);
+    if (activeSortInUrl === Order_By.Asc) {
+      orderToSet = Order_By.Desc;
+      setSearch({ orderBySaleDate: Order_By.Desc });
     } else {
-      if (orderBy === Order_By.Desc || orderBy === "") {
-        setOrderBy(Order_By.Asc);
-        orderToSet = Order_By.Desc;
+      if (activeSortInUrl === Order_By.Desc || activeSortInUrl === null) {
+        setSearch({ orderBySaleDate: Order_By.Asc });
+        orderToSet = Order_By.Asc;
       }
     }
     await refetch(orderVariables(orderToSet!));
-
     return orderToSet!;
   }
+  //   if (!search.get(URL_PARAMS.SALE_DATE_SORT))
+  //   setSearch({ orderBySaleDate: Order_By.Asc });
+
+  // if (search.get(URL_PARAMS.SALE_DATE_SORT) === Order_By.Desc)
+  //   setSearch({ orderBySaleDate: Order_By.Asc });
+  // else if (search.get(URL_PARAMS.SALE_DATE_SORT) === Order_By.Asc)
+  //   setSearch({ orderBySaleDate: Order_By.Desc });
 
   async function searchInInventory(searchText: string) {
     if (!searchText) {

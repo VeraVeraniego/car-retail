@@ -19,6 +19,7 @@ interface Props {
 export const OrderBy = ({ toogleOrder }: Props) => {
   const [search, setSearch] = useSearchParams();
   const [orderBy, setOrderBy] = useState<Order_By | "">("");
+  const activeSortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT);
 
   const currentSort =
     orderBy === Order_By.Asc ? (
@@ -32,8 +33,6 @@ export const OrderBy = ({ toogleOrder }: Props) => {
   async function handleClick() {
     const order = await toogleOrder();
     // TODO: ADD PARAMS PASSING
-    console.log(search.get(URL_PARAMS.SALE_DATE_SORT));
-    setSearch({ orderBySaleDate: Order_By.Asc });
 
     setOrderBy(order);
   }
