@@ -51,7 +51,7 @@ export const useHandleCars = () => {
       }
     }
     await refetch(orderVariables(orderToSet!));
-    return orderToSet!;
+    return;
   }
   //   if (!search.get(URL_PARAMS.SALE_DATE_SORT))
   //   setSearch({ orderBySaleDate: Order_By.Asc });
