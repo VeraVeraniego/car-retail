@@ -3790,12 +3790,24 @@ export type CarsQuery = { __typename?: 'query_root', cars: Array<{ __typename?: 
 export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BrandsQuery = { __typename?: 'query_root', brands: Array<{ __typename?: 'brands', name: string, id: number, cars_count: any, models: Array<{ __typename?: 'models', name: string, id: number }> }> };
+export type BrandsQuery = { __typename?: 'query_root', brands: Array<{ __typename?: 'brands', name: string, id: number }> };
 
-export type PublishDataQueryVariables = Exact<{ [key: string]: never; }>;
+export type ModelsQueryVariables = Exact<{
+  where?: InputMaybe<Models_Bool_Exp>;
+}>;
 
 
-export type PublishDataQuery = { __typename?: 'query_root', brands: Array<{ __typename?: 'brands', name: string, id: number, cars_count: any, models: Array<{ __typename?: 'models', name: string, id: number }> }>, cities: Array<{ __typename?: 'cities', id: number, name: string, state: { __typename?: 'states', id: number, name: string } }>, colors: Array<{ __typename?: 'colors', id: number, name: string }> };
+export type ModelsQuery = { __typename?: 'query_root', models: Array<{ __typename?: 'models', id: number, name: string }> };
+
+export type CitiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CitiesQuery = { __typename?: 'query_root', cities: Array<{ __typename?: 'cities', id: number, name: string, state: { __typename?: 'states', id: number, name: string } }> };
+
+export type ColorsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ColorsQuery = { __typename?: 'query_root', colors: Array<{ __typename?: 'colors', id: number, name: string }> };
 
 
 export const UsersDocument = gql`
@@ -3907,11 +3919,6 @@ export const BrandsDocument = gql`
   brands {
     name
     id
-    cars_count
-    models {
-      name
-      id
-    }
   }
 }
     `;
@@ -3942,17 +3949,44 @@ export function useBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Bra
 export type BrandsQueryHookResult = ReturnType<typeof useBrandsQuery>;
 export type BrandsLazyQueryHookResult = ReturnType<typeof useBrandsLazyQuery>;
 export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVariables>;
-export const PublishDataDocument = gql`
-    query PublishData {
-  brands {
-    name
+export const ModelsDocument = gql`
+    query Models($where: models_bool_exp) {
+  models(where: $where) {
     id
-    cars_count
-    models {
-      name
-      id
-    }
+    name
   }
+}
+    `;
+
+/**
+ * __useModelsQuery__
+ *
+ * To run a query within a React component, call `useModelsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useModelsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useModelsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useModelsQuery(baseOptions?: Apollo.QueryHookOptions<ModelsQuery, ModelsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ModelsQuery, ModelsQueryVariables>(ModelsDocument, options);
+      }
+export function useModelsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ModelsQuery, ModelsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ModelsQuery, ModelsQueryVariables>(ModelsDocument, options);
+        }
+export type ModelsQueryHookResult = ReturnType<typeof useModelsQuery>;
+export type ModelsLazyQueryHookResult = ReturnType<typeof useModelsLazyQuery>;
+export type ModelsQueryResult = Apollo.QueryResult<ModelsQuery, ModelsQueryVariables>;
+export const CitiesDocument = gql`
+    query Cities {
   cities {
     id
     name
@@ -3961,6 +3995,37 @@ export const PublishDataDocument = gql`
       name
     }
   }
+}
+    `;
+
+/**
+ * __useCitiesQuery__
+ *
+ * To run a query within a React component, call `useCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCitiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCitiesQuery(baseOptions?: Apollo.QueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, options);
+      }
+export function useCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, options);
+        }
+export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
+export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
+export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVariables>;
+export const ColorsDocument = gql`
+    query Colors {
   colors {
     id
     name
@@ -3969,28 +4034,28 @@ export const PublishDataDocument = gql`
     `;
 
 /**
- * __usePublishDataQuery__
+ * __useColorsQuery__
  *
- * To run a query within a React component, call `usePublishDataQuery` and pass it any options that fit your needs.
- * When your component renders, `usePublishDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useColorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useColorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = usePublishDataQuery({
+ * const { data, loading, error } = useColorsQuery({
  *   variables: {
  *   },
  * });
  */
-export function usePublishDataQuery(baseOptions?: Apollo.QueryHookOptions<PublishDataQuery, PublishDataQueryVariables>) {
+export function useColorsQuery(baseOptions?: Apollo.QueryHookOptions<ColorsQuery, ColorsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PublishDataQuery, PublishDataQueryVariables>(PublishDataDocument, options);
+        return Apollo.useQuery<ColorsQuery, ColorsQueryVariables>(ColorsDocument, options);
       }
-export function usePublishDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PublishDataQuery, PublishDataQueryVariables>) {
+export function useColorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ColorsQuery, ColorsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PublishDataQuery, PublishDataQueryVariables>(PublishDataDocument, options);
+          return Apollo.useLazyQuery<ColorsQuery, ColorsQueryVariables>(ColorsDocument, options);
         }
-export type PublishDataQueryHookResult = ReturnType<typeof usePublishDataQuery>;
-export type PublishDataLazyQueryHookResult = ReturnType<typeof usePublishDataLazyQuery>;
-export type PublishDataQueryResult = Apollo.QueryResult<PublishDataQuery, PublishDataQueryVariables>;
+export type ColorsQueryHookResult = ReturnType<typeof useColorsQuery>;
+export type ColorsLazyQueryHookResult = ReturnType<typeof useColorsLazyQuery>;
+export type ColorsQueryResult = Apollo.QueryResult<ColorsQuery, ColorsQueryVariables>;

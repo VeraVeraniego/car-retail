@@ -47,17 +47,25 @@ export const GET_CARS = gql`
     }
   }
 `;
-export const GET_PUBLIS_FORM_VALUES = gql`
-  query PublishData {
+
+export const GET_BRANDS = gql`
+  query Brands {
     brands {
       name
       id
-      cars_count
-      models {
-        name
-        id
-      }
     }
+  }
+`;
+export const GET_MODELS = gql`
+  query Models($where: models_bool_exp) {
+    models(where: $where) {
+      id
+      name
+    }
+  }
+`;
+export const GET_CITIES = gql`
+  query Cities {
     cities {
       id
       name
@@ -66,6 +74,10 @@ export const GET_PUBLIS_FORM_VALUES = gql`
         name
       }
     }
+  }
+`;
+export const GET_COLORS = gql`
+  query Colors {
     colors {
       id
       name

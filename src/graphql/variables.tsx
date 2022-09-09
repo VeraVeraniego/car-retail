@@ -1,3 +1,4 @@
+import { gql } from "@apollo/client";
 import { Order_By } from "./generated/graphql";
 
 export function orderVariables(order: Order_By) {
@@ -34,6 +35,15 @@ export function searchByBatchVariables(batch: string) {
     where: {
       batch: {
         _eq: batch,
+      },
+    },
+  };
+}
+export function modelsbyBrandIdVariables(brandId: string | number) {
+  return {
+    where: {
+      brand_id: {
+        _eq: parseInt(brandId as string),
       },
     },
   };
