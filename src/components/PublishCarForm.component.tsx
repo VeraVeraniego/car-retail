@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { defaultTheme, GlobalStyle } from "../theme";
 import {
@@ -12,18 +12,36 @@ import {
   H4,
 } from "./styled";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { usePublishDataQuery } from "../graphql/generated/graphql";
+
+import { FetchPolicy, gql, WatchQueryFetchPolicy } from "@apollo/client";
+import {
+  useBrandsLazyQuery,
+  useModelsLazyQuery,
+} from "../graphql/generated/graphql";
+import { modelsbyBrandIdVariables } from "../graphql/variables";
 
 interface FormValues {
   brand_Id: number;
   model_Id: number | string;
-  year_Id?: number;
+  year?: number;
   city_Id?: number;
   vin?: string;
   color_Id?: number;
 }
+
 export const PublishCarForm = () => {
-  const { data, error, loading } = usePublishDataQuery();
+  const networkFetch: { fetchPolicy: WatchQueryFetchPolicy | undefined } = {
+    fetchPolicy: "network-only",
+  };
+  const [
+    fetchBrands,
+    { data: brandsData, error: brandsError, loading: brandsLoading },
+  ] = useBrandsLazyQuery(networkFetch);
+  const [
+    fetchModels,
+    { data: modelsData, error: modelsError, loading: modelsLoading },
+  ] = useModelsLazyQuery(networkFetch);
+
   const {
     register,
     handleSubmit,
@@ -34,70 +52,106 @@ export const PublishCarForm = () => {
   } = useForm<FormValues>();
   const onSubmit: SubmitHandler<any> = (data) => console.log("submit", data);
 
-  function getModelsByBrandId(brandId: number) {
-    setValue("model_Id", "");
-    const test = data?.brands.find((brand) => brand.id == brandId);
-    return test?.models;
-  }
+  // useEffect(() => {
+  //   console.log("data", data);
+  // }, [data]);
+
+  // useEffect(() => {
+  //   console.log("loading", loading);
+  // }, [loading]);
+
+  // function getModelsByBrandId(brandId: number) {
+  //   setValue("model_Id", "");
+  //   const test = data?.brands.find((brand) => brand.id == brandId);
+  //   return test?.models;
+  // }
+
   const TESTSELECT = <select></select>;
   console.log("watch", watch("brand_Id"));
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <GlobalStyle />
-      {loading ? (
-        <H2>Loading...</H2>
-      ) : (
-        <>
-          <H2>Publish a Car</H2>
-          <Title>Brand *</Title>
-          <select {...register("brand_Id")} defaultValue="">
-            <option value="" disabled>
-              Select an option
-            </option>
-            <optgroup label="Brands">
-              {data?.brands.map((brand) => (
-                <option key={brand.id} value={brand.id}>
-                  {brand.name}
-                </option>
-              ))}
-            </optgroup>
-          </select>
-          <Title>Model *</Title>
-          <select {...register("model_Id")} disabled={!getValues("brand_Id")}>
-            <option>Select an option</option>
-            <optgroup label="Model">
-              {getModelsByBrandId(getValues("brand_Id"))?.map((model) => (
-                <option key={model.id} value={model.id}>
-                  {model.name}
-                </option>
-              ))}
-            </optgroup>
-          </select>
-          <Title>Fabrication Year *</Title>
-          {TESTSELECT}
-          <Title>Origin City *</Title>
-          {TESTSELECT}
-          <Title>Vehicle Identification Number *</Title>
-          <input />
 
-          <Title>Color *</Title>
-          {TESTSELECT}
-          {/* input range below */}
-          <Title>ODOmeter *</Title>
-          <input type="range" />
-          <Title>Condition *</Title>
-          {TESTSELECT}
-          <Title>Damage Type</Title>
-          {TESTSELECT}
-          {/* date picker below */}
-          <Title>Sale Date</Title>
-          {TESTSELECT}
-          {/* dolar sign before next input */}
-          <Title>Price willing to sell</Title>
-          <input />
-        </>
-      )}
+      <H2>Publish a Car</H2>
+      <Title>Brand *</Title>
+      <select
+        {...register("brand_Id")}
+        defaultValue=""
+        disabled={brandsLoading}
+        onFocus={() => fetchBrands()}
+        onChange={() => setValue("model_Id", "")}
+      >
+        <option value="" disabled>
+          Select an option
+        </option>
+        <optgroup label="Brands">
+          {brandsLoading ? (
+            <option>Loading...</option>
+          ) : (
+            brandsData?.brands.map((brand) => (
+              <option key={brand.id} value={brand.id}>
+                {brand.name}
+              </option>
+            ))
+          )}
+        </optgroup>
+      </select>
+
+      <Title>Model *</Title>
+      <select
+        {...register("model_Id")}
+        disabled={!getValues("brand_Id")}
+        defaultValue=""
+        onFocus={() => {
+          fetchModels({
+            variables: modelsbyBrandIdVariables(getValues("brand_Id")),
+          });
+        }}
+      >
+        <option value="">Select an option</option>
+        <optgroup label="Model">
+          {modelsLoading ? (
+            <option>Loading...</option>
+          ) : (
+            modelsData?.models?.map((model) => (
+              <option key={model.id} value={model.id}>
+                {model.name}
+              </option>
+            ))
+          )}
+        </optgroup>
+      </select>
+      <Title>Fabrication Year *</Title>
+      <input
+        type="number"
+        min="1950"
+        max="2023"
+        step="1"
+        defaultValue={2020}
+        {...register("year")}
+      />
+      <Title>Origin City *</Title>
+      {TESTSELECT}
+      <Title>Vehicle Identification Number *</Title>
+      <input />
+
+      <Title>Color *</Title>
+      {TESTSELECT}
+      {/* input range below */}
+      <Title>ODOmeter *</Title>
+      <input type="range" />
+      <Title>Condition *</Title>
+      {TESTSELECT}
+      <Title>Damage Type</Title>
+      {TESTSELECT}
+      {/* date picker below */}
+      <Title>Sale Date</Title>
+      {TESTSELECT}
+      {/* dolar sign before next input */}
+      <Title>Price willing to sell</Title>
+      <input />
+
       <Button>PUBLISH CAR NOW</Button>
     </Container>
   );
