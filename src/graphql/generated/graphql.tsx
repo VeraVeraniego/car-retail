@@ -3804,6 +3804,11 @@ export type CitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CitiesQuery = { __typename?: 'query_root', cities: Array<{ __typename?: 'cities', id: number, name: string, state: { __typename?: 'states', id: number, name: string } }> };
 
+export type StatesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StatesQuery = { __typename?: 'query_root', states: Array<{ __typename?: 'states', id: number, name: string, cities: Array<{ __typename?: 'cities', id: number, name: string }> }> };
+
 export type ColorsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4024,6 +4029,45 @@ export function useCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Cit
 export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
 export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
 export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVariables>;
+export const StatesDocument = gql`
+    query States {
+  states {
+    id
+    name
+    cities {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useStatesQuery__
+ *
+ * To run a query within a React component, call `useStatesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStatesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStatesQuery(baseOptions?: Apollo.QueryHookOptions<StatesQuery, StatesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StatesQuery, StatesQueryVariables>(StatesDocument, options);
+      }
+export function useStatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StatesQuery, StatesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StatesQuery, StatesQueryVariables>(StatesDocument, options);
+        }
+export type StatesQueryHookResult = ReturnType<typeof useStatesQuery>;
+export type StatesLazyQueryHookResult = ReturnType<typeof useStatesLazyQuery>;
+export type StatesQueryResult = Apollo.QueryResult<StatesQuery, StatesQueryVariables>;
 export const ColorsDocument = gql`
     query Colors {
   colors {

@@ -76,6 +76,18 @@ export const GET_CITIES = gql`
     }
   }
 `;
+export const GET_STATES = gql`
+  query States {
+    states {
+      id
+      name
+      cities {
+        id
+        name
+      }
+    }
+  }
+`;
 export const GET_COLORS = gql`
   query Colors {
     colors {
