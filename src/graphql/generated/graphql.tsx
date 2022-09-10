@@ -3814,6 +3814,13 @@ export type ColorsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ColorsQuery = { __typename?: 'query_root', colors: Array<{ __typename?: 'colors', id: number, name: string }> };
 
+export type CreateCarMutationVariables = Exact<{
+  object: Cars_Insert_Input;
+}>;
+
+
+export type CreateCarMutation = { __typename?: 'mutation_root', insert_cars_one?: { __typename?: 'cars', brand_id: number, city_id: number, color_id: number, condition: any, model_id: number, odometer?: number | null, price: any, sale_date: any, state_id: number, title?: string | null, vin: string, year?: number | null } | null };
+
 
 export const UsersDocument = gql`
     query Users($where: users_bool_exp) {
@@ -4103,3 +4110,47 @@ export function useColorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Col
 export type ColorsQueryHookResult = ReturnType<typeof useColorsQuery>;
 export type ColorsLazyQueryHookResult = ReturnType<typeof useColorsLazyQuery>;
 export type ColorsQueryResult = Apollo.QueryResult<ColorsQuery, ColorsQueryVariables>;
+export const CreateCarDocument = gql`
+    mutation CreateCar($object: cars_insert_input!) {
+  insert_cars_one(object: $object) {
+    brand_id
+    city_id
+    color_id
+    condition
+    model_id
+    odometer
+    price
+    sale_date
+    state_id
+    title
+    vin
+    year
+  }
+}
+    `;
+export type CreateCarMutationFn = Apollo.MutationFunction<CreateCarMutation, CreateCarMutationVariables>;
+
+/**
+ * __useCreateCarMutation__
+ *
+ * To run a mutation, you first call `useCreateCarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCarMutation, { data, loading, error }] = useCreateCarMutation({
+ *   variables: {
+ *      object: // value for 'object'
+ *   },
+ * });
+ */
+export function useCreateCarMutation(baseOptions?: Apollo.MutationHookOptions<CreateCarMutation, CreateCarMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCarMutation, CreateCarMutationVariables>(CreateCarDocument, options);
+      }
+export type CreateCarMutationHookResult = ReturnType<typeof useCreateCarMutation>;
+export type CreateCarMutationResult = Apollo.MutationResult<CreateCarMutation>;
+export type CreateCarMutationOptions = Apollo.BaseMutationOptions<CreateCarMutation, CreateCarMutationVariables>;
