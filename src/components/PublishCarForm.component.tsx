@@ -38,7 +38,17 @@ interface FormValues {
   saleDate: string;
   price: number;
 }
-
+const VALIDATION_MESSAGES = {
+  BRAND: "Select your car's Brand",
+  MODEL: "Select your car's Model",
+  YEAR: "Enter your car's fabrication year (between 1950 and 2023)",
+  CITY: "Select your car's city of procedence",
+  VIN: "Enter your Vehicle's Vehicle Identification Number",
+  COLOR: "Select your car's color",
+  CONDITION: "Pick your car's condition",
+  SALE_DATE: "Select when you want to sell your car",
+  PRICE: "Enter a price for your car",
+};
 export const PublishCarForm = () => {
   const networkFetch: { fetchPolicy: WatchQueryFetchPolicy | undefined } = {
     fetchPolicy: "network-only",
@@ -94,9 +104,12 @@ export const PublishCarForm = () => {
 
       <H2>Publish a Car</H2>
       {/* BRAND */}
+      <p>{errors.brand_Id?.message}</p>
+      <p>{errors.year?.message}</p>
+      <p>{errors.price?.message}</p>
       <Title>Brand *</Title>
       <select
-        {...register("brand_Id")}
+        {...register("brand_Id", { required: "Select a Brand" })}
         defaultValue=""
         onFocus={() => fetchBrands()}
         onChange={(e) => {
@@ -118,7 +131,7 @@ export const PublishCarForm = () => {
       {/* MODEL */}
       <Title>Model *</Title>
       <select
-        {...register("model_Id")}
+        {...register("model_Id", { required: "Select a Model" })}
         disabled={!brandId}
         defaultValue=""
         onFocus={() => {
@@ -146,7 +159,9 @@ export const PublishCarForm = () => {
         max="2023"
         step="1"
         defaultValue={2020}
-        {...register("year")}
+        {...register("year", {
+          required: "Enter a year between 1950 and 2023",
+        })}
       />
       {/* CITIES */}
       <Title>Origin City *</Title>
@@ -236,7 +251,12 @@ export const PublishCarForm = () => {
       ></input>
       {/* dolar sign before next input */}
       <Title>Price willing to sell</Title>
-      <input {...register("price")} type="number" min={3000} max={1000000} />
+      <input
+        {...register("price", { min: 10000 })}
+        type="number"
+        min={3000}
+        max={1000000}
+      />
 
       <Button>PUBLISH CAR NOW</Button>
     </Container>
