@@ -1,6 +1,6 @@
 import { Cars } from "../graphql/generated/graphql";
 import { CarRowInfo } from "../interfaces/Car";
-enum Condition {
+export enum Condition {
   A = "Salvage Title",
   N = "New",
   O = "Other",
