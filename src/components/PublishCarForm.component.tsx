@@ -64,14 +64,11 @@ export const PublishCarForm = () => {
     register,
     handleSubmit,
     watch,
-    getValues,
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const today = new Date();
   const aYearAway = new Date();
-  aYearAway.setDate(aYearAway.getDate() + 365);
-  console.log(aYearAway);
+  aYearAway.setDate(aYearAway.getDate() + 90);
 
   const onSubmit: SubmitHandler<any> = (data) => console.log("submit", data);
 
@@ -79,35 +76,18 @@ export const PublishCarForm = () => {
   //   console.log("data", colorData);
   // }, [statesData]);
 
-  // useEffect(() => {
-  //   console.log("loading", loading);
-  // }, [loading]);
-
-  // function getModelsByBrandId(brandId: number) {
-  //   setValue("model_Id", "");
-  //   const test = data?.brands.find((brand) => brand.id == brandId);
-  //   return test?.models;
-  // }
-
   const TESTSELECT = <select></select>;
-  // console.log("brandIs:", watch("brand_Id"));
-  // console.log("ODOIs:", watch("odo"));
   const brandId = watch("brand_Id");
   const odo = watch("odo");
   const cityId = watch("city_Id");
 
-  const setStateId = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // console.log("changed city and so state");
-
-    // register("city_Id").onChange(e);
-    // console.log("watch city id on setstate", cityId);
+  const setStateId = () => {
     const stateId = statesData?.states
       .find((state) => state.cities.find((city) => city.id == cityId))
       ?.id.toString();
-    // console.log("state to set", stateId);
     setValue("state_Id", stateId);
   };
-
+  // TODO: CHANGE TITLES TO LABELS WITH HTMLFOR
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <GlobalStyle />
@@ -118,20 +98,21 @@ export const PublishCarForm = () => {
       <select
         {...register("brand_Id")}
         defaultValue=""
-        disabled={brandsLoading}
         onFocus={() => fetchBrands()}
+        onChange={(e) => {
+          register("city_Id").onChange(e);
+          setValue("model_Id", "");
+        }}
       >
-        <option value="">Select an option</option>
+        <option value="">
+          {brandsLoading ? "Loading..." : "Select an option"}
+        </option>
         <optgroup label="Brands">
-          {brandsLoading ? (
-            <option>Loading...</option>
-          ) : (
-            brandsData?.brands.map((brand) => (
-              <option key={brand.id} value={brand.id}>
-                {brand.name}
-              </option>
-            ))
-          )}
+          {brandsData?.brands.map((brand) => (
+            <option key={brand.id} value={brand.id}>
+              {brand.name}
+            </option>
+          ))}
         </optgroup>
       </select>
       {/* MODEL */}
@@ -146,17 +127,15 @@ export const PublishCarForm = () => {
           });
         }}
       >
-        <option value="">Select an option</option>
+        <option value="">
+          {modelsLoading ? "Loading..." : "Select an option"}
+        </option>
         <optgroup label="Model">
-          {modelsLoading ? (
-            <option>Loading...</option>
-          ) : (
-            modelsData?.models?.map((model) => (
-              <option key={model.id} value={model.id}>
-                {model.name}
-              </option>
-            ))
-          )}
+          {modelsData?.models?.map((model) => (
+            <option key={model.id} value={model.id}>
+              {model.name}
+            </option>
+          ))}
         </optgroup>
       </select>
       {/* YEAR */}
@@ -173,27 +152,24 @@ export const PublishCarForm = () => {
       <Title>Origin City *</Title>
       <select
         {...register("city_Id")}
-        disabled={statesLoading}
         onFocus={() => fetchStates()}
-        onBlur={(e) => setStateId(e)}
+        onBlur={() => setStateId()}
       >
-        <option value="">Select an option</option>
-        {statesLoading ? (
-          <option>Loading...</option>
-        ) : (
-          statesData?.states.map((state) => (
-            <optgroup key={state.id} label={state.name}>
-              {state.cities.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {city.name}
-                </option>
-              ))}
-            </optgroup>
-          ))
-        )}
+        <option value="">
+          {statesLoading ? "Loading..." : "Select an option"}
+        </option>
+        {statesData?.states.map((state) => (
+          <optgroup key={state.id} label={state.name}>
+            {state.cities.map((city) => (
+              <option key={city.id} value={city.id}>
+                {city.name}
+              </option>
+            ))}
+          </optgroup>
+        ))}
       </select>
       <Title>Vehicle Identification Number *</Title>
-      <input />
+      <input {...register("vin")} />
       {/* COLORS */}
       <Title>Color *</Title>
       <select
@@ -201,16 +177,14 @@ export const PublishCarForm = () => {
         disabled={colorLoading}
         onFocus={() => fetchColors()}
       >
-        <option value="">Select an option</option>
-        {colorLoading ? (
-          <option>Loading...</option>
-        ) : (
-          colorData?.colors.map((color) => (
-            <option key={color.id} value={color.id}>
-              {color.name}
-            </option>
-          ))
-        )}
+        <option value="">
+          {colorLoading ? "Loading..." : "Select an option"}
+        </option>
+        {colorData?.colors.map((color) => (
+          <option key={color.id} value={color.id}>
+            {color.name}
+          </option>
+        ))}
       </select>
       {/* ODOMETER */}
       <Title>ODOmeter ({odo ?? 10000} km) *</Title>
@@ -223,8 +197,25 @@ export const PublishCarForm = () => {
         defaultValue={10000}
       />
       <Title>Condition *</Title>
-      <input type="radio" name={Condition.A} />
-      <input type="radio" name={Condition.N} />
+      <fieldset>
+        <legend>Pick a condition</legend>
+        <input
+          {...register("condition")}
+          type="radio"
+          value="A"
+          name="condition"
+          id={Condition.A}
+        />
+        <label htmlFor={Condition.A}>{Condition.A}</label>
+        <input
+          {...register("condition")}
+          type="radio"
+          value="N"
+          name="condition"
+          id={Condition.N}
+        />
+        <label htmlFor={Condition.N}>{Condition.N}</label>
+      </fieldset>
       {/* <Title>Damage Type</Title>
       <select {...register("damageType")} defaultValue="">
         <option value="" disabled>
@@ -237,10 +228,15 @@ export const PublishCarForm = () => {
       </select> */}
       {/* date picker below */}
       <Title>Sale Date</Title>
-      <input type="date" min="2022-09-08" max="2023-09-08"></input>
+      <input
+        {...register("saleDate")}
+        type="date"
+        min={new Date().toISOString().split("T")[0]}
+        max={aYearAway.toISOString().split("T")[0]}
+      ></input>
       {/* dolar sign before next input */}
       <Title>Price willing to sell</Title>
-      <input {...register("price")} type="number" />
+      <input {...register("price")} type="number" min={3000} max={1000000} />
 
       <Button>PUBLISH CAR NOW</Button>
     </Container>
