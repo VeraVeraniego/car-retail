@@ -110,6 +110,7 @@ export const PublishCarForm = () => {
       <select
         {...register("brand_Id")}
         // {...register("brand_Id", { required: "Select a Brand" })}
+
         defaultValue=""
         onFocus={() => fetchBrands()}
         onChange={(e) => {
@@ -133,6 +134,7 @@ export const PublishCarForm = () => {
       <select
         {...register("model_Id")}
         // {...register("model_Id", { required: "Select a Model" })}
+
         disabled={!brandId}
         defaultValue=""
         onFocus={() => {
