@@ -86,7 +86,6 @@ export const PublishCarForm = () => {
   //   console.log("data", colorData);
   // }, [statesData]);
 
-  const TESTSELECT = <select></select>;
   const brandId = watch("brand_Id");
   const odo = watch("odo");
   const cityId = watch("city_Id");
@@ -109,7 +108,8 @@ export const PublishCarForm = () => {
       <p>{errors.price?.message}</p>
       <Title>Brand *</Title>
       <select
-        {...register("brand_Id", { required: "Select a Brand" })}
+        {...register("brand_Id")}
+        // {...register("brand_Id", { required: "Select a Brand" })}
         defaultValue=""
         onFocus={() => fetchBrands()}
         onChange={(e) => {
@@ -131,7 +131,8 @@ export const PublishCarForm = () => {
       {/* MODEL */}
       <Title>Model *</Title>
       <select
-        {...register("model_Id", { required: "Select a Model" })}
+        {...register("model_Id")}
+        // {...register("model_Id", { required: "Select a Model" })}
         disabled={!brandId}
         defaultValue=""
         onFocus={() => {
@@ -160,7 +161,7 @@ export const PublishCarForm = () => {
         step="1"
         defaultValue={2020}
         {...register("year", {
-          required: "Enter a year between 1950 and 2023",
+          required: VALIDATION_MESSAGES.YEAR,
         })}
       />
       {/* CITIES */}
