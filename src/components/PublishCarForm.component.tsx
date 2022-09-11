@@ -1,22 +1,24 @@
 import React, { useCallback, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { defaultTheme, GlobalStyle } from "../theme";
 import {
   Button,
+  ButtonOnHoverOppacity,
   CSSCenteredFlexCol,
   CSSFlexCol,
+  FlexRow,
   Form,
   H1,
   H2,
   H3,
   H4,
+  P,
 } from "./styled";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import { FetchPolicy, gql, WatchQueryFetchPolicy } from "@apollo/client";
+import { WatchQueryFetchPolicy } from "@apollo/client";
 import {
   useBrandsLazyQuery,
-  useCitiesLazyQuery,
   useColorsLazyQuery,
   useModelsLazyQuery,
   useStatesLazyQuery,
@@ -107,7 +109,7 @@ export const PublishCarForm = () => {
       <p>{errors.year?.message}</p>
       <p>{errors.price?.message}</p>
       <Title>Brand *</Title>
-      <select
+      <Select
         {...register("brand_Id")}
         // {...register("brand_Id", { required: "Select a Brand" })}
 
@@ -128,10 +130,10 @@ export const PublishCarForm = () => {
             </option>
           ))}
         </optgroup>
-      </select>
+      </Select>
       {/* MODEL */}
       <Title>Model *</Title>
-      <select
+      <Select
         {...register("model_Id")}
         // {...register("model_Id", { required: "Select a Model" })}
 
@@ -153,22 +155,22 @@ export const PublishCarForm = () => {
             </option>
           ))}
         </optgroup>
-      </select>
+      </Select>
       {/* YEAR */}
       <Title>Fabrication Year *</Title>
-      <input
+      <Input
         type="number"
         min="1950"
         max="2023"
         step="1"
-        defaultValue={2020}
+        placeholder="2020"
         {...register("year", {
           required: VALIDATION_MESSAGES.YEAR,
         })}
       />
       {/* CITIES */}
       <Title>Origin City *</Title>
-      <select
+      <Select
         {...register("city_Id")}
         onFocus={() => fetchStates()}
         onBlur={() => setStateId()}
@@ -185,12 +187,12 @@ export const PublishCarForm = () => {
             ))}
           </optgroup>
         ))}
-      </select>
+      </Select>
       <Title>Vehicle Identification Number *</Title>
-      <input {...register("vin")} />
+      <Input {...register("vin")} placeholder="8YTN4YPFK375ZNV" />
       {/* COLORS */}
       <Title>Color *</Title>
-      <select
+      <Select
         {...register("color_Id")}
         disabled={colorLoading}
         onFocus={() => fetchColors()}
@@ -203,10 +205,10 @@ export const PublishCarForm = () => {
             {color.name}
           </option>
         ))}
-      </select>
+      </Select>
       {/* ODOMETER */}
       <Title>ODOmeter ({odo ?? 10000} km) *</Title>
-      <input
+      <Input
         {...register("odo")}
         type="range"
         min={0}
@@ -214,10 +216,12 @@ export const PublishCarForm = () => {
         step={500}
         defaultValue={10000}
       />
-      <Title>Condition *</Title>
-      <fieldset>
-        <legend>Pick a condition</legend>
-        <input
+      {/* Condition */}
+      <Fieldset>
+        <legend>
+          <Title>Condition *</Title>
+        </legend>
+        <RadioInput
           {...register("condition")}
           type="radio"
           value="A"
@@ -225,7 +229,7 @@ export const PublishCarForm = () => {
           id={Condition.A}
         />
         <label htmlFor={Condition.A}>{Condition.A}</label>
-        <input
+        <RadioInput
           {...register("condition")}
           type="radio"
           value="N"
@@ -233,9 +237,9 @@ export const PublishCarForm = () => {
           id={Condition.N}
         />
         <label htmlFor={Condition.N}>{Condition.N}</label>
-      </fieldset>
+      </Fieldset>
       {/* <Title>Damage Type</Title>
-      <select {...register("damageType")} defaultValue="">
+      <Select {...register("damageType")} defaultValue="">
         <option value="" disabled>
           Select an option
         </option>
@@ -243,36 +247,80 @@ export const PublishCarForm = () => {
         <option>Rear Damage</option>
         <option>Back Damage</option>
         <option>Minor Scratches</option>
-      </select> */}
+      </Select> */}
       {/* date picker below */}
       <Title>Sale Date</Title>
-      <input
+      <Input
         {...register("saleDate")}
         type="date"
         min={new Date().toISOString().split("T")[0]}
         max={aYearAway.toISOString().split("T")[0]}
-      ></input>
-      {/* dolar sign before next input */}
-      <Title>Price willing to sell</Title>
-      <input
-        {...register("price", { min: 10000 })}
-        type="number"
-        min={3000}
-        max={1000000}
       />
+      {/* dolar sign before next Input */}
+      <Title>Price willing to sell</Title>
+      <PriceContainer>
+        <P>$</P>
+        <PriceInput
+          {...register("price", { min: 10000 })}
+          type="number"
+          min={3000}
+          max={1000000}
+          placeholder="10500"
+        />
+      </PriceContainer>
 
-      <Button>PUBLISH CAR NOW</Button>
+      <PublishButton>PUBLISH CAR NOW</PublishButton>
     </Container>
   );
 };
 const Title = styled(H3)`
-  margin-top: 8px;
+  margin-top: 16px;
+  margin-bottom: 4px;
 `;
 const Container = styled(Form)`
   ${CSSFlexCol};
-  margin-top: 16mm mpx;
+  margin-top: 16px;
   padding: 16px;
   background-color: ${defaultTheme.palette.bglightgray};
   height: 100%;
   width: 80vw;
+`;
+const InputStyle = css`
+  height: 32px;
+  background-color: ${defaultTheme.palette.white};
+  border: 1px solid ${defaultTheme.palette.gray};
+  border-radius: 4px;
+  color: ${defaultTheme.palette.darkblue};
+  padding-left: 8px;
+`;
+
+const Select = styled.select`
+  ${InputStyle}
+`;
+const Input = styled.input`
+  ${InputStyle}
+`;
+const PriceContainer = styled(FlexRow)`
+  ${InputStyle}
+  align-items: center;
+`;
+const PriceInput = styled.input`
+  margin-left: 8px;
+  outline: none;
+  border: none;
+  width: 100%;
+  height: 100%;
+`;
+const PublishButton = styled(ButtonOnHoverOppacity)`
+  align-self: center;
+  margin-top: 16px;
+`;
+const Fieldset = styled.fieldset`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 8px;
+`;
+const RadioInput = styled.input`
+  margin-left: 8px;
 `;
