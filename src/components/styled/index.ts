@@ -1,6 +1,14 @@
 import styled, { css } from "styled-components";
 import { defaultTheme } from "../../theme";
 
+export const InputStyle = css`
+  height: 32px;
+  background-color: ${defaultTheme.palette.white};
+  border: 1px solid ${defaultTheme.palette.gray};
+  border-radius: 4px;
+  color: ${defaultTheme.palette.darkblue};
+  padding-left: 8px;
+`;
 export const CSSFlexCol = css`
   display: flex;
   flex-direction: column;
