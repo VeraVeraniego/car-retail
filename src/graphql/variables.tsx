@@ -48,3 +48,6 @@ export function modelsbyBrandIdVariables(brandId: string | number) {
     },
   };
 }
+export function variableWrapper(obj: {}) {
+  return { variables: obj };
+}
