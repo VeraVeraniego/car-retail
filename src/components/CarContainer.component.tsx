@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Cars, useCarsQuery } from "../graphql/generated/graphql";
 import { CarRowInfo, CarsState } from "../interfaces/Car";
@@ -10,6 +10,7 @@ import {
 import { FlexColumn, H2, ValidationText } from "./styled";
 import { CarInfo } from "./CarInfo.component";
 import { ApolloError } from "@apollo/client";
+import { UserContext } from "../contexts/UserContext";
 
 interface Props {
   data: {
@@ -22,6 +23,7 @@ interface Props {
 export const CarContainer = ({ data }: Props) => {
   const { cars, error, loading } = data;
   const [renderedCars, setRenderedCars] = useState<CarRowInfo[] | null>(null);
+  const { loggedUser, setLoggedUser } = useContext(UserContext);
 
   useEffect(() => {
     setRenderedCars(cars);
@@ -40,9 +42,10 @@ export const CarContainer = ({ data }: Props) => {
           Error {error.message ? "- " + error.message : "- Unknown"}
         </ValidationText>
       ) : (
-        renderedCars?.map((ele, ind) => (
+        renderedCars?.map((ele) => (
           <CarInfo
             key={ele.vin}
+            id={ele.id}
             img={`${IMG_URL}/${ele.id}/300/200`}
             title={ele.title}
             batch={ele.batch}
@@ -55,10 +58,6 @@ export const CarContainer = ({ data }: Props) => {
           />
         ))
       )}
-      {/* <CarInfo />
-      <CarInfo />
-      <CarInfo />
-      <CarInfo /> */}
     </Container>
   );
 };

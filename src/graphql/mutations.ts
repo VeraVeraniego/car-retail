@@ -19,3 +19,13 @@ export const CREATE_CAR = gql`
     }
   }
 `;
+export const CREATE_USER_CAR = gql`
+  mutation Insert_user_cars_one($object: user_cars_insert_input!) {
+    insert_user_cars_one(object: $object) {
+      car_id
+      id
+      user_id
+      uuid
+    }
+  }
+`;

@@ -51,3 +51,6 @@ export function modelsbyBrandIdVariables(brandId: string | number) {
 export function variableWrapper(obj: {}) {
   return { variables: obj };
 }
+export function userCarVariables(userId: number, carId: number | string) {
+  return { car_id: carId, user_id: userId };
+}

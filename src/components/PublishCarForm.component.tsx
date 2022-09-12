@@ -43,7 +43,6 @@ interface FormValues {
   color_id?: number;
   odometer: number;
   condition: string;
-  // damageType: string;
   sale_date: string;
   price: number;
   title?: string;
@@ -268,7 +267,7 @@ export const PublishCarForm = () => {
         min={new Date().toISOString().split("T")[0]}
         max={threeMonthsAhead.toISOString().split("T")[0]}
       />
-      {/* dolar sign before next Input */}
+
       <Title>Price willing to sell</Title>
       <Validation>{errors.price?.message}</Validation>
       <PriceContainer>

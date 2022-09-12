@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { defaultTheme } from "../theme";
 import { Button, FlexColumn, FlexRow, H3, H4, P } from "./styled";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { CarRowInfo } from "../interfaces/Car";
+import { UserContext } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
+import { PATHNAME } from "../utils";
+import { useCreateCarMutation } from "../graphql/generated/graphql";
+import { userCarVariables, variableWrapper } from "../graphql/variables";
+import { CREATE_USER_CAR } from "../graphql/mutations";
+import { useMutation } from "@apollo/client";
 
 export const CarInfo = ({
+  id,
   img,
   title,
   batch,
@@ -16,7 +24,21 @@ export const CarInfo = ({
   saleDate,
   place,
 }: CarRowInfo) => {
+  const { loggedUser, setLoggedUser } = useContext(UserContext);
+  const [createUserCar, { data, error, loading }] =
+    useMutation(CREATE_USER_CAR);
   const now = new Date();
+  const navigate = useNavigate();
+
+  function setFavorite() {
+    if (!loggedUser) return navigate(PATHNAME.LOGIN);
+    // createUserCar(
+    //   variableWrapper({ object: userCarVariables(loggedUser.id, id) })
+    // );
+    createUserCar({
+      variables: { object: { car_id: id, user_id: loggedUser.id } },
+    });
+  }
   return (
     <Container>
       <CarImage src={img} alt={title} />
@@ -24,7 +46,7 @@ export const CarInfo = ({
       <Column>
         <Title>{title}</Title>
         <Value>{batch}</Value>
-        <FavoriteButton>
+        <FavoriteButton onClick={() => setFavorite()}>
           <WatchIcon />
           Watch
         </FavoriteButton>
@@ -64,6 +86,9 @@ export const CarInfo = ({
   );
 };
 const WatchIcon = styled(AiOutlineEye)`
+  font-size: 16px;
+`;
+const UnwatchIcon = styled(AiOutlineEyeInvisible)`
   font-size: 16px;
 `;
 const FavoriteButton = styled(Button)`
