@@ -2,9 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { defaultTheme, GlobalStyle } from "../theme";
 import {
-  Button,
   ButtonOnHoverOppacity,
-  CSSCenteredFlexCol,
   CSSFlexCol,
   FlexRow,
   Form,
@@ -13,6 +11,7 @@ import {
   H3,
   H4,
   P,
+  ValidationText,
 } from "./styled";
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -20,30 +19,34 @@ import { WatchQueryFetchPolicy } from "@apollo/client";
 import {
   useBrandsLazyQuery,
   useColorsLazyQuery,
+  useCreateCarMutation,
   useModelsLazyQuery,
   useStatesLazyQuery,
 } from "../graphql/generated/graphql";
 import { modelsbyBrandIdVariables } from "../graphql/variables";
 import { Condition } from "../utils/CarAdapter.util";
+import { useNavigate } from "react-router-dom";
+import { PATHNAME } from "../utils";
 
 interface FormValues {
-  brand_Id: number;
-  model_Id: number | string;
+  brand_id: number;
+  model_id?: number;
   year?: number;
-  state_Id?: number | string;
-  city_Id?: number;
+  state_id?: number;
+  city_id?: number;
   vin?: string;
-  color_Id?: number;
-  odo: number | string;
+  color_id?: number;
+  odometer: number;
   condition: string;
-  damageType: string;
-  saleDate: string;
+  // damageType: string;
+  sale_date: string;
   price: number;
+  title?: string;
 }
 const VALIDATION_MESSAGES = {
   BRAND: "Select your car's Brand",
   MODEL: "Select your car's Model",
-  YEAR: "Enter your car's fabrication year (between 1950 and 2023)",
+  YEAR: "Enter your car's fabrication year",
   CITY: "Select your car's city of procedence",
   VIN: "Enter your Vehicle's Vehicle Identification Number",
   COLOR: "Select your car's color",
@@ -71,7 +74,10 @@ export const PublishCarForm = () => {
     fetchColors,
     { data: colorData, error: colorError, loading: colorLoading },
   ] = useColorsLazyQuery(networkFetch);
-
+  const [
+    createCar,
+    { data: mutationReturn, error: mutationError, loading: mutationLoading },
+  ] = useCreateCarMutation();
   const {
     register,
     handleSubmit,
@@ -79,64 +85,89 @@ export const PublishCarForm = () => {
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const aYearAway = new Date();
-  aYearAway.setDate(aYearAway.getDate() + 90);
+  const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<any> = (data) => console.log("submit", data);
+  const threeMonthsAhead = new Date();
+  threeMonthsAhead.setDate(threeMonthsAhead.getDate() + 90);
 
-  // useEffect(() => {
-  //   console.log("data", colorData);
-  // }, [statesData]);
+  const brandId = watch("brand_id");
+  const modelId = watch("model_id");
+  const colorId = watch("color_id");
+  const odometer = watch("odometer");
+  const cityId = watch("city_id");
+  const year = watch("year");
 
-  const brandId = watch("brand_Id");
-  const odo = watch("odo");
-  const cityId = watch("city_Id");
+  const error = brandsError ? (
+    <ValidationText>{brandsError.message}</ValidationText>
+  ) : modelsError ? (
+    <ValidationText>{modelsError.message}</ValidationText>
+  ) : statesError ? (
+    <ValidationText>{statesError.message}</ValidationText>
+  ) : colorError ? (
+    <ValidationText>{colorError.message}</ValidationText>
+  ) : (
+    ""
+  );
+
+  const onSubmit: SubmitHandler<any> = (data) => {
+    const color = colorData?.colors.find((color) => color.id == colorId)?.name;
+    const brand = brandsData?.brands.find((brand) => brand.id == brandId)?.name;
+    const model = modelsData?.models.find((model) => model.id == modelId)?.name;
+    data.title = `${color} ${brand} ${model} ${year}`;
+    for (let key in data)
+      if (key.includes("id")) data[key] = parseInt(data[key]);
+    createCar({ variables: { object: data } });
+  };
+
+  useEffect(() => {
+    if (!mutationReturn) return;
+    navigate(PATHNAME.RETAIL_CARS);
+    console.log("mutation returned sth", mutationReturn);
+  }, [mutationReturn]);
 
   const setStateId = () => {
-    const stateId = statesData?.states
-      .find((state) => state.cities.find((city) => city.id == cityId))
-      ?.id.toString();
-    setValue("state_Id", stateId);
+    const stateId = statesData?.states.find((state) =>
+      state.cities.find((city) => city.id == cityId)
+    )?.id;
+    setValue("state_id", stateId);
   };
-  // TODO: CHANGE TITLES TO LABELS WITH HTMLFOR
+
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <GlobalStyle />
 
       <H2>Publish a Car</H2>
+      {error}
       {/* BRAND */}
-      <p>{errors.brand_Id?.message}</p>
-      <p>{errors.year?.message}</p>
-      <p>{errors.price?.message}</p>
       <Title>Brand *</Title>
+      <Validation>{errors.brand_id?.message}</Validation>
       <Select
-        {...register("brand_Id")}
-        // {...register("brand_Id", { required: "Select a Brand" })}
-
+        // {...register("brand_id")}
+        {...register("brand_id", { required: VALIDATION_MESSAGES.BRAND })}
         defaultValue=""
         onFocus={() => fetchBrands()}
         onChange={(e) => {
-          register("city_Id").onChange(e);
-          setValue("model_Id", "");
+          register("brand_id").onChange(e);
+          setValue("model_id", undefined);
         }}
       >
         <option value="">
           {brandsLoading ? "Loading..." : "Select an option"}
         </option>
         <optgroup label="Brands">
-          {brandsData?.brands.map((brand) => (
-            <option key={brand.id} value={brand.id}>
-              {brand.name}
-            </option>
-          ))}
+          {!brandsLoading &&
+            brandsData?.brands.map((brand) => (
+              <option key={brand.id} value={brand.id}>
+                {brand.name}
+              </option>
+            ))}
         </optgroup>
       </Select>
       {/* MODEL */}
       <Title>Model *</Title>
+      <Validation>{errors.model_id?.message}</Validation>
       <Select
-        {...register("model_Id")}
-        // {...register("model_Id", { required: "Select a Model" })}
-
+        {...register("model_id", { required: VALIDATION_MESSAGES.MODEL })}
         disabled={!brandId}
         defaultValue=""
         onFocus={() => {
@@ -149,15 +180,17 @@ export const PublishCarForm = () => {
           {modelsLoading ? "Loading..." : "Select an option"}
         </option>
         <optgroup label="Model">
-          {modelsData?.models?.map((model) => (
-            <option key={model.id} value={model.id}>
-              {model.name}
-            </option>
-          ))}
+          {!modelsLoading &&
+            modelsData?.models?.map((model) => (
+              <option key={model.id} value={model.id}>
+                {model.name}
+              </option>
+            ))}
         </optgroup>
       </Select>
       {/* YEAR */}
       <Title>Fabrication Year *</Title>
+      <Validation>{errors.year?.message}</Validation>
       <Input
         type="number"
         min="1950"
@@ -170,46 +203,55 @@ export const PublishCarForm = () => {
       />
       {/* CITIES */}
       <Title>Origin City *</Title>
+      <Validation>{errors.city_id?.message}</Validation>
       <Select
-        {...register("city_Id")}
+        {...register("city_id", { required: VALIDATION_MESSAGES.CITY })}
         onFocus={() => fetchStates()}
         onBlur={() => setStateId()}
       >
         <option value="">
           {statesLoading ? "Loading..." : "Select an option"}
         </option>
-        {statesData?.states.map((state) => (
-          <optgroup key={state.id} label={state.name}>
-            {state.cities.map((city) => (
-              <option key={city.id} value={city.id}>
-                {city.name}
-              </option>
-            ))}
-          </optgroup>
-        ))}
+        {!statesLoading &&
+          statesData?.states.map((state) => (
+            <optgroup key={state.id} label={state.name}>
+              {state.cities.map((city) => (
+                <option key={city.id} value={city.id}>
+                  {city.name}
+                </option>
+              ))}
+            </optgroup>
+          ))}
       </Select>
       <Title>Vehicle Identification Number *</Title>
-      <Input {...register("vin")} placeholder="8YTN4YPFK375ZNV" />
+      <Validation>{errors.vin?.message}</Validation>
+
+      <Input
+        {...register("vin", { required: VALIDATION_MESSAGES.VIN })}
+        placeholder="8YTN4YPFK375ZNV"
+      />
       {/* COLORS */}
       <Title>Color *</Title>
+      <Validation>{errors.color_id?.message}</Validation>
       <Select
-        {...register("color_Id")}
+        {...register("color_id", { required: VALIDATION_MESSAGES.COLOR })}
         disabled={colorLoading}
         onFocus={() => fetchColors()}
       >
         <option value="">
           {colorLoading ? "Loading..." : "Select an option"}
         </option>
-        {colorData?.colors.map((color) => (
-          <option key={color.id} value={color.id}>
-            {color.name}
-          </option>
-        ))}
+        {!colorLoading &&
+          colorData?.colors.map((color) => (
+            <option key={color.id} value={color.id}>
+              {color.name}
+            </option>
+          ))}
       </Select>
       {/* ODOMETER */}
-      <Title>ODOmeter ({odo ?? 10000} km) *</Title>
+      <Title>ODOmeter ({odometer ?? 10000} km) *</Title>
       <Input
-        {...register("odo")}
+        {...register("odometer")}
         type="range"
         min={0}
         max={250000}
@@ -220,9 +262,12 @@ export const PublishCarForm = () => {
       <Fieldset>
         <legend>
           <Title>Condition *</Title>
+          <Validation>{errors.condition?.message}</Validation>
         </legend>
         <RadioInput
-          {...register("condition")}
+          {...register("condition", {
+            required: VALIDATION_MESSAGES.CONDITION,
+          })}
           type="radio"
           value="A"
           name="condition"
@@ -250,18 +295,20 @@ export const PublishCarForm = () => {
       </Select> */}
       {/* date picker below */}
       <Title>Sale Date</Title>
+      <Validation>{errors.sale_date?.message}</Validation>
       <Input
-        {...register("saleDate")}
+        {...register("sale_date", { required: VALIDATION_MESSAGES.SALE_DATE })}
         type="date"
         min={new Date().toISOString().split("T")[0]}
-        max={aYearAway.toISOString().split("T")[0]}
+        max={threeMonthsAhead.toISOString().split("T")[0]}
       />
       {/* dolar sign before next Input */}
       <Title>Price willing to sell</Title>
+      <Validation>{errors.price?.message}</Validation>
       <PriceContainer>
         <P>$</P>
         <PriceInput
-          {...register("price", { min: 10000 })}
+          {...register("price", { required: VALIDATION_MESSAGES.PRICE })}
           type="number"
           min={3000}
           max={1000000}
@@ -273,10 +320,6 @@ export const PublishCarForm = () => {
     </Container>
   );
 };
-const Title = styled(H3)`
-  margin-top: 16px;
-  margin-bottom: 4px;
-`;
 const Container = styled(Form)`
   ${CSSFlexCol};
   margin-top: 16px;
@@ -284,6 +327,14 @@ const Container = styled(Form)`
   background-color: ${defaultTheme.palette.bglightgray};
   height: 100%;
   width: 80vw;
+`;
+const Title = styled(H3)`
+  margin-top: 16px;
+`;
+const Validation = styled(P)`
+  margin-bottom: 4px;
+  font-size: 10px;
+  color: ${defaultTheme.palette.red};
 `;
 const InputStyle = css`
   height: 32px;
@@ -296,6 +347,9 @@ const InputStyle = css`
 
 const Select = styled.select`
   ${InputStyle}
+  &:disabled {
+    color: ${defaultTheme.palette.inactive};
+  }
 `;
 const Input = styled.input`
   ${InputStyle}

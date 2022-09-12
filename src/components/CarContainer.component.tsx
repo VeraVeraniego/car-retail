@@ -43,7 +43,7 @@ export const CarContainer = ({ data }: Props) => {
         renderedCars?.map((ele, ind) => (
           <CarInfo
             key={ele.vin}
-            img={`${IMG_URL}/10${ele.id}/300/200`}
+            img={`${IMG_URL}/${ele.id}/300/200`}
             title={ele.title}
             batch={ele.batch}
             odo={ele.odo}
