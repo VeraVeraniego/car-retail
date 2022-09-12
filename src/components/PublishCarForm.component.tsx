@@ -10,6 +10,7 @@ import {
   H2,
   H3,
   H4,
+  InputStyle,
   P,
   ValidationText,
 } from "./styled";
@@ -23,10 +24,14 @@ import {
   useModelsLazyQuery,
   useStatesLazyQuery,
 } from "../graphql/generated/graphql";
-import { modelsbyBrandIdVariables } from "../graphql/variables";
+import {
+  modelsbyBrandIdVariables,
+  variableWrapper,
+} from "../graphql/variables";
 import { Condition } from "../utils/CarAdapter.util";
 import { useNavigate } from "react-router-dom";
 import { PATHNAME } from "../utils";
+import { FormSelectInput } from "./FormSelectInput.component";
 
 interface FormValues {
   brand_id: number;
@@ -98,13 +103,13 @@ export const PublishCarForm = () => {
   const year = watch("year");
 
   const error = brandsError ? (
-    <ValidationText>{brandsError.message}</ValidationText>
+    <ValidationText>"On brands:"+{brandsError.message}</ValidationText>
   ) : modelsError ? (
-    <ValidationText>{modelsError.message}</ValidationText>
+    <ValidationText>"On models:"+{modelsError.message}</ValidationText>
   ) : statesError ? (
-    <ValidationText>{statesError.message}</ValidationText>
+    <ValidationText>"On states:"+{statesError.message}</ValidationText>
   ) : colorError ? (
-    <ValidationText>{colorError.message}</ValidationText>
+    <ValidationText>"On colors:"+{colorError.message}</ValidationText>
   ) : (
     ""
   );
@@ -131,6 +136,7 @@ export const PublishCarForm = () => {
     )?.id;
     setValue("state_id", stateId);
   };
+  console.log("watch", watch());
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
@@ -141,88 +147,58 @@ export const PublishCarForm = () => {
       {/* BRAND */}
       <Title>Brand *</Title>
       <Validation>{errors.brand_id?.message}</Validation>
-      <Select
-        // {...register("brand_id")}
-        {...register("brand_id", { required: VALIDATION_MESSAGES.BRAND })}
-        defaultValue=""
+      <FormSelectInput
+        register={register("brand_id", { required: VALIDATION_MESSAGES.BRAND })}
         onFocus={() => fetchBrands()}
         onChange={(e) => {
           register("brand_id").onChange(e);
           setValue("model_id", undefined);
         }}
-      >
-        <option value="">
-          {brandsLoading ? "Loading..." : "Select an option"}
-        </option>
-        <optgroup label="Brands">
-          {!brandsLoading &&
-            brandsData?.brands.map((brand) => (
-              <option key={brand.id} value={brand.id}>
-                {brand.name}
-              </option>
-            ))}
-        </optgroup>
-      </Select>
+        label="Brand"
+        loading={brandsLoading}
+        data={brandsData?.brands}
+      />
+
       {/* MODEL */}
       <Title>Model *</Title>
       <Validation>{errors.model_id?.message}</Validation>
-      <Select
-        {...register("model_id", { required: VALIDATION_MESSAGES.MODEL })}
+      <FormSelectInput
+        register={register("model_id", { required: VALIDATION_MESSAGES.MODEL })}
+        onFocus={() =>
+          fetchModels(variableWrapper(modelsbyBrandIdVariables(brandId)))
+        }
+        label="Model"
+        loading={modelsLoading}
         disabled={!brandId}
-        defaultValue=""
-        onFocus={() => {
-          fetchModels({
-            variables: modelsbyBrandIdVariables(brandId),
-          });
-        }}
-      >
-        <option value="">
-          {modelsLoading ? "Loading..." : "Select an option"}
-        </option>
-        <optgroup label="Model">
-          {!modelsLoading &&
-            modelsData?.models?.map((model) => (
-              <option key={model.id} value={model.id}>
-                {model.name}
-              </option>
-            ))}
-        </optgroup>
-      </Select>
+        data={modelsData?.models}
+      />
       {/* YEAR */}
       <Title>Fabrication Year *</Title>
       <Validation>{errors.year?.message}</Validation>
       <Input
+        {...register("year", {
+          required: VALIDATION_MESSAGES.YEAR,
+        })}
         type="number"
         min="1950"
         max="2023"
         step="1"
         placeholder="2020"
-        {...register("year", {
-          required: VALIDATION_MESSAGES.YEAR,
-        })}
       />
       {/* CITIES */}
       <Title>Origin City *</Title>
       <Validation>{errors.city_id?.message}</Validation>
-      <Select
-        {...register("city_id", { required: VALIDATION_MESSAGES.CITY })}
+      <FormSelectInput
+        label="Cities"
+        register={register("city_id", {
+          required: VALIDATION_MESSAGES.CITY,
+        })}
+        loading={statesLoading}
+        data={statesData?.states}
         onFocus={() => fetchStates()}
         onBlur={() => setStateId()}
-      >
-        <option value="">
-          {statesLoading ? "Loading..." : "Select an option"}
-        </option>
-        {!statesLoading &&
-          statesData?.states.map((state) => (
-            <optgroup key={state.id} label={state.name}>
-              {state.cities.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {city.name}
-                </option>
-              ))}
-            </optgroup>
-          ))}
-      </Select>
+      />
+
       <Title>Vehicle Identification Number *</Title>
       <Validation>{errors.vin?.message}</Validation>
 
@@ -283,17 +259,7 @@ export const PublishCarForm = () => {
         />
         <label htmlFor={Condition.N}>{Condition.N}</label>
       </Fieldset>
-      {/* <Title>Damage Type</Title>
-      <Select {...register("damageType")} defaultValue="">
-        <option value="" disabled>
-          Select an option
-        </option>
-        <option>No Damage</option>
-        <option>Rear Damage</option>
-        <option>Back Damage</option>
-        <option>Minor Scratches</option>
-      </Select> */}
-      {/* date picker below */}
+
       <Title>Sale Date</Title>
       <Validation>{errors.sale_date?.message}</Validation>
       <Input
@@ -315,7 +281,9 @@ export const PublishCarForm = () => {
           placeholder="10500"
         />
       </PriceContainer>
-
+      <ValidationText>
+        {mutationError && "Couldn't create car: " + mutationError?.message}
+      </ValidationText>
       <PublishButton>PUBLISH CAR NOW</PublishButton>
     </Container>
   );
@@ -335,14 +303,6 @@ const Validation = styled(P)`
   margin-bottom: 4px;
   font-size: 10px;
   color: ${defaultTheme.palette.red};
-`;
-const InputStyle = css`
-  height: 32px;
-  background-color: ${defaultTheme.palette.white};
-  border: 1px solid ${defaultTheme.palette.gray};
-  border-radius: 4px;
-  color: ${defaultTheme.palette.darkblue};
-  padding-left: 8px;
 `;
 
 const Select = styled.select`
@@ -379,3 +339,80 @@ const Fieldset = styled.fieldset`
 const RadioInput = styled.input`
   margin-left: 8px;
 `;
+
+/* <Title>Damage Type</Title>
+      <Select {...register("damageType")} defaultValue="">
+        <option value="" disabled>
+          Select an option
+        </option>
+        <option>No Damage</option>
+        <option>Rear Damage</option>
+        <option>Back Damage</option>
+        <option>Minor Scratches</option>
+      </Select> */
+
+/* <Select
+        // {...register("brand_id")}
+        {...register("brand_id", { required: VALIDATION_MESSAGES.BRAND })}
+        defaultValue=""
+        onFocus={() => fetchBrands()}
+        onChange={(e) => {
+          register("brand_id").onChange(e);
+          setValue("model_id", undefined);
+        }}
+      >
+        <option value="">
+          {brandsLoading ? "Loading..." : "Select an option"}
+        </option>
+        <optgroup label="Brands">
+          {!brandsLoading &&
+            brandsData?.brands.map((brand) => (
+              <option key={brand.id} value={brand.id}>
+                {brand.name}
+              </option>
+            ))}
+        </optgroup>
+      </Select> */
+
+/* <Select
+        {...register("model_id", { required: VALIDATION_MESSAGES.MODEL })}
+        disabled={!brandId}
+        defaultValue=""
+        onFocus={() => {
+          fetchModels({
+            variables: modelsbyBrandIdVariables(brandId),
+          });
+        }}
+      >
+        <option value="">
+          {modelsLoading ? "Loading..." : "Select an option"}
+        </option>
+        <optgroup label="Model">
+          {!modelsLoading &&
+            modelsData?.models?.map((model) => (
+              <option key={model.id} value={model.id}>
+                {model.name}
+              </option>
+            ))}
+        </optgroup>
+      </Select> */
+
+/* <Select
+        {...register("city_id", { required: VALIDATION_MESSAGES.CITY })}
+        onFocus={() => fetchStates()}
+        onBlur={() => setStateId()}
+      >
+        <option value="">
+          {statesLoading ? "Loading..." : "Select an option"}
+        </option>
+        {!statesLoading &&
+          statesData?.states.map((state) => (
+            <optgroup key={state.id} label={state.name}>
+              {state.cities.map((city) => (
+                <option key={city.id} value={city.id}>
+                  {city.name}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+      </Select> */
