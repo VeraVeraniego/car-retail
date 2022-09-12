@@ -320,6 +320,7 @@ const Fieldset = styled.fieldset`
   align-items: center;
   gap: 4px;
   padding-bottom: 8px;
+  background-color: ${defaultTheme.palette.white};
 `;
 const RadioInput = styled.input`
   margin-left: 8px;
