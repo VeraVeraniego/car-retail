@@ -3499,10 +3499,10 @@ export type CarsQueryVariables = Exact<{
 
 export type CarsQuery = { __typename?: 'query_root', cars: Array<{ __typename?: 'cars', batch: any, condition: any, damage_type?: string | null, description?: string | null, id: number, odometer?: number | null, price: any, sale_date: any, title?: string | null, vin: string, year?: number | null, city: { __typename?: 'cities', name: string, id: number, state: { __typename?: 'states', id: number, name: string } }, color: { __typename?: 'colors', id: number, name: string }, model: { __typename?: 'models', id: number, name: string, brand: { __typename?: 'brands', id: number, name: string } } }> };
 
-export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
+export type FormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BrandsQuery = { __typename?: 'query_root', brands: Array<{ __typename?: 'brands', name: string, id: number }> };
+export type FormDataQuery = { __typename?: 'query_root', brands: Array<{ __typename?: 'brands', name: string, id: number }>, states: Array<{ __typename?: 'states', id: number, name: string, cities: Array<{ __typename?: 'cities', id: number, name: string }> }>, colors: Array<{ __typename?: 'colors', id: number, name: string }> };
 
 export type ModelsQueryVariables = Exact<{
   where?: InputMaybe<Models_Bool_Exp>;
@@ -3510,21 +3510,6 @@ export type ModelsQueryVariables = Exact<{
 
 
 export type ModelsQuery = { __typename?: 'query_root', models: Array<{ __typename?: 'models', id: number, name: string }> };
-
-export type CitiesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CitiesQuery = { __typename?: 'query_root', cities: Array<{ __typename?: 'cities', id: number, name: string, state: { __typename?: 'states', id: number, name: string } }> };
-
-export type StatesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type StatesQuery = { __typename?: 'query_root', states: Array<{ __typename?: 'states', id: number, name: string, cities: Array<{ __typename?: 'cities', id: number, name: string }> }> };
-
-export type ColorsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ColorsQuery = { __typename?: 'query_root', colors: Array<{ __typename?: 'colors', id: number, name: string }> };
 
 
 export const CreateCarDocument = gql`
@@ -3711,41 +3696,53 @@ export function useCarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CarsQ
 export type CarsQueryHookResult = ReturnType<typeof useCarsQuery>;
 export type CarsLazyQueryHookResult = ReturnType<typeof useCarsLazyQuery>;
 export type CarsQueryResult = Apollo.QueryResult<CarsQuery, CarsQueryVariables>;
-export const BrandsDocument = gql`
-    query Brands {
+export const FormDataDocument = gql`
+    query FormData {
   brands {
     name
     id
+  }
+  states {
+    id
+    name
+    cities {
+      id
+      name
+    }
+  }
+  colors {
+    id
+    name
   }
 }
     `;
 
 /**
- * __useBrandsQuery__
+ * __useFormDataQuery__
  *
- * To run a query within a React component, call `useBrandsQuery` and pass it any options that fit your needs.
- * When your component renders, `useBrandsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFormDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFormDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useBrandsQuery({
+ * const { data, loading, error } = useFormDataQuery({
  *   variables: {
  *   },
  * });
  */
-export function useBrandsQuery(baseOptions?: Apollo.QueryHookOptions<BrandsQuery, BrandsQueryVariables>) {
+export function useFormDataQuery(baseOptions?: Apollo.QueryHookOptions<FormDataQuery, FormDataQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BrandsQuery, BrandsQueryVariables>(BrandsDocument, options);
+        return Apollo.useQuery<FormDataQuery, FormDataQueryVariables>(FormDataDocument, options);
       }
-export function useBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BrandsQuery, BrandsQueryVariables>) {
+export function useFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FormDataQuery, FormDataQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BrandsQuery, BrandsQueryVariables>(BrandsDocument, options);
+          return Apollo.useLazyQuery<FormDataQuery, FormDataQueryVariables>(FormDataDocument, options);
         }
-export type BrandsQueryHookResult = ReturnType<typeof useBrandsQuery>;
-export type BrandsLazyQueryHookResult = ReturnType<typeof useBrandsLazyQuery>;
-export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVariables>;
+export type FormDataQueryHookResult = ReturnType<typeof useFormDataQuery>;
+export type FormDataLazyQueryHookResult = ReturnType<typeof useFormDataLazyQuery>;
+export type FormDataQueryResult = Apollo.QueryResult<FormDataQuery, FormDataQueryVariables>;
 export const ModelsDocument = gql`
     query Models($where: models_bool_exp) {
   models(where: $where) {
@@ -3782,116 +3779,3 @@ export function useModelsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Mod
 export type ModelsQueryHookResult = ReturnType<typeof useModelsQuery>;
 export type ModelsLazyQueryHookResult = ReturnType<typeof useModelsLazyQuery>;
 export type ModelsQueryResult = Apollo.QueryResult<ModelsQuery, ModelsQueryVariables>;
-export const CitiesDocument = gql`
-    query Cities {
-  cities {
-    id
-    name
-    state {
-      id
-      name
-    }
-  }
-}
-    `;
-
-/**
- * __useCitiesQuery__
- *
- * To run a query within a React component, call `useCitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCitiesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCitiesQuery(baseOptions?: Apollo.QueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, options);
-      }
-export function useCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, options);
-        }
-export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
-export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
-export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVariables>;
-export const StatesDocument = gql`
-    query States {
-  states {
-    id
-    name
-    cities {
-      id
-      name
-    }
-  }
-}
-    `;
-
-/**
- * __useStatesQuery__
- *
- * To run a query within a React component, call `useStatesQuery` and pass it any options that fit your needs.
- * When your component renders, `useStatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useStatesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useStatesQuery(baseOptions?: Apollo.QueryHookOptions<StatesQuery, StatesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<StatesQuery, StatesQueryVariables>(StatesDocument, options);
-      }
-export function useStatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StatesQuery, StatesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<StatesQuery, StatesQueryVariables>(StatesDocument, options);
-        }
-export type StatesQueryHookResult = ReturnType<typeof useStatesQuery>;
-export type StatesLazyQueryHookResult = ReturnType<typeof useStatesLazyQuery>;
-export type StatesQueryResult = Apollo.QueryResult<StatesQuery, StatesQueryVariables>;
-export const ColorsDocument = gql`
-    query Colors {
-  colors {
-    id
-    name
-  }
-}
-    `;
-
-/**
- * __useColorsQuery__
- *
- * To run a query within a React component, call `useColorsQuery` and pass it any options that fit your needs.
- * When your component renders, `useColorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useColorsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useColorsQuery(baseOptions?: Apollo.QueryHookOptions<ColorsQuery, ColorsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ColorsQuery, ColorsQueryVariables>(ColorsDocument, options);
-      }
-export function useColorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ColorsQuery, ColorsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ColorsQuery, ColorsQueryVariables>(ColorsDocument, options);
-        }
-export type ColorsQueryHookResult = ReturnType<typeof useColorsQuery>;
-export type ColorsLazyQueryHookResult = ReturnType<typeof useColorsLazyQuery>;
-export type ColorsQueryResult = Apollo.QueryResult<ColorsQuery, ColorsQueryVariables>;
