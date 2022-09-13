@@ -31,6 +31,9 @@ import { Condition } from "../utils/CarAdapter.util";
 import { useNavigate } from "react-router-dom";
 import { PATHNAME } from "../utils";
 import { FormSelectInput } from "./FormSelectInput.component";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { GraphQLError } from "graphql";
 
 interface FormValues {
   brand_id: number;
@@ -102,7 +105,7 @@ export const PublishCarForm = () => {
       await createCar({ variables: { object: data } });
     } catch (e) {
       toast.error(
-        "Car couldn't be published, you might have already added this car."
+        "Car could not be published, you may have already added this car."
       );
       const err = e as Error;
       console.error(err.message);
@@ -264,10 +267,10 @@ export const PublishCarForm = () => {
           placeholder="10500"
         />
       </PriceContainer>
-      <ValidationText>
-        {mutationError && "Couldn't create car: " + mutationError?.message}
-      </ValidationText>
-      <PublishButton>PUBLISH CAR NOW</PublishButton>
+      <ToastContainer />
+      <PublishButton disabled={mutationLoading}>
+        {mutationLoading ? "LOADING..." : "PUBLISH CAR NOW"}
+      </PublishButton>
     </Container>
   );
 };
