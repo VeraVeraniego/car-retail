@@ -25,7 +25,7 @@ const HEADERS = [
 ];
 
 export const CarRetail = () => {
-  const { data, toogleOrder, searchInInventory } = useHandleCars();
+  const { data, toggleOrder, searchInInventory } = useHandleCars();
   const navigate = useNavigate();
 
   return (
@@ -37,7 +37,7 @@ export const CarRetail = () => {
           Publish New Car
         </PublishNewCarButton>
         <CarSearchForm searchInInventory={searchInInventory} />
-        <OrderBy toogleOrder={toogleOrder} />
+        <OrderBy toggleOrder={toggleOrder} />
       </FirstRow>
       <HeadersRow>
         {HEADERS.map((ele, index) => (

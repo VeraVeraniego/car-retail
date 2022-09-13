@@ -12,10 +12,10 @@ import { useSearchParams } from "react-router-dom";
 import { URL_PARAMS } from "../utils/constants";
 
 interface Props {
-  toogleOrder: () => void;
+  toggleOrder: () => void;
 }
 
-export const OrderBy = ({ toogleOrder }: Props) => {
+export const OrderBy = ({ toggleOrder }: Props) => {
   const [search, setSearch] = useSearchParams();
   const activeSortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT);
 
@@ -29,7 +29,7 @@ export const OrderBy = ({ toogleOrder }: Props) => {
     );
 
   async function handleClick() {
-    const order = toogleOrder();
+    const order = toggleOrder();
   }
 
   return (
