@@ -1,14 +1,27 @@
 import { gql } from "@apollo/client";
 import { Order_By } from "./generated/graphql";
 
-export function orderVariables(order: Order_By) {
+export function orderVariables(order: Order_By | null) {
   return {
     orderBy: [
       {
-        year: null,
         sale_date: order,
       },
     ],
+  };
+}
+export function fetchVariables(order: Order_By | null, search: string | null) {
+  return {
+    orderBy: [
+      {
+        sale_date: null,
+      },
+    ],
+    where: {
+      title: {
+        _ilike: search ? `%${search}%` : "%%",
+      },
+    },
   };
 }
 
