@@ -48,36 +48,12 @@ export const GET_CARS = gql`
   }
 `;
 
-export const GET_BRANDS = gql`
-  query Brands {
+export const GET_FORM_DATA = gql`
+  query FormData {
     brands {
       name
       id
     }
-  }
-`;
-export const GET_MODELS = gql`
-  query Models($where: models_bool_exp) {
-    models(where: $where) {
-      id
-      name
-    }
-  }
-`;
-export const GET_CITIES = gql`
-  query Cities {
-    cities {
-      id
-      name
-      state {
-        id
-        name
-      }
-    }
-  }
-`;
-export const GET_STATES = gql`
-  query States {
     states {
       id
       name
@@ -86,11 +62,15 @@ export const GET_STATES = gql`
         name
       }
     }
+    colors {
+      id
+      name
+    }
   }
 `;
-export const GET_COLORS = gql`
-  query Colors {
-    colors {
+export const GET_MODELS = gql`
+  query Models($where: models_bool_exp) {
+    models(where: $where) {
       id
       name
     }
