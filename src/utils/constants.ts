@@ -8,6 +8,7 @@ export const PATHNAME = {
 
 export const URL_PARAMS = {
   SALE_DATE_SORT: "orderBySaleDate",
+  SEARCH: "searchQuery",
 };
 
 export const STORAGE_KEY = {
