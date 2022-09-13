@@ -18,11 +18,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 import { WatchQueryFetchPolicy } from "@apollo/client";
 import {
-  useBrandsLazyQuery,
-  useColorsLazyQuery,
   useCreateCarMutation,
+  useFormDataLazyQuery,
+  useFormDataQuery,
   useModelsLazyQuery,
-  useStatesLazyQuery,
 } from "../graphql/generated/graphql";
 import {
   modelsbyBrandIdVariables,
@@ -59,25 +58,15 @@ const VALIDATION_MESSAGES = {
   PRICE: "Enter a price for your car",
 };
 export const PublishCarForm = () => {
-  const networkFetch: { fetchPolicy: WatchQueryFetchPolicy | undefined } = {
-    fetchPolicy: "network-only",
-  };
-  const [
-    fetchBrands,
-    { data: brandsData, error: brandsError, loading: brandsLoading },
-  ] = useBrandsLazyQuery(networkFetch);
+  const { data: formsData, error: dataError, loading } = useFormDataQuery();
   const [
     fetchModels,
-    { data: modelsData, error: modelsError, loading: modelsLoading },
-  ] = useModelsLazyQuery(networkFetch);
-  const [
-    fetchStates,
-    { data: statesData, error: statesError, loading: statesLoading },
-  ] = useStatesLazyQuery(networkFetch);
-  const [
-    fetchColors,
-    { data: colorData, error: colorError, loading: colorLoading },
-  ] = useColorsLazyQuery(networkFetch);
+    { data: modelsData, error: modelsError, loading: modelsLoading, refetch },
+  ] = useModelsLazyQuery();
+  //   {
+  //   fetchPolicy: "network-only",
+  // }
+
   const [
     createCar,
     { data: mutationReturn, error: mutationError, loading: mutationLoading },
@@ -89,7 +78,7 @@ export const PublishCarForm = () => {
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const threeMonthsAhead = new Date();
   threeMonthsAhead.setDate(threeMonthsAhead.getDate() + 90);
@@ -101,61 +90,61 @@ export const PublishCarForm = () => {
   const cityId = watch("city_id");
   const year = watch("year");
 
-  const error = brandsError ? (
-    <ValidationText>"On brands:"+{brandsError.message}</ValidationText>
-  ) : modelsError ? (
-    <ValidationText>"On models:"+{modelsError.message}</ValidationText>
-  ) : statesError ? (
-    <ValidationText>"On states:"+{statesError.message}</ValidationText>
-  ) : colorError ? (
-    <ValidationText>"On colors:"+{colorError.message}</ValidationText>
-  ) : (
-    ""
-  );
-
-  const onSubmit: SubmitHandler<any> = (data) => {
-    const color = colorData?.colors.find((color) => color.id == colorId)?.name;
-    const brand = brandsData?.brands.find((brand) => brand.id == brandId)?.name;
+  const onSubmit: SubmitHandler<any> = async (data) => {
+    const color = formsData?.colors.find((color) => color.id == colorId)?.name;
+    const brand = formsData?.brands.find((brand) => brand.id == brandId)?.name;
     const model = modelsData?.models.find((model) => model.id == modelId)?.name;
     data.title = `${color} ${brand} ${model} ${year}`;
     for (let key in data)
       if (key.includes("id")) data[key] = parseInt(data[key]);
-    createCar({ variables: { object: data } });
+
+    try {
+      await createCar({ variables: { object: data } });
+    } catch (e) {
+      toast.error(
+        "Car couldn't be published, you might have already added this car."
+      );
+      const err = e as Error;
+      console.error(err.message);
+    }
   };
 
   useEffect(() => {
+    if (brandId)
+      fetchModels(variableWrapper(modelsbyBrandIdVariables(brandId)));
+  }, [brandId]);
+
+  useEffect(() => {
     if (!mutationReturn) return;
-    navigate(PATHNAME.RETAIL_CARS);
-    console.log("mutation returned sth", mutationReturn);
+    toast.success("Successfully added car");
   }, [mutationReturn]);
 
   const setStateId = () => {
-    const stateId = statesData?.states.find((state) =>
+    const stateId = formsData?.states.find((state) =>
       state.cities.find((city) => city.id == cityId)
     )?.id;
     setValue("state_id", stateId);
   };
-  console.log("watch", watch());
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <GlobalStyle />
 
       <H2>Publish a Car</H2>
-      {error}
+      {dataError && <ValidationText>{dataError.message}</ValidationText>}
+
       {/* BRAND */}
       <Title>Brand *</Title>
       <Validation>{errors.brand_id?.message}</Validation>
       <FormSelectInput
         register={register("brand_id", { required: VALIDATION_MESSAGES.BRAND })}
-        onFocus={() => fetchBrands()}
         onChange={(e) => {
           register("brand_id").onChange(e);
           setValue("model_id", undefined);
         }}
         label="Brand"
-        loading={brandsLoading}
-        data={brandsData?.brands}
+        loading={loading}
+        data={formsData?.brands}
       />
 
       {/* MODEL */}
@@ -163,14 +152,12 @@ export const PublishCarForm = () => {
       <Validation>{errors.model_id?.message}</Validation>
       <FormSelectInput
         register={register("model_id", { required: VALIDATION_MESSAGES.MODEL })}
-        onFocus={() =>
-          fetchModels(variableWrapper(modelsbyBrandIdVariables(brandId)))
-        }
         label="Model"
         loading={modelsLoading}
         disabled={!brandId}
         data={modelsData?.models}
       />
+
       {/* YEAR */}
       <Title>Fabrication Year *</Title>
       <Validation>{errors.year?.message}</Validation>
@@ -182,8 +169,10 @@ export const PublishCarForm = () => {
         min="1950"
         max="2023"
         step="1"
+        defaultValue="2020"
         placeholder="2020"
       />
+
       {/* CITIES */}
       <Title>Origin City *</Title>
       <Validation>{errors.city_id?.message}</Validation>
@@ -192,37 +181,29 @@ export const PublishCarForm = () => {
         register={register("city_id", {
           required: VALIDATION_MESSAGES.CITY,
         })}
-        loading={statesLoading}
-        data={statesData?.states}
-        onFocus={() => fetchStates()}
+        loading={loading}
+        data={formsData?.states}
         onBlur={() => setStateId()}
       />
 
+      {/* VIN */}
       <Title>Vehicle Identification Number *</Title>
       <Validation>{errors.vin?.message}</Validation>
-
       <Input
         {...register("vin", { required: VALIDATION_MESSAGES.VIN })}
         placeholder="8YTN4YPFK375ZNV"
       />
+
       {/* COLORS */}
       <Title>Color *</Title>
       <Validation>{errors.color_id?.message}</Validation>
-      <Select
-        {...register("color_id", { required: VALIDATION_MESSAGES.COLOR })}
-        disabled={colorLoading}
-        onFocus={() => fetchColors()}
-      >
-        <option value="">
-          {colorLoading ? "Loading..." : "Select an option"}
-        </option>
-        {!colorLoading &&
-          colorData?.colors.map((color) => (
-            <option key={color.id} value={color.id}>
-              {color.name}
-            </option>
-          ))}
-      </Select>
+      <FormSelectInput
+        register={register("color_id", { required: VALIDATION_MESSAGES.COLOR })}
+        label="Colors"
+        loading={loading}
+        data={formsData?.colors}
+      />
+
       {/* ODOMETER */}
       <Title>ODOmeter ({odometer ?? 10000} km) *</Title>
       <Input
@@ -233,6 +214,7 @@ export const PublishCarForm = () => {
         step={500}
         defaultValue={10000}
       />
+
       {/* Condition */}
       <Fieldset>
         <legend>
@@ -259,6 +241,7 @@ export const PublishCarForm = () => {
         <label htmlFor={Condition.N}>{Condition.N}</label>
       </Fieldset>
 
+      {/* Sale date */}
       <Title>Sale Date</Title>
       <Validation>{errors.sale_date?.message}</Validation>
       <Input
@@ -268,6 +251,7 @@ export const PublishCarForm = () => {
         max={threeMonthsAhead.toISOString().split("T")[0]}
       />
 
+      {/* Price */}
       <Title>Price willing to sell</Title>
       <Validation>{errors.price?.message}</Validation>
       <PriceContainer>
@@ -349,7 +333,18 @@ const RadioInput = styled.input`
         <option>Back Damage</option>
         <option>Minor Scratches</option>
       </Select> */
-
+/* <Select
+        {...register("color_id", { required: VALIDATION_MESSAGES.COLOR })}
+        disabled={loading}
+      >
+        <option value="">{loading ? "Loading..." : "Select an option"}</option>
+        {!loading &&
+          formsData?.colors.map((color) => (
+            <option key={color.id} value={color.id}>
+              {color.name}
+            </option>
+          ))}
+      </Select> */
 /* <Select
         // {...register("brand_id")}
         {...register("brand_id", { required: VALIDATION_MESSAGES.BRAND })}

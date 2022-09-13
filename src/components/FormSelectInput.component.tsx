@@ -19,7 +19,7 @@ export const FormSelectInput = ({
 }: {
   label: string;
   register: any;
-  onFocus: any;
+  onFocus?: any;
   onBlur?: any;
   onChange?: (e: React.ChangeEvent) => void;
   loading: boolean;
