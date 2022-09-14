@@ -7,13 +7,16 @@ import { CarRowInfo } from "../interfaces/Car";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { PATHNAME } from "../utils";
-import { useCreateCarMutation } from "../graphql/generated/graphql";
-import { userCarVariables, variableWrapper } from "../graphql/variables";
-import { CREATE_USER_CAR } from "../graphql/mutations";
+import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
 import { useMutation } from "@apollo/client";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { deleteCarVariables, variableWrapper } from "../graphql/variables";
+import { FavoriteButton } from "./FavoriteButton.component";
 
 export const CarInfo = ({
   id,
+  isFavorite: isFav,
   img,
   title,
   batch,
@@ -25,41 +28,45 @@ export const CarInfo = ({
   place,
 }: CarRowInfo) => {
   const { loggedUser } = useContext(UserContext);
-  const [isFavorite, setIsFavorite] = useState<boolean>();
-  const [createUserCar, { data, error, loading }] =
-    useMutation(CREATE_USER_CAR);
+  const [isFavorite, setIsFavorite] = useState<boolean>(isFav ?? false);
+  const [
+    createUserCar,
+    { data: favData, error: favError, loading: favLoading },
+  ] = useMutation(CREATE_USER_CAR);
+  const [
+    deleteUserCar,
+    { data: unfavData, error: unfavError, loading: unfavLoading },
+  ] = useMutation(DELETE_USER_CAR);
   const now = new Date();
   const navigate = useNavigate();
 
-  function setFavorite() {
-    if (!loggedUser) return navigate(PATHNAME.LOGIN);
-    // createUserCar(
-    //   variableWrapper({ object: userCarVariables(loggedUser.id, id) })
-    // );
-    createUserCar({
-      variables: { object: { car_id: id, user_id: loggedUser.id } },
-    });
+  async function toggleFavorite() {
+    if (!loggedUser) {
+      return navigate(PATHNAME.LOGIN);
+    }
+    if (isFavorite) {
+      await deleteUserCar(
+        variableWrapper(deleteCarVariables(loggedUser.id, id!))
+      );
+      setIsFavorite(false);
+    } else {
+      await createUserCar(
+        variableWrapper({ object: { car_id: id, user_id: loggedUser.id } })
+      );
+      setIsFavorite(true);
+    }
   }
   return (
     <Container>
       <CarImage src={img} alt={title} />
-      {/* Batch Info */}
       <Column>
         <Title>{title}</Title>
         <Value>{batch}</Value>
-        <FavoriteButton onClick={() => setFavorite()}>
-          {isFavorite ? (
-            <>
-              <WatchIcon />
-              Watch
-            </>
-          ) : (
-            <>
-              <UnwatchIcon />
-              Unwatch
-            </>
-          )}
-        </FavoriteButton>
+        <FavoriteButton
+          fav={isFavorite}
+          onClick={() => toggleFavorite()}
+          loading={favLoading || unfavLoading}
+        />
       </Column>
       <Column>
         {odo && (
@@ -95,27 +102,7 @@ export const CarInfo = ({
     </Container>
   );
 };
-const WatchIcon = styled(AiOutlineEye)`
-  font-size: 16px;
-`;
-const UnwatchIcon = styled(AiOutlineEyeInvisible)`
-  font-size: 16px;
-`;
-const FavoriteButton = styled(Button)`
-  line-height: 12px;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  border-radius: 2px;
-  border: 1px solid;
-  background-color: inherit;
-  color: ${defaultTheme.palette.red};
-  width: 80px;
-  &:hover {
-    color: ${defaultTheme.palette.darkblue};
-    background-color: ${defaultTheme.palette.lightyellow};
-  }
-`;
+
 const Value = styled(P)``;
 const RedValue = styled(Value)`
   color: ${defaultTheme.palette.red};

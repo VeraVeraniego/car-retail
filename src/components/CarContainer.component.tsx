@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { CarRowInfo } from "../interfaces/Car";
 import { CAR_SKELETON_PROPS, IMG_URL } from "../utils/index";
-import { FlexColumn, H2, ValidationText } from "./styled";
+import { FlexColumn, H2, H3, ValidationText } from "./styled";
 import { CarInfo } from "./CarInfo.component";
 import { ApolloError } from "@apollo/client";
 
@@ -26,9 +26,7 @@ export const CarContainer = ({ data }: Props) => {
     <Container>
       {loading ? (
         <>
-          <CarInfo {...CAR_SKELETON_PROPS} />
-          <CarInfo {...CAR_SKELETON_PROPS} />
-          <CarInfo {...CAR_SKELETON_PROPS} />
+          <H3>Loading...</H3>
         </>
       ) : error ? (
         <ValidationText>
@@ -38,6 +36,7 @@ export const CarContainer = ({ data }: Props) => {
         renderedCars?.map((ele) => (
           <CarInfo
             key={ele.vin}
+            isFavorite={ele.isFavorite}
             id={ele.id}
             img={`${IMG_URL}/${ele.id}/300/200`}
             title={ele.title}
