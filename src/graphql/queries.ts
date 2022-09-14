@@ -11,7 +11,11 @@ export const VALIDATE_EMAIL = gql`
   }
 `;
 export const GET_CARS = gql`
-  query Cars($orderBy: [cars_order_by!], $where: cars_bool_exp) {
+  query Cars(
+    $orderBy: [cars_order_by!]
+    $where: cars_bool_exp
+    $userCarsWhere2: user_cars_bool_exp
+  ) {
     cars(order_by: $orderBy, where: $where) {
       batch
       city {
@@ -44,6 +48,10 @@ export const GET_CARS = gql`
           name
         }
       }
+    }
+    user_cars(where: $userCarsWhere2) {
+      user_id
+      car_id
     }
   }
 `;

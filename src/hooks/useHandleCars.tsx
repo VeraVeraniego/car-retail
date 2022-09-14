@@ -28,16 +28,19 @@ export const useHandleCars = () => {
   const [cars, setCars] = useState<CarRowInfo[] | null>(null);
   const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery();
   const [search, setSearch] = useSearchParams();
-  const activeSortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT) as Order_By;
-  const activeSearchInUrl = search.get(URL_PARAMS.SEARCH);
+  const sortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT) as Order_By;
+  const searchInUrl = search.get(URL_PARAMS.SEARCH);
+  const { loggedUser } = useContext(UserContext);
 
   useEffect(() => {
     if (!data) {
-      // console.log("will sort by", orderVariables(activeSortInUrl));
-      // getCars(variableWrapper(orderVariables(activeSortInUrl)));
-      getCars(
-        variableWrapper(fetchVariables(activeSortInUrl, activeSearchInUrl))
-      );
+      if (!loggedUser) {
+        getCars(variableWrapper(fetchVariables(sortInUrl, searchInUrl)));
+      } else {
+        getCars(
+          variableWrapper(fetchVariables(sortInUrl, searchInUrl, loggedUser.id))
+        );
+      }
       return;
     }
     const adaptedCars = adaptResponse(data.cars as Cars[]);
@@ -45,20 +48,16 @@ export const useHandleCars = () => {
   }, [data]);
 
   async function toggleOrder() {
-    // if (!cars) return "";
     let orderToSet: Order_By;
-    if (activeSortInUrl === Order_By.Asc) {
+    if (sortInUrl === Order_By.Asc) {
       orderToSet = Order_By.Desc;
       search.set(URL_PARAMS.SALE_DATE_SORT, Order_By.Desc);
       setSearch(search);
     } else {
-      // if (activeSortInUrl === Order_By.Desc || activeSortInUrl === null) {
       search.set(URL_PARAMS.SALE_DATE_SORT, Order_By.Asc);
       setSearch(search);
       orderToSet = Order_By.Asc;
     }
-    console.log("order varbiables", orderVariables(orderToSet));
-
     await refetch(orderVariables(orderToSet));
     // return;
   }
@@ -73,7 +72,6 @@ export const useHandleCars = () => {
   async function searchInInventory(searchText: string) {
     search.set(URL_PARAMS.SEARCH, searchText);
     setSearch(search);
-    console.log(activeSearchInUrl);
     if (!searchText) {
       await getCars();
       return;

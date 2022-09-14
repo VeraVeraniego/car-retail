@@ -10,17 +10,31 @@ export function orderVariables(order: Order_By | null) {
     ],
   };
 }
-export function fetchVariables(order: Order_By | null, search: string | null) {
+
+export function fetchVariables(
+  order: Order_By | null,
+  search: string | null,
+  userId?: number
+) {
   return {
     orderBy: [
       {
-        sale_date: null,
+        sale_date: order,
       },
     ],
     where: {
       title: {
         _ilike: search ? `%${search}%` : "%%",
       },
+    },
+    userCarsWhere2: {
+      user_id: userId
+        ? {
+            _eq: userId,
+          }
+        : {
+            _is_null: true,
+          },
     },
   };
 }

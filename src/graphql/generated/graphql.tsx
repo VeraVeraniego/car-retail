@@ -3494,10 +3494,11 @@ export type UsersQuery = { __typename?: 'query_root', users: Array<{ __typename?
 export type CarsQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Cars_Order_By> | Cars_Order_By>;
   where?: InputMaybe<Cars_Bool_Exp>;
+  userCarsWhere2?: InputMaybe<User_Cars_Bool_Exp>;
 }>;
 
 
-export type CarsQuery = { __typename?: 'query_root', cars: Array<{ __typename?: 'cars', batch: any, condition: any, damage_type?: string | null, description?: string | null, id: number, odometer?: number | null, price: any, sale_date: any, title?: string | null, vin: string, year?: number | null, city: { __typename?: 'cities', name: string, id: number, state: { __typename?: 'states', id: number, name: string } }, color: { __typename?: 'colors', id: number, name: string }, model: { __typename?: 'models', id: number, name: string, brand: { __typename?: 'brands', id: number, name: string } } }> };
+export type CarsQuery = { __typename?: 'query_root', cars: Array<{ __typename?: 'cars', batch: any, condition: any, damage_type?: string | null, description?: string | null, id: number, odometer?: number | null, price: any, sale_date: any, title?: string | null, vin: string, year?: number | null, city: { __typename?: 'cities', name: string, id: number, state: { __typename?: 'states', id: number, name: string } }, color: { __typename?: 'colors', id: number, name: string }, model: { __typename?: 'models', id: number, name: string, brand: { __typename?: 'brands', id: number, name: string } } }>, user_cars: Array<{ __typename?: 'user_cars', user_id: number, car_id: number }> };
 
 export type FormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3631,7 +3632,7 @@ export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
 export const CarsDocument = gql`
-    query Cars($orderBy: [cars_order_by!], $where: cars_bool_exp) {
+    query Cars($orderBy: [cars_order_by!], $where: cars_bool_exp, $userCarsWhere2: user_cars_bool_exp) {
   cars(order_by: $orderBy, where: $where) {
     batch
     city {
@@ -3665,6 +3666,10 @@ export const CarsDocument = gql`
       }
     }
   }
+  user_cars(where: $userCarsWhere2) {
+    user_id
+    car_id
+  }
 }
     `;
 
@@ -3682,6 +3687,7 @@ export const CarsDocument = gql`
  *   variables: {
  *      orderBy: // value for 'orderBy'
  *      where: // value for 'where'
+ *      userCarsWhere2: // value for 'userCarsWhere2'
  *   },
  * });
  */
