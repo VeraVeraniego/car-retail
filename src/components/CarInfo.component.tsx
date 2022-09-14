@@ -56,6 +56,7 @@ export const CarInfo = ({
       setIsFavorite(true);
     }
   }
+
   return (
     <Container>
       <CarImage src={img} alt={title} />

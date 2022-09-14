@@ -63,15 +63,7 @@ export const useHandleCars = () => {
       orderToSet = Order_By.Asc;
     }
     await refetch(orderVariables(orderToSet));
-    // return;
   }
-  //   if (!search.get(URL_PARAMS.SALE_DATE_SORT))
-  //   setSearch({ orderBySaleDate: Order_By.Asc });
-
-  // if (search.get(URL_PARAMS.SALE_DATE_SORT) === Order_By.Desc)
-  //   setSearch({ orderBySaleDate: Order_By.Asc });
-  // else if (search.get(URL_PARAMS.SALE_DATE_SORT) === Order_By.Asc)
-  //   setSearch({ orderBySaleDate: Order_By.Desc });
 
   async function searchInInventory(searchText: string) {
     search.set(URL_PARAMS.SEARCH, searchText);
