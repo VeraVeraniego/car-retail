@@ -1,16 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Cars, useCarsQuery } from "../graphql/generated/graphql";
-import { CarRowInfo, CarsState } from "../interfaces/Car";
-import {
-  CAR_SKELETON_PROPS,
-  IMG_URL,
-  responseCarToCarComponent,
-} from "../utils/index";
+import { CarRowInfo } from "../interfaces/Car";
+import { CAR_SKELETON_PROPS, IMG_URL } from "../utils/index";
 import { FlexColumn, H2, ValidationText } from "./styled";
 import { CarInfo } from "./CarInfo.component";
 import { ApolloError } from "@apollo/client";
-import { UserContext } from "../contexts/UserContext";
 
 interface Props {
   data: {
@@ -23,7 +17,6 @@ interface Props {
 export const CarContainer = ({ data }: Props) => {
   const { cars, error, loading } = data;
   const [renderedCars, setRenderedCars] = useState<CarRowInfo[] | null>(null);
-  const { loggedUser, setLoggedUser } = useContext(UserContext);
 
   useEffect(() => {
     setRenderedCars(cars);
