@@ -3484,6 +3484,13 @@ export type Insert_User_Cars_OneMutationVariables = Exact<{
 
 export type Insert_User_Cars_OneMutation = { __typename?: 'mutation_root', insert_user_cars_one?: { __typename?: 'user_cars', car_id: number, id: number, user_id: number, uuid: any } | null };
 
+export type Delete_User_CarsMutationVariables = Exact<{
+  where: User_Cars_Bool_Exp;
+}>;
+
+
+export type Delete_User_CarsMutation = { __typename?: 'mutation_root', delete_user_cars?: { __typename?: 'user_cars_mutation_response', returning: Array<{ __typename?: 'user_cars', car_id: number, user_id: number, id: number }> } | null };
+
 export type UsersQueryVariables = Exact<{
   where?: InputMaybe<Users_Bool_Exp>;
 }>;
@@ -3593,6 +3600,43 @@ export function useInsert_User_Cars_OneMutation(baseOptions?: Apollo.MutationHoo
 export type Insert_User_Cars_OneMutationHookResult = ReturnType<typeof useInsert_User_Cars_OneMutation>;
 export type Insert_User_Cars_OneMutationResult = Apollo.MutationResult<Insert_User_Cars_OneMutation>;
 export type Insert_User_Cars_OneMutationOptions = Apollo.BaseMutationOptions<Insert_User_Cars_OneMutation, Insert_User_Cars_OneMutationVariables>;
+export const Delete_User_CarsDocument = gql`
+    mutation Delete_user_cars($where: user_cars_bool_exp!) {
+  delete_user_cars(where: $where) {
+    returning {
+      car_id
+      user_id
+      id
+    }
+  }
+}
+    `;
+export type Delete_User_CarsMutationFn = Apollo.MutationFunction<Delete_User_CarsMutation, Delete_User_CarsMutationVariables>;
+
+/**
+ * __useDelete_User_CarsMutation__
+ *
+ * To run a mutation, you first call `useDelete_User_CarsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDelete_User_CarsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserCarsMutation, { data, loading, error }] = useDelete_User_CarsMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useDelete_User_CarsMutation(baseOptions?: Apollo.MutationHookOptions<Delete_User_CarsMutation, Delete_User_CarsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Delete_User_CarsMutation, Delete_User_CarsMutationVariables>(Delete_User_CarsDocument, options);
+      }
+export type Delete_User_CarsMutationHookResult = ReturnType<typeof useDelete_User_CarsMutation>;
+export type Delete_User_CarsMutationResult = Apollo.MutationResult<Delete_User_CarsMutation>;
+export type Delete_User_CarsMutationOptions = Apollo.BaseMutationOptions<Delete_User_CarsMutation, Delete_User_CarsMutationVariables>;
 export const UsersDocument = gql`
     query Users($where: users_bool_exp) {
   users(where: $where) {

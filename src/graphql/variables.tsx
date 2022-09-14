@@ -81,3 +81,15 @@ export function variableWrapper(obj: {}) {
 export function userCarVariables(userId: number, carId: number | string) {
   return { car_id: carId, user_id: userId };
 }
+export function deleteCarVariables(userId: number, carId: number | string) {
+  return {
+    where: {
+      user_id: {
+        _eq: userId,
+      },
+      car_id: {
+        _eq: carId,
+      },
+    },
+  };
+}

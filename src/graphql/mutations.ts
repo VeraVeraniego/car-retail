@@ -29,3 +29,14 @@ export const CREATE_USER_CAR = gql`
     }
   }
 `;
+export const DELETE_USER_CAR = gql`
+  mutation Delete_user_cars($where: user_cars_bool_exp!) {
+    delete_user_cars(where: $where) {
+      returning {
+        car_id
+        user_id
+        id
+      }
+    }
+  }
+`;
