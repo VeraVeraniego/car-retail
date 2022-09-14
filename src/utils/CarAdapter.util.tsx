@@ -1,4 +1,4 @@
-import { Cars } from "../graphql/generated/graphql";
+import { Cars, User_Cars } from "../graphql/generated/graphql";
 import { CarRowInfo } from "../interfaces/Car";
 export enum Condition {
   A = "Salvage Title",
@@ -12,7 +12,7 @@ export function responseCarToCarComponent(queryCar: Cars) {
     // title: `${queryCar.model.brand.name} ${queryCar.model.name} ${queryCar.year}`,
     batch: queryCar.batch,
     vin: queryCar.vin,
-    odo: queryCar.odometer ? queryCar.odometer : "",
+    odo: queryCar.odometer ?? "",
     price: queryCar.price,
     condition:
       queryCar.condition === "A"
@@ -27,8 +27,12 @@ export function responseCarToCarComponent(queryCar: Cars) {
   return shapedCar;
 }
 
-export function adaptResponse(cars: Cars[]) {
+export function adaptResponse(cars: Cars[], userCars: User_Cars[]) {
   // if (!cars) return;
-  const mapped = cars.map((elem) => responseCarToCarComponent(elem as Cars));
+  const mapped = cars.map((car) => {
+    const newCar = responseCarToCarComponent(car as Cars);
+    newCar.isFavorite = !!userCars.find((fav) => car.id == fav.car_id);
+    return newCar;
+  });
   return mapped;
 }

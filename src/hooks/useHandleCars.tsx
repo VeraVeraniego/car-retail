@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 import {
   Cars,
   Order_By,
   useCarsLazyQuery,
-  useCarsQuery,
+  User_Cars,
 } from "../graphql/generated/graphql";
 import {
   fetchVariables,
@@ -14,7 +15,7 @@ import {
   searchByVINVariables,
   variableWrapper,
 } from "../graphql/variables";
-import { CarRowInfo, Filters, SortOrder } from "../interfaces/Car";
+import { CarRowInfo } from "../interfaces/Car";
 import { adaptResponse } from "../utils/CarAdapter.util";
 import { URL_PARAMS } from "../utils/constants";
 
@@ -43,7 +44,10 @@ export const useHandleCars = () => {
       }
       return;
     }
-    const adaptedCars = adaptResponse(data.cars as Cars[]);
+    const adaptedCars = adaptResponse(
+      data.cars as Cars[],
+      data.user_cars as User_Cars[]
+    );
     setCars(adaptedCars);
   }, [data]);
 
