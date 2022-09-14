@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { defaultTheme } from "../theme";
 import { Button, FlexColumn, FlexRow, H3, H4, P } from "./styled";
@@ -24,7 +24,8 @@ export const CarInfo = ({
   saleDate,
   place,
 }: CarRowInfo) => {
-  const { loggedUser, setLoggedUser } = useContext(UserContext);
+  const { loggedUser } = useContext(UserContext);
+  const [isFavorite, setIsFavorite] = useState<boolean>();
   const [createUserCar, { data, error, loading }] =
     useMutation(CREATE_USER_CAR);
   const now = new Date();
@@ -47,8 +48,17 @@ export const CarInfo = ({
         <Title>{title}</Title>
         <Value>{batch}</Value>
         <FavoriteButton onClick={() => setFavorite()}>
-          <WatchIcon />
-          Watch
+          {isFavorite ? (
+            <>
+              <WatchIcon />
+              Watch
+            </>
+          ) : (
+            <>
+              <UnwatchIcon />
+              Unwatch
+            </>
+          )}
         </FavoriteButton>
       </Column>
       <Column>
