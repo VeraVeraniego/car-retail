@@ -27,11 +27,14 @@ function isUUID(text: string) {
 
 export const useHandleCars = () => {
   const [cars, setCars] = useState<CarRowInfo[] | null>(null);
-  const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery();
   const [search, setSearch] = useSearchParams();
   const sortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT) as Order_By;
   const searchInUrl = search.get(URL_PARAMS.SEARCH);
   const { loggedUser } = useContext(UserContext);
+  // const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery({
+  //   fetchPolicy: "network-only",
+  // });
+  const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery();
 
   useEffect(() => {
     if (!data) {

@@ -1,25 +1,21 @@
-import React, { useCallback, useEffect } from "react";
-import styled, { css } from "styled-components";
+import React, { useEffect } from "react";
+import styled from "styled-components";
 import { defaultTheme, GlobalStyle } from "../theme";
 import {
   ButtonOnHoverOppacity,
   CSSFlexCol,
   FlexRow,
   Form,
-  H1,
   H2,
   H3,
-  H4,
   InputStyle,
   P,
   ValidationText,
 } from "./styled";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import { WatchQueryFetchPolicy } from "@apollo/client";
 import {
   useCreateCarMutation,
-  useFormDataLazyQuery,
   useFormDataQuery,
   useModelsLazyQuery,
 } from "../graphql/generated/graphql";
@@ -27,13 +23,11 @@ import {
   modelsbyBrandIdVariables,
   variableWrapper,
 } from "../graphql/variables";
-import { Condition } from "../utils/CarAdapter.util";
-import { useNavigate } from "react-router-dom";
-import { PATHNAME } from "../utils";
 import { FormSelectInput } from "./FormSelectInput.component";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { GraphQLError } from "graphql";
+import { ConditionFieldset } from "./ConditionFieldset";
+import Loader from "./styled/Loader.component";
 
 interface FormValues {
   brand_id: number;
@@ -76,6 +70,7 @@ export const PublishCarForm = () => {
   ] = useCreateCarMutation();
   const {
     register,
+    reset,
     handleSubmit,
     watch,
     setValue,
@@ -106,7 +101,14 @@ export const PublishCarForm = () => {
       if (key.includes("id")) data[key] = parseInt(data[key]);
 
     try {
-      await createCar({ variables: { object: data } });
+      await createCar({
+        variables: { object: data },
+        optimisticResponse: {
+          insert_cars_one: data,
+          __typename: "mutation_root",
+        },
+      });
+      reset();
     } catch (e) {
       toast.error(
         "Car could not be published, you may have already added this car."
@@ -136,148 +138,132 @@ export const PublishCarForm = () => {
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <GlobalStyle />
-
-      <H2>Publish a Car</H2>
       {dataError && <ValidationText>{dataError.message}</ValidationText>}
 
-      {/* BRAND */}
-      <Title>Brand *</Title>
-      <Validation>{errors.brand_id?.message}</Validation>
-      <FormSelectInput
-        register={register("brand_id", { required: VALIDATION_MESSAGES.BRAND })}
-        onChange={(e) => {
-          register("brand_id").onChange(e);
-          setValue("model_id", undefined);
-        }}
-        label="Brand"
-        loading={loading}
-        data={formsData?.brands}
-      />
+      <H2>Publish a Car</H2>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Title>Brand *</Title>
+          <Validation>{errors.brand_id?.message}</Validation>
+          <FormSelectInput
+            register={register("brand_id", {
+              required: VALIDATION_MESSAGES.BRAND,
+            })}
+            onChange={(e) => {
+              register("brand_id").onChange(e);
+              setValue("model_id", undefined);
+            }}
+            label="Brand"
+            loading={loading}
+            data={formsData?.brands}
+          />
 
-      {/* MODEL */}
-      <Title>Model *</Title>
-      <Validation>{errors.model_id?.message}</Validation>
-      <FormSelectInput
-        register={register("model_id", { required: VALIDATION_MESSAGES.MODEL })}
-        label="Model"
-        loading={modelsLoading}
-        disabled={!brandId}
-        data={modelsData?.models}
-      />
+          <Title>Model *</Title>
+          <Validation>{errors.model_id?.message}</Validation>
+          <FormSelectInput
+            register={register("model_id", {
+              required: VALIDATION_MESSAGES.MODEL,
+            })}
+            label="Model"
+            loading={modelsLoading}
+            disabled={!brandId}
+            data={modelsData?.models}
+          />
 
-      {/* YEAR */}
-      <Title>Fabrication Year *</Title>
-      <Validation>{errors.year?.message}</Validation>
-      <Input
-        {...register("year", {
-          required: VALIDATION_MESSAGES.YEAR,
-        })}
-        type="number"
-        min="1950"
-        max="2023"
-        step="1"
-        defaultValue="2020"
-        placeholder="2020"
-      />
+          <Title>Fabrication Year *</Title>
+          <Validation>{errors.year?.message}</Validation>
+          <Input
+            {...register("year", {
+              required: VALIDATION_MESSAGES.YEAR,
+            })}
+            type="number"
+            min="1950"
+            max="2023"
+            step="1"
+            defaultValue="2020"
+            placeholder="2020"
+          />
 
-      {/* CITIES */}
-      <Title>Origin City *</Title>
-      <Validation>{errors.city_id?.message}</Validation>
-      <FormSelectInput
-        label="Cities"
-        register={register("city_id", {
-          required: VALIDATION_MESSAGES.CITY,
-        })}
-        loading={loading}
-        data={formsData?.states}
-        onBlur={() => setStateId()}
-      />
+          <Title>Origin City *</Title>
+          <Validation>{errors.city_id?.message}</Validation>
+          <FormSelectInput
+            label="Cities"
+            register={register("city_id", {
+              required: VALIDATION_MESSAGES.CITY,
+            })}
+            loading={loading}
+            data={formsData?.states}
+            onBlur={() => setStateId()}
+          />
 
-      {/* VIN */}
-      <Title>Vehicle Identification Number *</Title>
-      <Validation>{errors.vin?.message}</Validation>
-      <Input
-        {...register("vin", { required: VALIDATION_MESSAGES.VIN })}
-        placeholder="8YTN4YPFK375ZNV"
-      />
+          <Title>Vehicle Identification Number *</Title>
+          <Validation>{errors.vin?.message}</Validation>
+          <Input
+            {...register("vin", { required: VALIDATION_MESSAGES.VIN })}
+            placeholder="8YTN4YPFK375ZNV"
+          />
 
-      {/* COLORS */}
-      <Title>Color *</Title>
-      <Validation>{errors.color_id?.message}</Validation>
-      <FormSelectInput
-        register={register("color_id", { required: VALIDATION_MESSAGES.COLOR })}
-        label="Colors"
-        loading={loading}
-        data={formsData?.colors}
-      />
+          <Title>Color *</Title>
+          <Validation>{errors.color_id?.message}</Validation>
+          <FormSelectInput
+            register={register("color_id", {
+              required: VALIDATION_MESSAGES.COLOR,
+            })}
+            label="Colors"
+            loading={loading}
+            data={formsData?.colors}
+          />
 
-      {/* ODOMETER */}
-      <Title>ODOmeter ({odometer ?? 10000} km) *</Title>
-      <Input
-        {...register("odometer")}
-        type="range"
-        min={0}
-        max={250000}
-        step={500}
-        defaultValue={10000}
-      />
+          <Title>ODOmeter ({odometer ?? 10000} km) *</Title>
+          <Input
+            {...register("odometer")}
+            type="range"
+            min={0}
+            max={250000}
+            step={500}
+            defaultValue={10000}
+          />
+          <ConditionFieldset
+            error={errors.condition?.message}
+            register={register}
+            validation={VALIDATION_MESSAGES.CONDITION}
+          />
 
-      {/* Condition */}
-      <Fieldset>
-        <legend>
-          <Title>Condition *</Title>
-          <Validation>{errors.condition?.message}</Validation>
-        </legend>
-        <RadioInput
-          {...register("condition", {
-            required: VALIDATION_MESSAGES.CONDITION,
-          })}
-          type="radio"
-          value="A"
-          name="condition"
-          id={Condition.A}
-        />
-        <label htmlFor={Condition.A}>{Condition.A}</label>
-        <RadioInput
-          {...register("condition")}
-          type="radio"
-          value="N"
-          name="condition"
-          id={Condition.N}
-        />
-        <label htmlFor={Condition.N}>{Condition.N}</label>
-      </Fieldset>
+          <Title>Sale Date</Title>
+          <Validation>{errors.sale_date?.message}</Validation>
+          <Input
+            {...register("sale_date", {
+              required: VALIDATION_MESSAGES.SALE_DATE,
+            })}
+            type="date"
+            min={new Date().toISOString().split("T")[0]}
+            max={threeMonthsAhead.toISOString().split("T")[0]}
+          />
 
-      {/* Sale date */}
-      <Title>Sale Date</Title>
-      <Validation>{errors.sale_date?.message}</Validation>
-      <Input
-        {...register("sale_date", { required: VALIDATION_MESSAGES.SALE_DATE })}
-        type="date"
-        min={new Date().toISOString().split("T")[0]}
-        max={threeMonthsAhead.toISOString().split("T")[0]}
-      />
-
-      {/* Price */}
-      <Title>Price willing to sell</Title>
-      <Validation>{errors.price?.message}</Validation>
-      <PriceContainer>
-        <P>$</P>
-        <PriceInput
-          {...register("price", { required: VALIDATION_MESSAGES.PRICE })}
-          type="number"
-          min={3000}
-          max={1000000}
-          placeholder="10500"
-        />
-      </PriceContainer>
-      <ToastContainer />
-      <PublishButton disabled={mutationLoading}>
-        {mutationLoading ? "LOADING..." : "PUBLISH CAR NOW"}
-      </PublishButton>
+          <Title>Price willing to sell</Title>
+          <Validation>{errors.price?.message}</Validation>
+          <PriceContainer>
+            <P>$</P>
+            <PriceInput
+              {...register("price", { required: VALIDATION_MESSAGES.PRICE })}
+              type="number"
+              min={3000}
+              max={1000000}
+              placeholder="10500"
+            />
+          </PriceContainer>
+          <ToastContainer />
+          <PublishButton disabled={mutationLoading}>
+            {mutationLoading ? "LOADING..." : "PUBLISH CAR NOW"}
+          </PublishButton>
+        </>
+      )}
     </Container>
   );
 };
+
 const Container = styled(Form)`
   ${CSSFlexCol};
   margin-top: 16px;
@@ -286,20 +272,13 @@ const Container = styled(Form)`
   height: 100%;
   width: 80vw;
 `;
-const Title = styled(H3)`
+export const Title = styled(H3)`
   margin-top: 16px;
 `;
-const Validation = styled(P)`
+export const Validation = styled(P)`
   margin-bottom: 4px;
   font-size: 10px;
   color: ${defaultTheme.palette.red};
-`;
-
-const Select = styled.select`
-  ${InputStyle}
-  &:disabled {
-    color: ${defaultTheme.palette.inactive};
-  }
 `;
 const Input = styled.input`
   ${InputStyle}
@@ -329,6 +308,31 @@ const Fieldset = styled.fieldset`
 const RadioInput = styled.input`
   margin-left: 8px;
 `;
+
+/* <Fieldset>
+        <legend>
+          <Title>Condition *</Title>
+          <Validation>{errors.condition?.message}</Validation>
+        </legend>
+        <RadioInput
+          {...register("condition", {
+            required: VALIDATION_MESSAGES.CONDITION,
+          })}
+          type="radio"
+          value="A"
+          name="condition"
+          id={Condition.A}
+        />
+        <label htmlFor={Condition.A}>{Condition.A}</label>
+        <RadioInput
+          {...register("condition")}
+          type="radio"
+          value="N"
+          name="condition"
+          id={Condition.N}
+        />
+        <label htmlFor={Condition.N}>{Condition.N}</label>
+      </Fieldset> */
 
 /* <Title>Damage Type</Title>
       <Select {...register("damageType")} defaultValue="">

@@ -5,6 +5,7 @@ import { CAR_SKELETON_PROPS, IMG_URL } from "../utils/index";
 import { FlexColumn, H2, H3, ValidationText } from "./styled";
 import { CarInfo } from "./CarInfo.component";
 import { ApolloError } from "@apollo/client";
+import Loader from "./styled/Loader.component";
 
 interface Props {
   data: {
@@ -26,7 +27,7 @@ export const CarContainer = ({ data }: Props) => {
     <Container>
       {loading ? (
         <>
-          <H3>Loading...</H3>
+          <Loader />
         </>
       ) : error ? (
         <ValidationText>
