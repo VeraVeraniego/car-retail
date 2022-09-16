@@ -1,15 +1,20 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IUserContext, UserContext } from "../contexts/UserContext";
-import { useUsersLazyQuery } from "../graphql/generated/graphql";
+import { UserContext } from "../contexts/UserContext";
 import { VALIDATE_EMAIL } from "../graphql/queries";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { EmailVars, Response } from "../interfaces/User";
-import { defaultTheme, GlobalStyle } from "../theme";
-import { PATHNAME, REPLACE, STORAGE_KEY } from "../utils/constants";
+import { GlobalStyle } from "../theme";
+import { REPLACE, STORAGE_KEY } from "../utils/constants";
 import { Button, Form, H1, Input, ValidationText } from "./styled";
+
+function isValidEmail(email: string) {
+  const regex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regex.test(email);
+}
 
 export const LoginForm = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);
@@ -45,7 +50,7 @@ export const LoginForm = () => {
     const resp = await validateEmail({
       variables: { where: { email: { _eq: emailInput } } },
     });
-    // Error Handling
+
     if (resp?.data?.users?.length === 0) setErrorMessage("Not Allowed");
     else {
       if (error) setErrorMessage(`Error: ${error.message}`);
@@ -60,12 +65,6 @@ export const LoginForm = () => {
     setErrorMessage("");
     setEmailInput(e.target.value);
   };
-
-  function isValidEmail(email: string) {
-    const regex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return regex.test(email);
-  }
 
   return (
     <FormContainer>

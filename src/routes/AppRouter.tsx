@@ -14,6 +14,7 @@ export function AppRouter() {
   return (
     <Routes>
       <Route path={PATHNAME.LOGIN} element={<Login />} />
+      {/* TODO: DASHOBOARD */}
       <Route path="/" element={<TopNavBar />}>
         <Route path="/" element={<Home />} />
         <Route path={PATHNAME.RETAIL_CARS} element={<CarRetail />} />
@@ -22,7 +23,6 @@ export function AppRouter() {
           <Route path={PATHNAME.WATCH_LIST} element={<FavoriteCars />} />
         </Route>
       </Route>
-      {/* Protected Routes Below */}
     </Routes>
   );
 }

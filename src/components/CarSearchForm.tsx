@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { MdSearch } from "react-icons/md";
 import styled from "styled-components";
 import { ButtonOnHoverOppacity, Form, Input } from "./styled";
-import { CarsAndFiltersState, FiltersState } from "../interfaces/Car";
 import { defaultTheme } from "../theme";
 
 export const CarSearchForm = ({ searchInInventory }: any) => {
@@ -12,10 +11,7 @@ export const CarSearchForm = ({ searchInInventory }: any) => {
     e.preventDefault();
     searchInInventory(searchInput);
   }
-  // function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setSearchInput(e.target.value);
-  //   searchInInventory(searchInput);
-  // }
+
   return (
     <SearchForm onSubmit={(e) => handleSubmit(e)}>
       <SearchVector />

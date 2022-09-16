@@ -1,15 +1,13 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { defaultTheme } from "../theme";
-import { Button, FlexColumn, FlexRow, H3, H4, P } from "./styled";
-import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import { FlexColumn, FlexRow, H3, H4, P } from "./styled";
 import { CarRowInfo } from "../interfaces/Car";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { PATHNAME } from "../utils";
 import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
 import { useMutation } from "@apollo/client";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteCarVariables, variableWrapper } from "../graphql/variables";
 import { FavoriteButton } from "./FavoriteButton.component";

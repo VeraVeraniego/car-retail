@@ -77,7 +77,6 @@ export const PublishCarForm = () => {
     getValues,
     formState: { errors },
   } = useForm<FormValues>();
-  // const navigate = useNavigate();
 
   const threeMonthsAhead = new Date();
   threeMonthsAhead.setDate(threeMonthsAhead.getDate() + 90);
@@ -225,6 +224,7 @@ export const PublishCarForm = () => {
             step={500}
             defaultValue={10000}
           />
+
           <ConditionFieldset
             error={errors.condition?.message}
             register={register}
@@ -308,116 +308,3 @@ const Fieldset = styled.fieldset`
 const RadioInput = styled.input`
   margin-left: 8px;
 `;
-
-/* <Fieldset>
-        <legend>
-          <Title>Condition *</Title>
-          <Validation>{errors.condition?.message}</Validation>
-        </legend>
-        <RadioInput
-          {...register("condition", {
-            required: VALIDATION_MESSAGES.CONDITION,
-          })}
-          type="radio"
-          value="A"
-          name="condition"
-          id={Condition.A}
-        />
-        <label htmlFor={Condition.A}>{Condition.A}</label>
-        <RadioInput
-          {...register("condition")}
-          type="radio"
-          value="N"
-          name="condition"
-          id={Condition.N}
-        />
-        <label htmlFor={Condition.N}>{Condition.N}</label>
-      </Fieldset> */
-
-/* <Title>Damage Type</Title>
-      <Select {...register("damageType")} defaultValue="">
-        <option value="" disabled>
-          Select an option
-        </option>
-        <option>No Damage</option>
-        <option>Rear Damage</option>
-        <option>Back Damage</option>
-        <option>Minor Scratches</option>
-      </Select> */
-/* <Select
-        {...register("color_id", { required: VALIDATION_MESSAGES.COLOR })}
-        disabled={loading}
-      >
-        <option value="">{loading ? "Loading..." : "Select an option"}</option>
-        {!loading &&
-          formsData?.colors.map((color) => (
-            <option key={color.id} value={color.id}>
-              {color.name}
-            </option>
-          ))}
-      </Select> */
-/* <Select
-        // {...register("brand_id")}
-        {...register("brand_id", { required: VALIDATION_MESSAGES.BRAND })}
-        defaultValue=""
-        onFocus={() => fetchBrands()}
-        onChange={(e) => {
-          register("brand_id").onChange(e);
-          setValue("model_id", undefined);
-        }}
-      >
-        <option value="">
-          {brandsLoading ? "Loading..." : "Select an option"}
-        </option>
-        <optgroup label="Brands">
-          {!brandsLoading &&
-            brandsData?.brands.map((brand) => (
-              <option key={brand.id} value={brand.id}>
-                {brand.name}
-              </option>
-            ))}
-        </optgroup>
-      </Select> */
-
-/* <Select
-        {...register("model_id", { required: VALIDATION_MESSAGES.MODEL })}
-        disabled={!brandId}
-        defaultValue=""
-        onFocus={() => {
-          fetchModels({
-            variables: modelsbyBrandIdVariables(brandId),
-          });
-        }}
-      >
-        <option value="">
-          {modelsLoading ? "Loading..." : "Select an option"}
-        </option>
-        <optgroup label="Model">
-          {!modelsLoading &&
-            modelsData?.models?.map((model) => (
-              <option key={model.id} value={model.id}>
-                {model.name}
-              </option>
-            ))}
-        </optgroup>
-      </Select> */
-
-/* <Select
-        {...register("city_id", { required: VALIDATION_MESSAGES.CITY })}
-        onFocus={() => fetchStates()}
-        onBlur={() => setStateId()}
-      >
-        <option value="">
-          {statesLoading ? "Loading..." : "Select an option"}
-        </option>
-        {!statesLoading &&
-          statesData?.states.map((state) => (
-            <optgroup key={state.id} label={state.name}>
-              {state.cities.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {city.name}
-                </option>
-              ))}
-            </optgroup>
-          ))}
-      </Select> */

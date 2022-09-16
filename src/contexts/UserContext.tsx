@@ -1,6 +1,4 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import { STORAGE_KEY } from "../utils/constants";
 interface User {
   email: string;
   first_name: string;

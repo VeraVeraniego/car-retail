@@ -28,7 +28,6 @@ export function responseCarToCarComponent(queryCar: Cars) {
 }
 
 export function adaptResponse(cars: Cars[], userCars: User_Cars[]) {
-  // if (!cars) return;
   const mapped = cars.map((car) => {
     const newCar = responseCarToCarComponent(car as Cars);
     newCar.isFavorite = !!userCars.find((fav) => car.id == fav.car_id);
