@@ -1,3 +1,4 @@
+import { useLazyQuery, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
@@ -5,6 +6,7 @@ import {
   Cars,
   Order_By,
   useCarsLazyQuery,
+  useCarsQuery,
   User_Cars,
 } from "../graphql/generated/graphql";
 import {
@@ -16,7 +18,11 @@ import {
   variableWrapper,
 } from "../graphql/variables";
 import { CarRowInfo } from "../interfaces/Car";
-import { adaptResponse } from "../utils/CarAdapter.util";
+import {
+  adaptFavorites,
+  adaptResponse,
+  removeFavorites,
+} from "../utils/CarAdapter.util";
 import { URL_PARAMS } from "../utils/constants";
 
 function isUUID(text: string) {
@@ -33,15 +39,24 @@ export const useHandleCars = (key: Key) => {
   const searchInUrl = search.get(URL_PARAMS.SEARCH);
   const { loggedUser } = useContext(UserContext);
   const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery();
+  // TODO: TEST CACHE WITH REGULAR QUERY BELOW
+  // const {
+  //   data,
+  //   error,
+  //   loading,
+  //   refetch: getCars,
+  // } = useCarsQuery({
+  //   fetchPolicy: "network-only",
+  // });
 
   useEffect(() => {
     if (!data) {
       if (!loggedUser) {
-        getCars(variableWrapper(fetchVariables(sortInUrl, searchInUrl)));
+        // refetch(fetchVariables(sortInUrl, searchInUrl));
+        refetch({ variables: fetchVariables(sortInUrl, searchInUrl) });
       } else {
-        getCars(
-          variableWrapper(fetchVariables(sortInUrl, searchInUrl, loggedUser.id))
-        );
+        // refetch(fetchVariables(sortInUrl, searchInUrl, loggedUser.id));
+        refetch(fetchVariables(sortInUrl, searchInUrl, loggedUser.id));
       }
       return;
     }
@@ -80,14 +95,14 @@ export const useHandleCars = (key: Key) => {
       setSearch(search);
       orderToSet = Order_By.Asc;
     }
-    await refetch(orderVariables(orderToSet));
+    await getCars(variableWrapper(orderVariables(orderToSet)));
   }
 
   async function searchInInventory(searchText: string) {
     search.set(URL_PARAMS.SEARCH, searchText);
     setSearch(search);
     if (!searchText) {
-      await getCars();
+      await refetch();
       return;
     }
     if (isUUID(searchText)) {
@@ -95,10 +110,10 @@ export const useHandleCars = (key: Key) => {
       return;
     } else {
       const titleResponse = await refetch(searchByTitleVariables(searchText));
-      if (titleResponse.data.cars.length) return;
+      if (titleResponse.data?.cars.length) return;
       else {
         const vinResponse = await refetch(searchByVINVariables(searchText));
-        if (vinResponse.data.cars.length) return;
+        if (vinResponse.data?.cars.length) return;
         else return;
       }
     }

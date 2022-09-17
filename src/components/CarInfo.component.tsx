@@ -56,9 +56,33 @@ export const CarInfo = ({
       return navigate(PATHNAME.LOGIN);
     }
     if (isFavorite) {
-      await deleteUserCar(
-        variableWrapper(deleteCarVariables(loggedUser.id, id!))
-      );
+      await deleteUserCar({
+        variables: deleteCarVariables(loggedUser.id, id!),
+        update(cache, { data }) {
+          console.log("cache: ", cache);
+          const carsCache: any = cache.readQuery({
+            query: CarsDocument,
+          });
+          console.log("carcache: ", carsCache);
+          console.log("data: ", data);
+        },
+        // update(cache, { data }) {
+        //   console.log("cache: ", cache);
+
+        //   const carsCache: any = cache.readQuery<CarsQuery>({
+        //     query: CREATE_USER_CAR,
+        //   });
+        //   console.log("carsCACHE", carsCache);
+
+        //   const newCars = carsCache!.cars.filter((t: any) => t.id !== id);
+        //   cache.writeQuery({
+        //     query: GET_CARS,
+        //     data: { ...carsCache, cars: newCars },
+        //   });
+        // },
+      });
+      console.log("almost seting isfavorite");
+
       setIsFavorite(false);
     } else {
       await createUserCar(
