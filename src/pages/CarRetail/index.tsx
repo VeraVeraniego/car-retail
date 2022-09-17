@@ -25,7 +25,7 @@ const HEADERS = [
 ];
 
 export const CarRetail = () => {
-  const { data, toggleOrder, searchInInventory } = useHandleCars();
+  const { data, toggleOrder, searchInInventory } = useHandleCars("all");
   const navigate = useNavigate();
 
   return (
