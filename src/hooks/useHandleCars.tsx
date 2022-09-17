@@ -25,13 +25,13 @@ function isUUID(text: string) {
   );
 }
 
-export const useHandleCars = () => {
+type Key = "favorites" | "all";
+export const useHandleCars = (key: Key) => {
   const [cars, setCars] = useState<CarRowInfo[] | null>(null);
   const [search, setSearch] = useSearchParams();
   const sortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT) as Order_By;
   const searchInUrl = search.get(URL_PARAMS.SEARCH);
   const { loggedUser } = useContext(UserContext);
-
   const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery();
 
   useEffect(() => {
@@ -45,12 +45,29 @@ export const useHandleCars = () => {
       }
       return;
     }
-    const adaptedCars = adaptResponse(
-      data.cars as Cars[],
-      data.user_cars as User_Cars[]
-    );
-    setCars(adaptedCars);
+    if (key === "favorites") {
+      const filteredCars = adaptFavorites(
+        data.cars as Cars[],
+        data.user_cars as User_Cars[]
+      );
+      setCars(filteredCars);
+    } else {
+      const adaptedCars = adaptResponse(
+        data.cars as Cars[],
+        data.user_cars as User_Cars[]
+      );
+      setCars(adaptedCars);
+    }
   }, [data]);
+
+  useEffect(() => {
+    if (!data) return;
+    if (!loggedUser) {
+      const removedFavorites = removeFavorites(cars as CarRowInfo[]);
+      setCars(removedFavorites);
+    }
+  }, [loggedUser]);
+  // TODO: MAY ADD USER ID TO REFETCH WHEN LOGGED OUT
 
   async function toggleOrder() {
     let orderToSet: Order_By;
