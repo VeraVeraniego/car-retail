@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { defaultTheme } from "../theme";
 import { FlexColumn, FlexRow, H3, H4, P } from "./styled";
@@ -7,10 +7,18 @@ import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { PATHNAME } from "../utils";
 import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
-import { useMutation } from "@apollo/client";
+import { InMemoryCache, useMutation } from "@apollo/client";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteCarVariables, variableWrapper } from "../graphql/variables";
 import { FavoriteButton } from "./FavoriteButton.component";
+import {
+  CarsDocument,
+  CarsQuery,
+  FormDataDocument,
+  User_Cars,
+  User_Cars_Constraint,
+} from "../graphql/generated/graphql";
+import { GET_CARS, GET_FORM_DATA } from "../graphql/queries";
 
 export const CarInfo = ({
   id,
@@ -35,8 +43,13 @@ export const CarInfo = ({
     deleteUserCar,
     { data: unfavData, error: unfavError, loading: unfavLoading },
   ] = useMutation(DELETE_USER_CAR);
+
   const now = new Date();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsFavorite(!!isFav);
+  }, [isFav]);
 
   async function toggleFavorite() {
     if (!loggedUser) {

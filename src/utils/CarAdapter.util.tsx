@@ -35,3 +35,18 @@ export function adaptResponse(cars: Cars[], userCars: User_Cars[]) {
   });
   return mapped;
 }
+export function removeFavorites(cars: CarRowInfo[]) {
+  const cleaned = cars.map(({ isFavorite, ...car }) => car);
+  return cleaned;
+}
+export function adaptFavorites(cars: Cars[], userCars: User_Cars[]) {
+  const filtered = cars.filter((car) => {
+    return userCars.find((fav) => car.id === fav.car_id);
+  });
+  const mapped = filtered.map((car) => {
+    const newCar = responseCarToCarComponent(car as Cars);
+    newCar.isFavorite = true;
+    return newCar;
+  });
+  return mapped;
+}
