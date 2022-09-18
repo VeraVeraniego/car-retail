@@ -7,7 +7,7 @@ import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { PATHNAME } from "../utils";
 import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
-import { InMemoryCache, useMutation } from "@apollo/client";
+import { ApolloClient, gql, InMemoryCache, useMutation } from "@apollo/client";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteCarVariables, variableWrapper } from "../graphql/variables";
 import { FavoriteButton } from "./FavoriteButton.component";
@@ -18,7 +18,7 @@ import {
   User_Cars,
   User_Cars_Constraint,
 } from "../graphql/generated/graphql";
-import { GET_CARS, GET_FORM_DATA } from "../graphql/queries";
+import { GET_CARS, GET_FORM_DATA, GET_USER_CARS } from "../graphql/queries";
 
 export const CarInfo = ({
   id,
@@ -59,35 +59,82 @@ export const CarInfo = ({
       await deleteUserCar({
         variables: deleteCarVariables(loggedUser.id, id!),
         update(cache, { data }) {
-          console.log("cache: ", cache);
-          const carsCache: any = cache.readQuery({
-            query: CarsDocument,
+          cache.modify({
+            fields: {
+              user_cars(existingUserCars, { readField }) {
+                return existingUserCars.filter((t: any) => t.car_id !== id);
+              },
+            },
           });
-          console.log("carcache: ", carsCache);
-          console.log("data: ", data);
+          // console.log("cache: ", cache);
+          // const carsCache: any = cache.readQuery({
+          //   query: GET_USER_CARS,
+          //   variables: {
+          //     where: {
+          //       user_id: {
+          //         _eq: loggedUser.id,
+          //       },
+          //     },
+          //   },
+          // });
+          // console.log("usercarcache: ", carsCache.user_cars);
+          // console.log("data: ", data);
+          // const newUserCars = carsCache.user_cars.filter(
+          //   (t: any) => t.car_id !== id
+          // );
+          // console.log("usercars new cache: ", newUserCars);
+          // cache.writeQuery({
+          //   query: GET_USER_CARS,
+          //   data: { user_cars: newUserCars },
+          // });
+          // console.log("usercars new cache2: ", newUserCars);
         },
-        // update(cache, { data }) {
-        //   console.log("cache: ", cache);
-
-        //   const carsCache: any = cache.readQuery<CarsQuery>({
-        //     query: CREATE_USER_CAR,
-        //   });
-        //   console.log("carsCACHE", carsCache);
-
-        //   const newCars = carsCache!.cars.filter((t: any) => t.id !== id);
-        //   cache.writeQuery({
-        //     query: GET_CARS,
-        //     data: { ...carsCache, cars: newCars },
-        //   });
-        // },
       });
       console.log("almost seting isfavorite");
 
       setIsFavorite(false);
     } else {
-      await createUserCar(
-        variableWrapper({ object: { car_id: id, user_id: loggedUser.id } })
-      );
+      await createUserCar({
+        variables: { object: { car_id: id, user_id: loggedUser.id } },
+
+        update(cache, { data }) {
+          cache.modify({
+            fields: {
+              user_cars(existingUserCars = []) {
+                const newUserCar = data.insert_user_cars_one;
+                return existingUserCars.concat(newUserCar);
+              },
+            },
+          });
+          // const favCache: any = cache.readQuery({
+          //   query: GET_USER_CARS,
+          //   variables: {
+          //     where: {
+          //       user_id: {
+          //         _eq: loggedUser.id,
+          //       },
+          //     },
+          //   },
+          // });
+          // console.log("user_carstest: ", favCache);
+          // console.log("datafull: ", data.insert_user_cars_one);
+          // cache.writeQuery({
+          //   query: GET_USER_CARS,
+          //   variables: {
+          //     where: {
+          //       user_id: {
+          //         _eq: loggedUser.id,
+          //       },
+          //     },
+          //   },
+          //   data: {
+          //     user_cars: favCache
+          //       ? [...favCache.user_cars, data.insert_user_cars_one]
+          //       : [data.insert_user_cars_one],
+          //   },
+          // });
+        },
+      });
       setIsFavorite(true);
     }
   }
