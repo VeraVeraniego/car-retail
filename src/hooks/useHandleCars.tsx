@@ -9,6 +9,7 @@ import {
   useCarsQuery,
   User_Cars,
 } from "../graphql/generated/graphql";
+import { GET_CARS, GET_USER_CARS } from "../graphql/queries";
 import {
   fetchVariables,
   orderVariables,
@@ -38,7 +39,31 @@ export const useHandleCars = (key: Key) => {
   const sortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT) as Order_By;
   const searchInUrl = search.get(URL_PARAMS.SEARCH);
   const { loggedUser } = useContext(UserContext);
-  const [getCars, { data, error, loading, refetch }] = useCarsLazyQuery();
+  const [getCars, { data, error, loading, refetch, called }] = useLazyQuery(
+    GET_CARS
+    // { fetchPolicy: "cache-and-network" }
+  );
+  const {
+    data: userCarsData,
+    error: userCarsError,
+    loading: userCarsLoading,
+  } = useQuery(GET_USER_CARS, {
+    // fetchPolicy: "cache-and-network",
+    variables: {
+      where: {
+        user_id: loggedUser
+          ? {
+              _eq: loggedUser.id,
+            }
+          : {
+              _is_null: true,
+            },
+      },
+    },
+  });
+  // {
+  //   fetchPolicy: "network-only",
+  // }
   // TODO: TEST CACHE WITH REGULAR QUERY BELOW
   // const {
   //   data,
@@ -48,28 +73,47 @@ export const useHandleCars = (key: Key) => {
   // } = useCarsQuery({
   //   fetchPolicy: "network-only",
   // });
-
   useEffect(() => {
-    if (!data) {
+    if (!data || !userCarsData) return;
+    console.log("user_cars on hook", userCarsData);
+    if (key === "favorites") {
+      const filteredCars = adaptFavorites(
+        data.cars as Cars[],
+        userCarsData.user_cars as User_Cars[]
+      );
+      setCars(filteredCars);
+    } else {
+      const adaptedCars = adaptResponse(
+        data.cars as Cars[],
+        userCarsData.user_cars as User_Cars[]
+      );
+      setCars(adaptedCars);
+    }
+  }, [userCarsData]);
+  useEffect(() => {
+    console.log("calling refetchs", data);
+    if (!data || !userCarsData) {
       if (!loggedUser) {
+        getCars({ variables: fetchVariables(sortInUrl, searchInUrl) });
         // refetch(fetchVariables(sortInUrl, searchInUrl));
-        refetch({ variables: fetchVariables(sortInUrl, searchInUrl) });
       } else {
+        getCars({
+          variables: fetchVariables(sortInUrl, searchInUrl),
+        });
         // refetch(fetchVariables(sortInUrl, searchInUrl, loggedUser.id));
-        refetch(fetchVariables(sortInUrl, searchInUrl, loggedUser.id));
       }
       return;
     }
     if (key === "favorites") {
       const filteredCars = adaptFavorites(
         data.cars as Cars[],
-        data.user_cars as User_Cars[]
+        userCarsData.user_cars as User_Cars[]
       );
       setCars(filteredCars);
     } else {
       const adaptedCars = adaptResponse(
         data.cars as Cars[],
-        data.user_cars as User_Cars[]
+        userCarsData.user_cars as User_Cars[]
       );
       setCars(adaptedCars);
     }
@@ -95,14 +139,14 @@ export const useHandleCars = (key: Key) => {
       setSearch(search);
       orderToSet = Order_By.Asc;
     }
-    await getCars(variableWrapper(orderVariables(orderToSet)));
+    await refetch(orderVariables(orderToSet));
   }
 
   async function searchInInventory(searchText: string) {
     search.set(URL_PARAMS.SEARCH, searchText);
     setSearch(search);
     if (!searchText) {
-      await refetch();
+      await getCars();
       return;
     }
     if (isUUID(searchText)) {
