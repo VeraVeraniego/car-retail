@@ -49,9 +49,13 @@ export const GET_CARS = gql`
         }
       }
     }
-    user_cars(where: $userCarsWhere2) {
-      user_id
+  }
+`;
+export const GET_USER_CARS = gql`
+  query UserCars($where: user_cars_bool_exp) {
+    user_cars(where: $where) {
       car_id
+      user_id
     }
   }
 `;

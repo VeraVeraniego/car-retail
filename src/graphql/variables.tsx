@@ -1,4 +1,3 @@
-import { gql } from "@apollo/client";
 import { Order_By } from "./generated/graphql";
 
 export function orderVariables(order: Order_By | null) {
@@ -13,8 +12,8 @@ export function orderVariables(order: Order_By | null) {
 
 export function fetchVariables(
   order: Order_By | null,
-  search: string | null,
-  userId?: number
+  search: string | null
+  // userId?: number
 ) {
   return {
     orderBy: [
@@ -27,15 +26,15 @@ export function fetchVariables(
         _ilike: search ? `%${search}%` : "%%",
       },
     },
-    userCarsWhere2: {
-      user_id: userId
-        ? {
-            _eq: userId,
-          }
-        : {
-            _is_null: true,
-          },
-    },
+    // userCarsWhere2: {
+    //   user_id: userId
+    //     ? {
+    //         _eq: userId,
+    //       }
+    //     : {
+    //         _is_null: true,
+    //       },
+    // },
   };
 }
 
