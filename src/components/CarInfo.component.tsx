@@ -10,7 +10,8 @@ import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
 import { useMutation } from "@apollo/client";
 import { deleteCarVariables } from "../graphql/variables";
 import { FavoriteButton } from "./FavoriteButton.component";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const CarInfo = ({
   id,
   isFavorite: isFav,
@@ -76,6 +77,7 @@ export const CarInfo = ({
     } catch (error) {
       const err = error as Error;
       console.error(err.message);
+      toast.warn("Can't change favorites now, try again later");
     }
   }
 

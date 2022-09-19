@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { PATHNAME, REPLACE } from "../utils/constants";
 import { NavButton } from "./styled";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const ToogleLoginButton = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);
@@ -11,6 +13,7 @@ export const ToogleLoginButton = () => {
   function handleLogout() {
     window.localStorage.clear();
     setLoggedUser(false);
+    toast.success("Logged out successfully");
   }
 
   function handleLogin() {
@@ -19,6 +22,7 @@ export const ToogleLoginButton = () => {
 
   return (
     <>
+      <ToastContainer position="bottom-right" />
       {loggedUser ? (
         <NavButton onClick={handleLogout}>LOGOUT</NavButton>
       ) : (

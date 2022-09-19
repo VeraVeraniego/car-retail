@@ -259,7 +259,7 @@ export const PublishCarForm = () => {
               placeholder="10500"
             />
           </PriceContainer>
-          <ToastContainer />
+          <ToastContainer position="bottom-right" />
           <PublishButton disabled={mutationLoading}>
             {mutationLoading ? "LOADING..." : "PUBLISH CAR NOW"}
           </PublishButton>

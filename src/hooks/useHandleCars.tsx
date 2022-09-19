@@ -59,7 +59,6 @@ export const useHandleCars = (key: Key) => {
   );
 
   useEffect(() => {
-    console.log("calling refetchs", data);
     if (!data || !userCarsData) {
       if (!loggedUser) {
         getCars({ variables: fetchVariables(sortInUrl, searchInUrl) });
