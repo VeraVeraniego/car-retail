@@ -48,4 +48,10 @@ const FavButton = styled(Button)`
   &:hover {
     background-color: ${defaultTheme.palette.hr};
   }
+  &:disabled {
+    background-color: ${defaultTheme.palette.inactive};
+    border-color: ${defaultTheme.palette.darkgray};
+    color: ${defaultTheme.palette.dialog};
+    cursor: unset;
+  }
 `;
