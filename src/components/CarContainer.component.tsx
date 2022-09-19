@@ -27,20 +27,7 @@ export const CarContainer = ({ data }: Props) => {
   const mapCars = () => {
     if (renderedCars?.length) {
       return renderedCars?.map((car) => (
-        <CarInfo
-          key={car.vin}
-          isFavorite={car.isFavorite}
-          id={car.id}
-          img={`${IMG_URL}/${car.id}/300/200`}
-          title={car.title}
-          batch={car.batch}
-          odo={car.odo}
-          price={car.price}
-          condition={car.condition}
-          damageType={car.damageType}
-          saleDate={car.saleDate}
-          place={car.place}
-        />
+        <CarInfo key={car.vin} car={car} img={`${IMG_URL}/${car.id}/300/200`} />
       ));
     } else {
       return <Empty>There's nothing to show here!</Empty>;

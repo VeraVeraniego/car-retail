@@ -14,46 +14,35 @@ import { PATHNAME } from "../utils";
 import { FavoriteButton } from "./FavoriteButton.component";
 import { FlexColumn, FlexRow, H3, H4, P } from "./styled";
 
-export const CarInfo = ({
-  id,
-  isFavorite: isFav,
-  img,
-  title,
-  batch,
-  odo,
-  price,
-  condition,
-  damageType,
-  saleDate,
-  place,
-}: CarRowInfo) => {
+export const CarInfo = ({ img, car }: { img: any; car: CarRowInfo }) => {
   const { loggedUser } = useContext(UserContext);
-  const [isFavorite, setIsFavorite] = useState<boolean>(isFav ?? false);
-  const [createUserCar, { error: favError, loading: favLoading }] =
-    useMutation(CREATE_USER_CAR);
-  const [deleteUserCar, { error: unfavError, loading: unfavLoading }] =
+  const [isFav, setIsFavorite] = useState<boolean>(car.isFavorite ?? false);
+  const [createUserCar, { loading: favLoading }] = useMutation(CREATE_USER_CAR);
+  const [deleteUserCar, { loading: unfavLoading }] =
     useMutation(DELETE_USER_CAR);
 
   const now = new Date();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setIsFavorite(!!isFav);
-  }, [isFav]);
+    setIsFavorite(!!car.isFavorite);
+  }, [car.isFavorite]);
 
   async function toggleFavorite() {
     if (!loggedUser) {
       return navigate(PATHNAME.LOGIN);
     }
     try {
-      if (isFavorite) {
+      if (isFav) {
         await deleteUserCar({
-          variables: deleteCarVariables(loggedUser.id, id!),
+          variables: deleteCarVariables(loggedUser.id, car.id!),
           update(cache) {
             cache.modify({
               fields: {
                 user_cars(existingUserCars) {
-                  return existingUserCars.filter((t: any) => t.car_id !== id);
+                  return existingUserCars.filter(
+                    (t: any) => t.car_id !== car.id
+                  );
                 },
               },
             });
@@ -62,7 +51,7 @@ export const CarInfo = ({
         setIsFavorite(false);
       } else {
         await createUserCar({
-          variables: { object: { car_id: id, user_id: loggedUser.id } },
+          variables: { object: { car_id: car.id, user_id: loggedUser.id } },
           update(cache, { data }) {
             cache.modify({
               fields: {
@@ -85,44 +74,44 @@ export const CarInfo = ({
 
   return (
     <Container>
-      <CarImage src={img} alt={title} />
+      <CarImage src={img} alt={car.title} />
       <Column>
-        <Title>{title}</Title>
-        <P>{batch}</P>
+        <Title>{car.title}</Title>
+        <P>{car.batch}</P>
         <FavoriteButton
-          fav={isFavorite}
+          fav={isFav}
           onClick={() => toggleFavorite()}
           loading={favLoading || unfavLoading}
         />
       </Column>
       <Column>
-        {odo && (
+        {car.odo && (
           <Title>
             ODOmeter
             <br />
-            <P>{odo}</P>
+            <P>{car.odo}</P>
           </Title>
         )}
         <Title>
           Estimated Price
           <br />
-          <P>{price}</P>
+          <P>{car.price}</P>
         </Title>
       </Column>
       <Column>
-        <Title>{condition}</Title>
-        <Title>{damageType}</Title>
+        <Title>{car.condition}</Title>
+        <Title>{car.damageType}</Title>
       </Column>
       <Column>
         <Title>
           Sale Date
           <br />
-          {now < new Date(saleDate) ? (
-            <P>{saleDate}</P>
+          {now < new Date(car.saleDate) ? (
+            <P>{car.saleDate}</P>
           ) : (
-            <RedValue>{`${saleDate} - sold`}</RedValue>
+            <RedValue>{`${car.saleDate} - sold`}</RedValue>
           )}
-          <P>{place}</P>
+          <P>{car.place}</P>
         </Title>
       </Column>
       {/* TODO: <ReactIco3dots></ReactIco3dots> */}
