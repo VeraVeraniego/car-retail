@@ -6,15 +6,16 @@ import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
 import { UserContext } from "../contexts/UserContext";
+import { User_Cars } from "../graphql/generated/graphql";
 import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
 import { deleteCarVariables } from "../graphql/variables";
 import { CarRowInfo } from "../interfaces/Car";
 import { defaultTheme } from "../theme";
 import { PATHNAME } from "../utils";
 import { FavoriteButton } from "./FavoriteButton.component";
-import { FlexColumn, FlexRow, H3, H4, P } from "./styled";
+import { FlexColumn, FlexRow, H4, P } from "./styled";
 
-export const CarInfo = ({ img, car }: { img: any; car: CarRowInfo }) => {
+export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
   const { loggedUser } = useContext(UserContext);
   const [isFav, setIsFavorite] = useState<boolean>(car.isFavorite ?? false);
   const [createUserCar, { loading: favLoading }] = useMutation(CREATE_USER_CAR);
@@ -41,7 +42,7 @@ export const CarInfo = ({ img, car }: { img: any; car: CarRowInfo }) => {
               fields: {
                 user_cars(existingUserCars) {
                   return existingUserCars.filter(
-                    (t: any) => t.car_id !== car.id
+                    (userFavorite: User_Cars) => userFavorite.car_id !== car.id
                   );
                 },
               },

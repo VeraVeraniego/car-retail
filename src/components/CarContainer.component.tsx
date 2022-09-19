@@ -30,7 +30,7 @@ export const CarContainer = ({ data }: Props) => {
         <CarInfo key={car.vin} car={car} img={`${IMG_URL}/${car.id}/300/200`} />
       ));
     } else {
-      return <Empty>There's nothing to show here!</Empty>;
+      return <Empty>There&apos;s nothing to show here!</Empty>;
     }
   };
 
@@ -41,7 +41,7 @@ export const CarContainer = ({ data }: Props) => {
           {loading && <Loader />}
           {error && (
             <ValidationText>
-              Couldn't load data - Try again later
+              Couldn&apos;t load data - Try again later
             </ValidationText>
           )}
         </>
