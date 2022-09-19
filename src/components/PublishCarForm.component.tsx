@@ -86,16 +86,13 @@ export const PublishCarForm = () => {
   const cityId = watch("city_id");
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    const color = formsData?.colors.find(
-      (color) => color.id == getValues("color_id")
-    )?.name;
     const brand = formsData?.brands.find(
       (brand) => brand.id == getValues("brand_id")
     )?.name;
     const model = modelsData?.models.find(
       (model) => model.id == getValues("model_id")
     )?.name;
-    data.title = `${color} ${brand} ${model} ${getValues("year")}`;
+    data.title = `${brand} ${model} ${getValues("year")}`;
     for (let key in data)
       if (key.includes("id")) data[key] = parseInt(data[key]);
 
@@ -105,6 +102,16 @@ export const PublishCarForm = () => {
         optimisticResponse: {
           insert_cars_one: data,
           __typename: "mutation_root",
+        },
+        update(cache, { data }) {
+          cache.modify({
+            fields: {
+              cars(existingCars = []) {
+                const newCar = data?.insert_cars_one;
+                return existingCars.concat(newCar);
+              },
+            },
+          });
         },
       });
       reset();
