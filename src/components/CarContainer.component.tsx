@@ -24,33 +24,42 @@ export const CarContainer = ({ data }: Props) => {
     setRenderedCars(cars);
   }, [cars]);
 
+  const mapCars = () => {
+    if (renderedCars?.length) {
+      return renderedCars?.map((ele) => (
+        <CarInfo
+          key={ele.vin}
+          isFavorite={ele.isFavorite}
+          id={ele.id}
+          img={`${IMG_URL}/${ele.id}/300/200`}
+          title={ele.title}
+          batch={ele.batch}
+          odo={ele.odo}
+          price={ele.price}
+          condition={ele.condition}
+          damageType={ele.damageType}
+          saleDate={ele.saleDate}
+          place={ele.place}
+        />
+      ));
+    } else {
+      return <Empty>There's nothing to show here!</Empty>;
+    }
+  };
+
   return (
     <Container>
-      {loading ? (
+      {loading || error ? (
         <>
-          <Loader />
+          {loading && <Loader />}
+          {error && (
+            <ValidationText>
+              Couldn't load data - Try again later
+            </ValidationText>
+          )}
         </>
-      ) : error ? (
-        <ValidationText>Couldn't load data - Try again later</ValidationText>
-      ) : renderedCars?.length ? (
-        renderedCars?.map((ele) => (
-          <CarInfo
-            key={ele.vin}
-            isFavorite={ele.isFavorite}
-            id={ele.id}
-            img={`${IMG_URL}/${ele.id}/300/200`}
-            title={ele.title}
-            batch={ele.batch}
-            odo={ele.odo}
-            price={ele.price}
-            condition={ele.condition}
-            damageType={ele.damageType}
-            saleDate={ele.saleDate}
-            place={ele.place}
-          />
-        ))
       ) : (
-        <Empty>There's nothing to show here!</Empty>
+        mapCars()
       )}
     </Container>
   );
