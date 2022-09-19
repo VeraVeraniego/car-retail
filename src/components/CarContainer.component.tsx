@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { CarRowInfo } from "../interfaces/Car";
-import { CAR_SKELETON_PROPS, IMG_URL } from "../utils/index";
-import { FlexColumn, H2, H3, ValidationText } from "./styled";
+import { IMG_URL } from "../utils/index";
+import { FlexColumn, H3, ValidationText } from "./styled";
 import { CarInfo } from "./CarInfo.component";
 import { ApolloError } from "@apollo/client";
 import Loader from "./styled/Loader.component";
@@ -30,9 +30,7 @@ export const CarContainer = ({ data }: Props) => {
           <Loader />
         </>
       ) : error ? (
-        <ValidationText>
-          Error {error.message ? "- " + error.message : "- Unknown"}
-        </ValidationText>
+        <ValidationText>Couldn't load data - Try again later</ValidationText>
       ) : renderedCars?.length ? (
         renderedCars?.map((ele) => (
           <CarInfo
