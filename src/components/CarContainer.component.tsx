@@ -26,20 +26,20 @@ export const CarContainer = ({ data }: Props) => {
 
   const mapCars = () => {
     if (renderedCars?.length) {
-      return renderedCars?.map((ele) => (
+      return renderedCars?.map((car) => (
         <CarInfo
-          key={ele.vin}
-          isFavorite={ele.isFavorite}
-          id={ele.id}
-          img={`${IMG_URL}/${ele.id}/300/200`}
-          title={ele.title}
-          batch={ele.batch}
-          odo={ele.odo}
-          price={ele.price}
-          condition={ele.condition}
-          damageType={ele.damageType}
-          saleDate={ele.saleDate}
-          place={ele.place}
+          key={car.vin}
+          isFavorite={car.isFavorite}
+          id={car.id}
+          img={`${IMG_URL}/${car.id}/300/200`}
+          title={car.title}
+          batch={car.batch}
+          odo={car.odo}
+          price={car.price}
+          condition={car.condition}
+          damageType={car.damageType}
+          saleDate={car.saleDate}
+          place={car.place}
         />
       ));
     } else {
