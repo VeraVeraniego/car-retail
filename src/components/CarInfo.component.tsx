@@ -7,18 +7,9 @@ import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { PATHNAME } from "../utils";
 import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
-import { ApolloClient, gql, InMemoryCache, useMutation } from "@apollo/client";
-import "react-toastify/dist/ReactToastify.css";
-import { deleteCarVariables, variableWrapper } from "../graphql/variables";
+import { useMutation } from "@apollo/client";
+import { deleteCarVariables } from "../graphql/variables";
 import { FavoriteButton } from "./FavoriteButton.component";
-import {
-  CarsDocument,
-  CarsQuery,
-  FormDataDocument,
-  User_Cars,
-  User_Cars_Constraint,
-} from "../graphql/generated/graphql";
-import { GET_CARS, GET_FORM_DATA, GET_USER_CARS } from "../graphql/queries";
 
 export const CarInfo = ({
   id,
@@ -35,14 +26,10 @@ export const CarInfo = ({
 }: CarRowInfo) => {
   const { loggedUser } = useContext(UserContext);
   const [isFavorite, setIsFavorite] = useState<boolean>(isFav ?? false);
-  const [
-    createUserCar,
-    { data: favData, error: favError, loading: favLoading },
-  ] = useMutation(CREATE_USER_CAR);
-  const [
-    deleteUserCar,
-    { data: unfavData, error: unfavError, loading: unfavLoading },
-  ] = useMutation(DELETE_USER_CAR);
+  const [createUserCar, { error: favError, loading: favLoading }] =
+    useMutation(CREATE_USER_CAR);
+  const [deleteUserCar, { error: unfavError, loading: unfavLoading }] =
+    useMutation(DELETE_USER_CAR);
 
   const now = new Date();
   const navigate = useNavigate();
@@ -55,87 +42,40 @@ export const CarInfo = ({
     if (!loggedUser) {
       return navigate(PATHNAME.LOGIN);
     }
-    if (isFavorite) {
-      await deleteUserCar({
-        variables: deleteCarVariables(loggedUser.id, id!),
-        update(cache, { data }) {
-          cache.modify({
-            fields: {
-              user_cars(existingUserCars, { readField }) {
-                return existingUserCars.filter((t: any) => t.car_id !== id);
+    try {
+      if (isFavorite) {
+        await deleteUserCar({
+          variables: deleteCarVariables(loggedUser.id, id!),
+          update(cache) {
+            cache.modify({
+              fields: {
+                user_cars(existingUserCars) {
+                  return existingUserCars.filter((t: any) => t.car_id !== id);
+                },
               },
-            },
-          });
-          // console.log("cache: ", cache);
-          // const carsCache: any = cache.readQuery({
-          //   query: GET_USER_CARS,
-          //   variables: {
-          //     where: {
-          //       user_id: {
-          //         _eq: loggedUser.id,
-          //       },
-          //     },
-          //   },
-          // });
-          // console.log("usercarcache: ", carsCache.user_cars);
-          // console.log("data: ", data);
-          // const newUserCars = carsCache.user_cars.filter(
-          //   (t: any) => t.car_id !== id
-          // );
-          // console.log("usercars new cache: ", newUserCars);
-          // cache.writeQuery({
-          //   query: GET_USER_CARS,
-          //   data: { user_cars: newUserCars },
-          // });
-          // console.log("usercars new cache2: ", newUserCars);
-        },
-      });
-      console.log("almost seting isfavorite");
-
-      setIsFavorite(false);
-    } else {
-      await createUserCar({
-        variables: { object: { car_id: id, user_id: loggedUser.id } },
-
-        update(cache, { data }) {
-          cache.modify({
-            fields: {
-              user_cars(existingUserCars = []) {
-                const newUserCar = data.insert_user_cars_one;
-                return existingUserCars.concat(newUserCar);
+            });
+          },
+        });
+        setIsFavorite(false);
+      } else {
+        await createUserCar({
+          variables: { object: { car_id: id, user_id: loggedUser.id } },
+          update(cache, { data }) {
+            cache.modify({
+              fields: {
+                user_cars(existingUserCars = []) {
+                  const newUserCar = data.insert_user_cars_one;
+                  return existingUserCars.concat(newUserCar);
+                },
               },
-            },
-          });
-          // const favCache: any = cache.readQuery({
-          //   query: GET_USER_CARS,
-          //   variables: {
-          //     where: {
-          //       user_id: {
-          //         _eq: loggedUser.id,
-          //       },
-          //     },
-          //   },
-          // });
-          // console.log("user_carstest: ", favCache);
-          // console.log("datafull: ", data.insert_user_cars_one);
-          // cache.writeQuery({
-          //   query: GET_USER_CARS,
-          //   variables: {
-          //     where: {
-          //       user_id: {
-          //         _eq: loggedUser.id,
-          //       },
-          //     },
-          //   },
-          //   data: {
-          //     user_cars: favCache
-          //       ? [...favCache.user_cars, data.insert_user_cars_one]
-          //       : [data.insert_user_cars_one],
-          //   },
-          // });
-        },
-      });
-      setIsFavorite(true);
+            });
+          },
+        });
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      const err = error as Error;
+      console.error(err.message);
     }
   }
 
@@ -144,7 +84,7 @@ export const CarInfo = ({
       <CarImage src={img} alt={title} />
       <Column>
         <Title>{title}</Title>
-        <Value>{batch}</Value>
+        <P>{batch}</P>
         <FavoriteButton
           fav={isFavorite}
           onClick={() => toggleFavorite()}
@@ -156,13 +96,13 @@ export const CarInfo = ({
           <Title>
             ODOmeter
             <br />
-            <Value>{odo}</Value>
+            <P>{odo}</P>
           </Title>
         )}
         <Title>
           Estimated Price
           <br />
-          <Value>{price}</Value>
+          <P>{price}</P>
         </Title>
       </Column>
       <Column>
@@ -174,11 +114,11 @@ export const CarInfo = ({
           Sale Date
           <br />
           {now < new Date(saleDate) ? (
-            <Value>{saleDate}</Value>
+            <P>{saleDate}</P>
           ) : (
             <RedValue>{`${saleDate} - sold`}</RedValue>
           )}
-          <Value>{place}</Value>
+          <P>{place}</P>
         </Title>
       </Column>
       {/* TODO: <ReactIco3dots></ReactIco3dots> */}
@@ -186,8 +126,7 @@ export const CarInfo = ({
   );
 };
 
-const Value = styled(P)``;
-const RedValue = styled(Value)`
+const RedValue = styled(P)`
   color: ${defaultTheme.palette.red};
 `;
 
