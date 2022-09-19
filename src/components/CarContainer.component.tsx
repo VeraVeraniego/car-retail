@@ -33,7 +33,7 @@ export const CarContainer = ({ data }: Props) => {
         <ValidationText>
           Error {error.message ? "- " + error.message : "- Unknown"}
         </ValidationText>
-      ) : (
+      ) : renderedCars?.length ? (
         renderedCars?.map((ele) => (
           <CarInfo
             key={ele.vin}
@@ -50,11 +50,16 @@ export const CarContainer = ({ data }: Props) => {
             place={ele.place}
           />
         ))
+      ) : (
+        <Empty>There's nothing to show here!</Empty>
       )}
     </Container>
   );
 };
-
+const Empty = styled(H3)`
+  text-align: center;
+  margin-top: 80px;
+`;
 const Container = styled(FlexColumn)`
   margin-top: 8px;
   padding-bottom: 8px;
