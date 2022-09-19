@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
-import { TopNavBar } from "../components/TopNavBar.component";
+import { Dashboard } from "../components/Dashboard.component";
 import { CarRetail } from "../pages/CarRetail";
 import { FavoriteCars } from "../pages/FavoriteCars";
 import { Home } from "../pages/Home";
@@ -14,8 +14,7 @@ export function AppRouter() {
   return (
     <Routes>
       <Route path={PATHNAME.LOGIN} element={<Login />} />
-      {/* TODO: DASHOBOARD */}
-      <Route path="/" element={<TopNavBar />}>
+      <Route path="/" element={<Dashboard />}>
         <Route path="/" element={<Home />} />
         <Route path={PATHNAME.RETAIL_CARS} element={<CarRetail />} />
         <Route path={PATHNAME.PUBLISH_FORM} element={<PublishCar />} />

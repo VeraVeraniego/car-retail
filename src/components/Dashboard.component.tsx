@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
 import { UserContext } from "../contexts/UserContext";
@@ -9,9 +11,9 @@ import { ToogleLoginButton } from "./ToogleLoginButton.component";
 import { WelcomeText } from "./WelcomeText.component";
 import { H1, NavButton } from "./styled";
 
-export const TopNavBar = () => {
+export const Dashboard = () => {
   const navigate = useNavigate();
-  const { loggedUser, setLoggedUser } = useContext(UserContext);
+  const { loggedUser } = useContext(UserContext);
 
   return (
     <PageContainer>
@@ -30,6 +32,7 @@ export const TopNavBar = () => {
         <WelcomeText />
       </BarContainer>
       <Outlet />
+      <ToastContainer position="top-center" />
     </PageContainer>
   );
 };
