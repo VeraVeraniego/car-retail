@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -21,10 +21,7 @@ export const LoginForm = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailInput, setEmailInput] = useState("");
-  const [userInStorage, setUserInStorage] = useLocalStorage(
-    STORAGE_KEY.USER,
-    ""
-  );
+  const [, setUserInStorage] = useLocalStorage(STORAGE_KEY.USER, "");
   const [validateEmail, { loading, error, data }] = useLazyQuery<
     Response,
     EmailVars
@@ -103,6 +100,7 @@ const FormContainer = styled(Form)`
   gap: 56px;
   align-items: center;
 `;
+
 const LoginButton = styled(Button)`
   font-size: 24px;
   font-weight: 400;
@@ -111,12 +109,14 @@ const LoginButton = styled(Button)`
   width: 530px;
   height: 90px;
 `;
+
 const EmailInput = styled(Input)`
   width: 530px;
   height: 90px;
   padding-left: 22px;
   border-radius: 8px;
 `;
+
 const ButtonAndValidation = styled.div`
   display: flex;
   flex-direction: column;

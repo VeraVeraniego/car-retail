@@ -53,6 +53,7 @@ const BarContainer = styled.section`
     margin-right: 8px;
   }
 `;
+
 const PageContainer = styled.div`
   position: absolute;
   top: 0px;

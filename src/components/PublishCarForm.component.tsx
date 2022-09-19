@@ -61,10 +61,8 @@ export const PublishCarForm = () => {
     { data: modelsData, error: modelsError, loading: modelsLoading },
   ] = useModelsLazyQuery();
 
-  const [
-    createCar,
-    { data: mutationReturn, error: mutationError, loading: mutationLoading },
-  ] = useCreateCarMutation();
+  const [createCar, { data: mutationReturn, loading: mutationLoading }] =
+    useCreateCarMutation();
   const {
     register,
     reset,
@@ -90,7 +88,7 @@ export const PublishCarForm = () => {
       (model) => model.id == getValues("model_id")
     )?.name;
     data.title = `${brand} ${model} ${getValues("year")}`;
-    for (let key in data)
+    for (const key in data)
       if (key.includes("id")) data[key] = parseInt(data[key]);
 
     try {
@@ -146,7 +144,9 @@ export const PublishCarForm = () => {
       {loading ? (
         <Loader />
       ) : dataError || modelsError ? (
-        <ValidationText>Couldn't load data - Try again later</ValidationText>
+        <ValidationText>
+          Couldn&apos;t load data - Try again later
+        </ValidationText>
       ) : (
         <>
           <Title>Brand *</Title>
@@ -276,21 +276,26 @@ const Container = styled(Form)`
   height: 100%;
   width: 80vw;
 `;
+
 export const Title = styled(H3)`
   margin-top: 16px;
 `;
+
 export const Validation = styled(P)`
   margin-bottom: 4px;
   font-size: 10px;
   color: ${defaultTheme.palette.red};
 `;
+
 const Input = styled.input`
   ${InputStyle}
 `;
+
 const PriceContainer = styled(FlexRow)`
   ${InputStyle}
   align-items: center;
 `;
+
 const PriceInput = styled.input`
   margin-left: 8px;
   outline: none;
@@ -298,17 +303,8 @@ const PriceInput = styled.input`
   width: 100%;
   height: 100%;
 `;
+
 const PublishButton = styled(ButtonOnHoverOppacity)`
   align-self: center;
   margin-top: 16px;
-`;
-const Fieldset = styled.fieldset`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding-bottom: 8px;
-  background-color: ${defaultTheme.palette.white};
-`;
-const RadioInput = styled.input`
-  margin-left: 8px;
 `;

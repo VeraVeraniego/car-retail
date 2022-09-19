@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const OrderBy = ({ toggleOrder }: Props) => {
-  const [search, setSearch] = useSearchParams();
+  const [search] = useSearchParams();
   const activeSortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT);
 
   const currentSort =
@@ -30,7 +30,7 @@ export const OrderBy = ({ toggleOrder }: Props) => {
     );
 
   async function handleClick() {
-    const order = toggleOrder();
+    toggleOrder();
   }
 
   return (
