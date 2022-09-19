@@ -16,3 +16,5 @@ export interface EmailVars {
     };
   };
 }
+
+export type UserState = User | null;

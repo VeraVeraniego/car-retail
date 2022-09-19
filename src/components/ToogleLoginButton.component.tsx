@@ -12,7 +12,7 @@ export const ToogleLoginButton = () => {
 
   function handleLogout() {
     window.localStorage.clear();
-    setLoggedUser(false);
+    setLoggedUser(null);
     toast.success("Logged out successfully");
   }
 

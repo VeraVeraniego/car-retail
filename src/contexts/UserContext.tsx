@@ -1,18 +1,13 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
-interface User {
-  email: string;
-  first_name: string;
-  id: number;
-  last_name: string;
-  uuid?: string;
-}
+import { createContext } from "react";
+import { UserState } from "../interfaces/User";
+
 export interface IUserContext {
-  loggedUser: User | false;
-  setLoggedUser: React.Dispatch<React.SetStateAction<User | false>>;
+  loggedUser: UserState;
+  setLoggedUser: React.Dispatch<React.SetStateAction<UserState>>;
 }
 // const [loggedUser, setLoggedUser] = useLocalStorage(STORAGE_KEY.USER, "");
 const contextInitializer = {
-  loggedUser: false,
+  loggedUser: null,
   setLoggedUser: () => {},
 } as IUserContext;
 
