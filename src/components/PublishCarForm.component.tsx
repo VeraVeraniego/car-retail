@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
@@ -259,7 +259,6 @@ export const PublishCarForm = () => {
               placeholder="10500"
             />
           </PriceContainer>
-          <ToastContainer position="bottom-right" />
           <PublishButton disabled={mutationLoading}>
             {mutationLoading ? "LOADING..." : "PUBLISH CAR NOW"}
           </PublishButton>
