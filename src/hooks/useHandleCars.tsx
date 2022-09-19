@@ -1,23 +1,17 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { UserContext } from "../contexts/UserContext";
-import {
-  Cars,
-  Order_By,
-  User_Cars,
-  useCarsLazyQuery,
-  useCarsQuery,
-} from "../graphql/generated/graphql";
+import { Cars, Order_By, User_Cars } from "../graphql/generated/graphql";
 import { GET_CARS, GET_USER_CARS } from "../graphql/queries";
 import {
   fetchVariables,
   orderVariables,
+  queryUserCarVariables,
   searchByBatchVariables,
   searchByTitleVariables,
   searchByVINVariables,
-  variableWrapper,
 } from "../graphql/variables";
 import { CarRowInfo } from "../interfaces/Car";
 import {
@@ -41,23 +35,11 @@ export const useHandleCars = (key: Key) => {
   const searchInUrl = search.get(URL_PARAMS.SEARCH);
   const { loggedUser } = useContext(UserContext);
   const [getCars, { data, error, loading, refetch }] = useLazyQuery(GET_CARS);
-  const { data: userCarsData, loading: userCarsLoading } = useQuery(
-    GET_USER_CARS,
-    {
-      variables: {
-        where: {
-          user_id: loggedUser
-            ? {
-                _eq: loggedUser.id,
-              }
-            : {
-                _is_null: true,
-              },
-        },
-      },
-      fetchPolicy: "cache-and-network",
-    }
-  );
+
+  const { data: userCarsData } = useQuery(GET_USER_CARS, {
+    variables: queryUserCarVariables(loggedUser),
+    fetchPolicy: "cache-and-network",
+  });
 
   useEffect(() => {
     if (!data || !userCarsData) {

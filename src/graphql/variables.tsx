@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+import { UserState } from "../interfaces/User";
 import { Order_By } from "./generated/graphql";
 
 export function orderVariables(order: Order_By | null) {
@@ -10,11 +12,7 @@ export function orderVariables(order: Order_By | null) {
   };
 }
 
-export function fetchVariables(
-  order: Order_By | null,
-  search: string | null
-  // userId?: number
-) {
+export function fetchVariables(order: Order_By | null, search: string | null) {
   return {
     orderBy: [
       {
@@ -26,15 +24,6 @@ export function fetchVariables(
         _ilike: search ? `%${search}%` : "%%",
       },
     },
-    // userCarsWhere2: {
-    //   user_id: userId
-    //     ? {
-    //         _eq: userId,
-    //       }
-    //     : {
-    //         _is_null: true,
-    //       },
-    // },
   };
 }
 
@@ -74,11 +63,22 @@ export function modelsbyBrandIdVariables(brandId: string | number) {
     },
   };
 }
-export function variableWrapper(obj: {}) {
-  return { variables: obj };
-}
 export function userCarVariables(userId: number, carId: number | string) {
   return { car_id: carId, user_id: userId };
+}
+
+export function queryUserCarVariables(user: UserState) {
+  return {
+    where: {
+      user_id: user
+        ? {
+            _eq: user.id,
+          }
+        : {
+            _is_null: true,
+          },
+    },
+  };
 }
 export function deleteCarVariables(userId: number, carId: number | string) {
   return {

@@ -117,8 +117,7 @@ export const PublishCarForm = () => {
   };
 
   useEffect(() => {
-    if (brandId)
-      fetchModels(variableWrapper(modelsbyBrandIdVariables(brandId)));
+    if (brandId) fetchModels({ variables: modelsbyBrandIdVariables(brandId) });
   }, [brandId]);
 
   useEffect(() => {
