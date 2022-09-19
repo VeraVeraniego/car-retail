@@ -58,11 +58,8 @@ export const PublishCarForm = () => {
   const { data: formsData, error: dataError, loading } = useFormDataQuery();
   const [
     fetchModels,
-    { data: modelsData, error: modelsError, loading: modelsLoading, refetch },
+    { data: modelsData, error: modelsError, loading: modelsLoading },
   ] = useModelsLazyQuery();
-  //   {
-  //   fetchPolicy: "network-only",
-  // }
 
   const [
     createCar,
@@ -144,11 +141,12 @@ export const PublishCarForm = () => {
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <GlobalStyle />
-      {dataError && <ValidationText>{dataError.message}</ValidationText>}
 
       <H2>Publish a Car</H2>
       {loading ? (
         <Loader />
+      ) : dataError || modelsError ? (
+        <ValidationText>Couldn't load data - Try again later</ValidationText>
       ) : (
         <>
           <Title>Brand *</Title>
