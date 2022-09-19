@@ -2,6 +2,7 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 import { UserContext } from "../contexts/UserContext";
 import { VALIDATE_EMAIL } from "../graphql/queries";
 import { useLocalStorage } from "../hooks/useLocalStorage";

@@ -1,10 +1,9 @@
 import React from "react";
-import { CarContainer } from "../../components/CarContainer.component";
-import { OrderBy } from "../../components/OrderBy.component";
-import { CarSearchForm } from "../../components/CarSearchForm";
-import { PATHNAME, REPLACE } from "../../utils";
 import { useNavigate } from "react-router-dom";
-import { useHandleCars } from "../../hooks/useHandleCars";
+
+import { CarContainer } from "../../components/CarContainer.component";
+import { CarSearchForm } from "../../components/CarSearchForm";
+import { OrderBy } from "../../components/OrderBy.component";
 import {
   Container,
   FirstRow,
@@ -12,6 +11,8 @@ import {
   PublishNewCarButton,
   TableHead,
 } from "../../components/styled/CarView.styles";
+import { useHandleCars } from "../../hooks/useHandleCars";
+import { PATHNAME, REPLACE } from "../../utils";
 
 const HEADERS = [
   "Image",

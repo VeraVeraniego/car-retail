@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+
 export type Palette = typeof defaultTheme.palette;
 
 export const GlobalStyle = createGlobalStyle`

@@ -1,8 +1,8 @@
-import { Condition } from "../utils/CarAdapter.util";
-
 import React from "react";
 import styled from "styled-components";
+
 import { defaultTheme } from "../theme";
+import { Condition } from "../utils/CarAdapter.util";
 import { Title, Validation } from "./PublishCarForm.component";
 
 export const ConditionFieldset = ({ error, register, validation }: any) => {

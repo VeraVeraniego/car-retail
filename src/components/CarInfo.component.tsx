@@ -1,17 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components";
-import { defaultTheme } from "../theme";
-import { FlexColumn, FlexRow, H3, H4, P } from "./styled";
-import { CarRowInfo } from "../interfaces/Car";
-import { UserContext } from "../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
-import { PATHNAME } from "../utils";
-import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
 import { useMutation } from "@apollo/client";
-import { deleteCarVariables } from "../graphql/variables";
-import { FavoriteButton } from "./FavoriteButton.component";
-import { ToastContainer, toast } from "react-toastify";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import styled from "styled-components";
+
+import { UserContext } from "../contexts/UserContext";
+import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
+import { deleteCarVariables } from "../graphql/variables";
+import { CarRowInfo } from "../interfaces/Car";
+import { defaultTheme } from "../theme";
+import { PATHNAME } from "../utils";
+import { FavoriteButton } from "./FavoriteButton.component";
+import { FlexColumn, FlexRow, H3, H4, P } from "./styled";
+
 export const CarInfo = ({
   id,
   isFavorite: isFav,

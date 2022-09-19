@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { MdSearch } from "react-icons/md";
 import styled from "styled-components";
-import { ButtonOnHoverOppacity, Form, Input } from "./styled";
+
 import { defaultTheme } from "../theme";
+import { ButtonOnHoverOppacity, Form, Input } from "./styled";
 
 export const CarSearchForm = ({ searchInInventory }: any) => {
   const [searchInput, setSearchInput] = useState<string>("");

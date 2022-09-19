@@ -1,14 +1,15 @@
 import React from "react";
+
 import { CarContainer } from "../../components/CarContainer.component";
-import { OrderBy } from "../../components/OrderBy.component";
 import { CarSearchForm } from "../../components/CarSearchForm";
-import { useHandleCars } from "../../hooks/useHandleCars";
+import { OrderBy } from "../../components/OrderBy.component";
 import {
   Container,
   FirstRow,
   HeadersRow,
   TableHead,
 } from "../../components/styled/CarView.styles";
+import { useHandleCars } from "../../hooks/useHandleCars";
 
 const HEADERS = [
   "Image",

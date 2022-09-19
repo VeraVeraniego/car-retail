@@ -1,10 +1,11 @@
+import { ApolloError } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+
 import { CarRowInfo } from "../interfaces/Car";
 import { IMG_URL } from "../utils/index";
-import { FlexColumn, H3, ValidationText } from "./styled";
 import { CarInfo } from "./CarInfo.component";
-import { ApolloError } from "@apollo/client";
+import { FlexColumn, H3, ValidationText } from "./styled";
 import Loader from "./styled/Loader.component";
 
 interface Props {

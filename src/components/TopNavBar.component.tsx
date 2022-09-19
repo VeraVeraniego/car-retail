@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 import { UserContext } from "../contexts/UserContext";
-import { defaultTheme, GlobalStyle } from "../theme";
+import { GlobalStyle, defaultTheme } from "../theme";
 import { PATHNAME, REPLACE } from "../utils/constants";
-import { H1, NavButton } from "./styled";
 import { ToogleLoginButton } from "./ToogleLoginButton.component";
 import { WelcomeText } from "./WelcomeText.component";
+import { H1, NavButton } from "./styled";
 
 export const TopNavBar = () => {
   const navigate = useNavigate();

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+
 import { defaultTheme } from "../theme";
 import { InputStyle } from "./styled";
 

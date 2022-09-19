@@ -1,15 +1,16 @@
 import React from "react";
-import styled from "styled-components";
-import { defaultTheme } from "../theme";
-import { ButtonOnHoverOppacity, H4 } from "./styled";
 import {
-  TiArrowUnsorted,
-  TiArrowSortedUp,
   TiArrowSortedDown,
+  TiArrowSortedUp,
+  TiArrowUnsorted,
 } from "react-icons/ti";
-import { Order_By } from "../graphql/generated/graphql";
 import { useSearchParams } from "react-router-dom";
+import styled from "styled-components";
+
+import { Order_By } from "../graphql/generated/graphql";
+import { defaultTheme } from "../theme";
 import { URL_PARAMS } from "../utils/constants";
+import { ButtonOnHoverOppacity, H4 } from "./styled";
 
 interface Props {
   toggleOrder: () => void;

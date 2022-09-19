@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { UserContext } from "../contexts/UserContext";
 import { PATHNAME, REPLACE } from "../utils/constants";
 import { NavButton } from "./styled";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export const ToogleLoginButton = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);

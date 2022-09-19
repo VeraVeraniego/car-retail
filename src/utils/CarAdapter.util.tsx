@@ -1,5 +1,6 @@
 import { Cars, User_Cars } from "../graphql/generated/graphql";
 import { CarRowInfo } from "../interfaces/Car";
+
 export enum Condition {
   A = "Salvage Title",
   N = "New",

@@ -1,8 +1,10 @@
 import React from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styled from "styled-components";
+
 import { defaultTheme } from "../theme";
 import { Button } from "./styled";
+
 interface Props {
   fav: boolean;
   onClick: () => void;
