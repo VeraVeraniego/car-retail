@@ -34,7 +34,7 @@ const WatchIcon = styled(AiOutlineEye)`
 const UnwatchIcon = styled(AiOutlineEyeInvisible)`
   font-size: 16px;
 `;
-const FavButton = styled(Button)`
+const FavButton = styled(Button)<{ fav?: boolean }>`
   line-height: 12px;
   display: flex;
   justify-content: space-evenly;

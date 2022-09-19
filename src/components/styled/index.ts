@@ -59,7 +59,7 @@ export const Form = styled.form`
   justify-content: flex-start;
   border-radius: 8px;
 `;
-export const Button = styled.button<{ fav?: boolean }>`
+export const Button = styled.button`
   font-size: 12px;
   line-height: 15px;
   font-weight: 400;
