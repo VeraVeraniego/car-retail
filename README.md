@@ -19,7 +19,7 @@ By the other hand if you want to **install** this project you can **clone** this
 ![Publish Car Page](https://github.com/VeraVeraniego/car-retail/blob/develop/public/screenshots/form-page.png)
 
 ## Validations and Notifications Screenshots
-#### Failed to Login
+#### Failed to Login (No Ethernet)
 ![Failed to Login](https://github.com/VeraVeraniego/car-retail/blob/develop/public/screenshots/val-error-logging-in.png)
 #### Failed to Load Cars
 ![Failed to Load Cars](https://github.com/VeraVeraniego/car-retail/blob/develop/public/screenshots/val-error-loading-cars-data.png)
