@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { MdSearch } from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { defaultTheme } from "../theme";
+import { URL_PARAMS } from "../utils/constants";
 import { ButtonOnHoverOppacity, Form, Input } from "./styled";
 
 export const CarSearchForm = ({ searchInInventory }: any) => {
   const [searchInput, setSearchInput] = useState<string>("");
+  const [search, setSearch] = useSearchParams();
+  const searchInUrl = search.get(URL_PARAMS.SEARCH);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -17,6 +21,7 @@ export const CarSearchForm = ({ searchInInventory }: any) => {
     <SearchForm onSubmit={(e) => handleSubmit(e)}>
       <SearchVector />
       <SearchInput
+        defaultValue={searchInUrl as string}
         placeholder="Search"
         onChange={(e) => setSearchInput(e.target.value)}
       ></SearchInput>
