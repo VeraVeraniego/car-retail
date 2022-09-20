@@ -45,7 +45,7 @@ const VALIDATION_MESSAGES = {
   MODEL: "Select your car's Model",
   YEAR: "Enter your car's fabrication year",
   CITY: "Select your car's city of procedence",
-  VIN: "Enter your Vehicle's Vehicle Identification Number",
+  VIN: "Enter your Vehicle's Identification Number",
   COLOR: "Select your car's color",
   CONDITION: "Pick your car's condition",
   SALE_DATE: "Select when you want to sell your car",
