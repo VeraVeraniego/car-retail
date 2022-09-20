@@ -51,8 +51,8 @@ export const LoginForm = () => {
 
     if (resp?.data?.users?.length === 0) setErrorMessage("Not Allowed");
     else {
-      if (error) setErrorMessage(`Error: ${error.message}`);
-      else setErrorMessage("Something went wrong.");
+      if (error) console.error(error.message);
+      else setErrorMessage("Couldn't login, try again later.");
     }
     return;
 
