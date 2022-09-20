@@ -6,7 +6,6 @@ export interface IUserContext {
   loggedUser: UserState;
   setLoggedUser: React.Dispatch<React.SetStateAction<UserState>>;
 }
-// const [loggedUser, setLoggedUser] = useLocalStorage(STORAGE_KEY.USER, "");
 const contextInitializer = {
   loggedUser: null,
   setLoggedUser: () => {},

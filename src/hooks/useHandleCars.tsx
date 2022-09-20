@@ -10,8 +10,7 @@ import {
   orderVariables,
   queryUserCarVariables,
   searchByBatchVariables,
-  searchByTitleVariables,
-  searchByVINVariables,
+  searchByVinAndTitleVariables,
 } from "../graphql/variables";
 import { CarRowInfo } from "../interfaces/Car";
 import {
@@ -21,8 +20,8 @@ import {
 } from "../utils/CarAdapter.util";
 import { URL_PARAMS } from "../utils/constants";
 
-function isUUID(text: string) {
-  return text.match(
+function isUUID(text: string | null) {
+  return text?.match(
     /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
   );
 }
@@ -34,7 +33,9 @@ export const useHandleCars = (key: Key) => {
   const sortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT) as Order_By;
   const searchInUrl = search.get(URL_PARAMS.SEARCH);
   const { loggedUser } = useContext(UserContext);
-  const [getCars, { data, error, loading, refetch }] = useLazyQuery(GET_CARS);
+  const [getCars, { data, error, loading, refetch }] = useLazyQuery(GET_CARS, {
+    fetchPolicy: "cache-and-network",
+  });
 
   const { data: userCarsData } = useQuery(GET_USER_CARS, {
     variables: queryUserCarVariables(loggedUser),
@@ -43,13 +44,20 @@ export const useHandleCars = (key: Key) => {
 
   useEffect(() => {
     if (!data || !userCarsData) {
-      if (!loggedUser) {
-        getCars({ variables: fetchVariables(sortInUrl, searchInUrl) });
-      } else {
-        getCars({
-          variables: fetchVariables(sortInUrl, searchInUrl),
-        });
+      let filterQuery: Record<string, unknown>;
+      if (!searchInUrl && !sortInUrl) {
+        getCars();
+        return;
       }
+      if (isUUID(searchInUrl))
+        filterQuery = searchByBatchVariables(searchInUrl!);
+      else filterQuery = searchByVinAndTitleVariables(searchInUrl!);
+      getCars({
+        variables: {
+          ...orderVariables(sortInUrl),
+          ...filterQuery,
+        },
+      });
       return;
     }
     if (key === "favorites") {
@@ -90,23 +98,22 @@ export const useHandleCars = (key: Key) => {
   }
 
   async function searchInInventory(searchText: string) {
-    search.set(URL_PARAMS.SEARCH, searchText);
-    setSearch(search);
+    let filterQuery: Record<string, unknown>;
     if (!searchText) {
       await getCars();
       return;
     }
     if (isUUID(searchText)) {
-      await refetch(searchByBatchVariables(searchText));
-      return;
+      filterQuery = searchByBatchVariables(searchText);
     } else {
-      const titleResponse = await refetch(searchByTitleVariables(searchText));
-      if (titleResponse.data?.cars.length) return;
-      else {
-        const vinResponse = await refetch(searchByVINVariables(searchText));
-        if (vinResponse.data?.cars.length) return;
-        else return;
-      }
+      filterQuery = searchByVinAndTitleVariables(searchText);
+    }
+    try {
+      // DEBUG: Why line below won't work with a lazy function call?
+      await refetch(filterQuery);
+    } catch (error) {
+      const err = error as Error;
+      console.error(err.message);
     }
   }
   return { data: { cars, error, loading }, toggleOrder, searchInInventory };

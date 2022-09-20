@@ -12,39 +12,25 @@ export function orderVariables(order: Order_By | null) {
   };
 }
 
-export function fetchVariables(order: Order_By | null, search: string | null) {
+export function searchByVinAndTitleVariables(searchText: string) {
   return {
-    orderBy: [
-      {
-        sale_date: order,
-      },
-    ],
     where: {
-      title: {
-        _ilike: search ? `%${search}%` : "%%",
-      },
+      _or: [
+        {
+          title: {
+            _iregex: searchText,
+          },
+        },
+        {
+          vin: {
+            _ilike: searchText,
+          },
+        },
+      ],
     },
   };
 }
 
-export function searchByTitleVariables(title: string) {
-  return {
-    where: {
-      title: {
-        _ilike: `%${title}%`,
-      },
-    },
-  };
-}
-export function searchByVINVariables(vin: string) {
-  return {
-    where: {
-      vin: {
-        _eq: vin,
-      },
-    },
-  };
-}
 export function searchByBatchVariables(batch: string) {
   return {
     where: {
@@ -54,6 +40,7 @@ export function searchByBatchVariables(batch: string) {
     },
   };
 }
+
 export function modelsbyBrandIdVariables(brandId: string | number) {
   return {
     where: {
@@ -63,6 +50,7 @@ export function modelsbyBrandIdVariables(brandId: string | number) {
     },
   };
 }
+
 export function userCarVariables(userId: number, carId: number | string) {
   return { car_id: carId, user_id: userId };
 }
@@ -80,6 +68,7 @@ export function queryUserCarVariables(user: UserState) {
     },
   };
 }
+
 export function deleteCarVariables(userId: number, carId: number | string) {
   return {
     where: {
