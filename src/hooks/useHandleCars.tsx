@@ -6,7 +6,6 @@ import { UserContext } from "../contexts/UserContext";
 import { Cars, Order_By, User_Cars } from "../graphql/generated/graphql";
 import { GET_CARS, GET_USER_CARS } from "../graphql/queries";
 import {
-  fetchVariables,
   orderVariables,
   queryUserCarVariables,
   searchByBatchVariables,
