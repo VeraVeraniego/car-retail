@@ -21,6 +21,7 @@
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "block-spacing": ["error", "always"],
-    "space-before-blocks": "error"
+    "space-before-blocks": "error",
+    "react/react-in-jsx-scope": "off"
   }
 }
