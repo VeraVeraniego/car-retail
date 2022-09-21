@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { InputStyle } from "../../components/styled";
+import { defaultTheme } from "../../theme";
 
-import { defaultTheme } from "../theme";
-import { InputStyle } from "./styled";
 
 type MapElement = { id: number; name: string };
 interface State extends MapElement {
