@@ -70,8 +70,7 @@ export const LoginForm = () => {
       <LoginH1>WELCOME!</LoginH1>
       <EmailInput
         type="text"
-        name="username"
-        placeholder="username"
+        placeholder="Email"
         disabled={loading}
         onChange={handleChange}
       />
