@@ -4,13 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
-import {
-  useCreateCarMutation,
-  useFormDataQuery,
-  useModelsLazyQuery,
-} from "../graphql/generated/graphql";
-import { modelsbyBrandIdVariables } from "../graphql/variables";
-import { GlobalStyle, defaultTheme } from "../theme";
+
 import { ConditionFieldset } from "./ConditionFieldset";
 import { FormSelectInput } from "./FormSelectInput.component";
 import {
@@ -23,8 +17,11 @@ import {
   InputStyle,
   P,
   ValidationText,
-} from "./styled";
-import Loader from "./styled/Loader.component";
+} from "../../components/styled";
+import Loader from "../../components/styled/Loader.component";
+import { useCreateCarMutation, useFormDataQuery, useModelsLazyQuery } from "../../graphql/generated/graphql";
+import { modelsbyBrandIdVariables } from "../../graphql/variables";
+import { defaultTheme, GlobalStyle } from "../../theme";
 
 interface FormValues {
   brand_id: number;

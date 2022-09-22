@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { PublishCarForm } from "../../components/PublishCarForm.component";
 import { FlexColumn } from "../../components/styled";
+import { PublishCarForm } from "./PublishCarForm.component";
 
 export const PublishCar = () => {
   return (
