@@ -57,7 +57,7 @@ export const useHandleCars = (key: Key) => {
           ...filterQuery,
         },
       });
-      console.log({
+      console.info({
         variables: {
           ...orderVariables(sortInUrl),
           ...filterQuery,
