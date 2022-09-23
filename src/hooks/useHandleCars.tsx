@@ -57,6 +57,12 @@ export const useHandleCars = (key: Key) => {
           ...filterQuery,
         },
       });
+      console.info({
+        variables: {
+          ...orderVariables(sortInUrl),
+          ...filterQuery,
+        },
+      });
       return;
     }
     if (key === "favorites") {
