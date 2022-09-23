@@ -63,7 +63,10 @@ export const useHandleCars = (key: Key) => {
           ...filterQuery,
         },
       });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 98c5414 (feat: adding test files and tests)
       return;
     }
     if (key === "favorites") {
