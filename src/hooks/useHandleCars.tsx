@@ -50,13 +50,20 @@ export const useHandleCars = (key: Key) => {
       }
       if (isUUID(searchInUrl))
         filterQuery = searchByBatchVariables(searchInUrl!);
-      else filterQuery = searchByVinAndTitleVariables(searchInUrl!);
+      else filterQuery = searchByVinAndTitleVariables(searchInUrl ?? "");
       getCars({
         variables: {
           ...orderVariables(sortInUrl),
           ...filterQuery,
         },
       });
+      console.log({
+        variables: {
+          ...orderVariables(sortInUrl),
+          ...filterQuery,
+        },
+      });
+
       return;
     }
     if (key === "favorites") {
