@@ -10,24 +10,29 @@ interface Props {
   onClick: () => void;
   loading: boolean;
 }
+
 export const FavoriteButton = ({ fav, onClick, loading }: Props) => {
-  return (
-    <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
-      {loading ? (
-        "Loading..."
-      ) : !fav ? (
-        <>
-          <WatchIcon />
-          Watch
-        </>
-      ) : (
-        <>
-          <UnwatchIcon />
-          Unwatch
-        </>
-      )}
-    </FavButton>
-  );
+  if (loading)
+    return (
+      <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
+        Loading...
+      </FavButton>
+    );
+
+  if (fav)
+    return (
+      <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
+        <UnwatchIcon />
+        Unwatch
+      </FavButton>
+    );
+  else
+    return (
+      <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
+        <WatchIcon />
+        Watch
+      </FavButton>
+    );
 };
 
 const WatchIcon = styled(AiOutlineEye)`
