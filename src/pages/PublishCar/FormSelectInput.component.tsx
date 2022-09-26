@@ -1,12 +1,23 @@
 import React from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "styled-components";
+
 import { InputStyle } from "../../components/styled";
 import { defaultTheme } from "../../theme";
-
 
 type MapElement = { id: number; name: string };
 interface State extends MapElement {
   cities: Array<MapElement>;
+}
+interface Props {
+  label: string;
+  register: UseFormRegisterReturn;
+  loading: boolean;
+  onFocus?: React.FocusEventHandler<HTMLSelectElement>;
+  onBlur?: React.FocusEventHandler<HTMLSelectElement>;
+  onChange?: (e: React.ChangeEvent) => void;
+  data?: Array<any>;
+  disabled?: boolean;
 }
 export const FormSelectInput = ({
   label,
@@ -17,16 +28,7 @@ export const FormSelectInput = ({
   loading,
   data,
   disabled,
-}: {
-  label: string;
-  register: any;
-  onFocus?: any;
-  onBlur?: any;
-  onChange?: (e: React.ChangeEvent) => void;
-  loading: boolean;
-  data: any;
-  disabled?: boolean;
-}) => {
+}: Props) => {
   return (
     <Select
       {...register}

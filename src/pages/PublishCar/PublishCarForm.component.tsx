@@ -22,24 +22,11 @@ import {
   useModelsLazyQuery,
 } from "../../graphql/generated/graphql";
 import { modelsbyBrandIdVariables } from "../../graphql/variables";
+import { FormValues } from "../../interfaces/PublishCarForm";
 import { GlobalStyle, defaultTheme } from "../../theme";
 import { ConditionFieldset } from "./ConditionFieldset";
 import { FormSelectInput } from "./FormSelectInput.component";
 
-interface FormValues {
-  brand_id: number;
-  model_id?: number;
-  year?: number;
-  state_id?: number;
-  city_id?: number;
-  vin?: string;
-  color_id?: number;
-  odometer: number;
-  condition: string;
-  sale_date: string;
-  price: number;
-  title?: string;
-}
 const VALIDATION_MESSAGES = {
   BRAND: "Select your car's Brand",
   MODEL: "Select your car's Model",
