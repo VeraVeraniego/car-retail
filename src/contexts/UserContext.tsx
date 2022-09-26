@@ -4,7 +4,7 @@ import { UserState } from "../interfaces/User";
 
 export interface IUserContext {
   loggedUser: UserState;
-  setLoggedUser: React.Dispatch<React.SetStateAction<UserState>>;
+  setLoggedUser?: React.Dispatch<React.SetStateAction<UserState>>;
 }
 const contextInitializer = {
   loggedUser: null,

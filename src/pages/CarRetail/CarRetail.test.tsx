@@ -1,14 +1,20 @@
 import { MockedProvider } from "@apollo/client/testing";
-import { render, renderHook, screen, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  render,
+  renderHook,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { CarRetail } from ".";
 import { Dashboard } from "../../components/Dashboard.component";
 import { GET_CARS } from "../../graphql/queries";
-import { useHandleCars } from "../../hooks/useHandleCars";
 import { PATHNAME } from "../../utils";
 
+// TODO: DO OR DELETE THIS COMPONENT
 const carsMock = [
   {
     request: {
@@ -76,6 +82,7 @@ const carsMock = [
     },
   },
 ];
+
 describe("Car Retail Test Suite", () => {
   beforeEach(() => {
     render(
@@ -90,9 +97,8 @@ describe("Car Retail Test Suite", () => {
       </MemoryRouter>
     );
   });
+  afterEach(cleanup);
   test("should render cars", async () => {
-    // screen.debug();
-    // const { result } = renderHook(() => useHandleCars("all"));
-    // expect(await screen.findByText("Rav 4 2017")).toBeInTheDocument();
+    screen.debug();
   });
 });

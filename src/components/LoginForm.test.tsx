@@ -67,27 +67,4 @@ describe("LoginForm connection to API", () => {
     await user.click(loginButton);
     expect(screen.getByText(/not allowed/i)).toBeInTheDocument();
   });
-  // test("should navigate to home when user allowed", async () => {
-  //   // const navigate = vi.fn();
-  //   // const spy = vi
-  //   //   .spyOn(ruter, "useNavigate")
-  //   //   .mockImplementation(() => navigate);
-  //   // ///////
-  //   // vi.mock("react-router-dom");
-  //   // (router as any).useNavigate = vi.fn();
-  //   // });
-  //   // const navigate = useNavigate();
-  //   // const spy = vi.spyOn(router, "useNavigate");
-  //   // ////
-  //   const email = screen.getByPlaceholderText(/email/i);
-  //   const loginButton = screen.getByRole("button", { name: /login/i });
-  //   await user.type(email, acceptedEmail);
-  //   await user.click(loginButton);
-
-  //   await waitFor(async () =>
-  //     expect(await screen.findByPlaceholderText(/email/i)).toHaveTextContent(
-  //       /redirecting/i
-  //     )
-  //   );
-  // });
 });
