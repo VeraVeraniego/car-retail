@@ -4,9 +4,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
-
-import { ConditionFieldset } from "./ConditionFieldset";
-import { FormSelectInput } from "./FormSelectInput.component";
 import {
   ButtonOnHoverOppacity,
   CSSFlexCol,
@@ -19,9 +16,15 @@ import {
   ValidationText,
 } from "../../components/styled";
 import Loader from "../../components/styled/Loader.component";
-import { useCreateCarMutation, useFormDataQuery, useModelsLazyQuery } from "../../graphql/generated/graphql";
+import {
+  useCreateCarMutation,
+  useFormDataQuery,
+  useModelsLazyQuery,
+} from "../../graphql/generated/graphql";
 import { modelsbyBrandIdVariables } from "../../graphql/variables";
-import { defaultTheme, GlobalStyle } from "../../theme";
+import { GlobalStyle, defaultTheme } from "../../theme";
+import { ConditionFieldset } from "./ConditionFieldset";
+import { FormSelectInput } from "./FormSelectInput.component";
 
 interface FormValues {
   brand_id: number;
@@ -235,6 +238,7 @@ export const PublishCarForm = () => {
             {...register("sale_date", {
               required: VALIDATION_MESSAGES.SALE_DATE,
             })}
+            data-testid="sale_date"
             type="date"
             min={new Date().toISOString().split("T")[0]}
             max={threeMonthsAhead.toISOString().split("T")[0]}
