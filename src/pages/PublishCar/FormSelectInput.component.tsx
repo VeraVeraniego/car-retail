@@ -29,6 +29,39 @@ export const FormSelectInput = ({
   data,
   disabled,
 }: Props) => {
+  let selectBody: React.ReactElement;
+
+  if (loading) selectBody = <option value="">Loading..</option>;
+
+  if (label === "Cities")
+    selectBody = (
+      <>
+        <option value="">{"Select an option"}</option>
+        {data?.map((state: State) => (
+          <optgroup key={state.id} label={state.name}>
+            {state.cities.map((city: MapElement) => (
+              <option key={city.id} value={city.id}>
+                {city.name}
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </>
+    );
+  else
+    selectBody = (
+      <>
+        <option value="">{loading ? "Loading..." : "Select an option"}</option>
+        <optgroup label={label}>
+          {data?.map((ele: MapElement) => (
+            <option key={ele.id} value={ele.id}>
+              {ele.name}
+            </option>
+          ))}
+        </optgroup>
+      </>
+    );
+
   return (
     <Select
       {...register}
@@ -38,28 +71,7 @@ export const FormSelectInput = ({
       defaultValue=""
       onBlur={onBlur ? onBlur : register.onBlur}
     >
-      <option value="">{loading ? "Loading..." : "Select an option"}</option>
-      {label === "Cities" ? (
-        !loading &&
-        data?.map((state: State) => (
-          <optgroup key={state.id} label={state.name}>
-            {state.cities.map((city: MapElement) => (
-              <option key={city.id} value={city.id}>
-                {city.name}
-              </option>
-            ))}
-          </optgroup>
-        ))
-      ) : (
-        <optgroup label={label}>
-          {!loading &&
-            data?.map((ele: MapElement) => (
-              <option key={ele.id} value={ele.id}>
-                {ele.name}
-              </option>
-            ))}
-        </optgroup>
-      )}
+      {selectBody}
     </Select>
   );
 };
