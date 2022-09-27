@@ -29,14 +29,12 @@ export const OrderBy = ({ toggleOrder }: Props) => {
       <TiArrowUnsorted />
     );
 
-  async function handleClick() {
-    toggleOrder();
-  }
-
   return (
     <H4>
       Order By:
-      <OrderButton onClick={handleClick}>{currentSort}Sale Date</OrderButton>
+      <OrderButton onClick={() => toggleOrder()}>
+        {currentSort}Sale Date
+      </OrderButton>
     </H4>
   );
 };

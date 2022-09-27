@@ -78,10 +78,6 @@ export const PublishCarForm = () => {
     try {
       await createCar({
         variables: { object: data },
-        optimisticResponse: {
-          insert_cars_one: data,
-          __typename: "mutation_root",
-        },
         update(cache, { data }) {
           cache.modify({
             fields: {
@@ -91,6 +87,9 @@ export const PublishCarForm = () => {
               },
             },
           });
+        },
+        onCompleted: () => {
+          toast.success("Successfully added car");
         },
       });
       reset();
@@ -106,11 +105,6 @@ export const PublishCarForm = () => {
   useEffect(() => {
     if (brandId) fetchModels({ variables: modelsbyBrandIdVariables(brandId) });
   }, [brandId]);
-
-  useEffect(() => {
-    if (!mutationReturn) return;
-    toast.success("Successfully added car");
-  }, [mutationReturn]);
 
   const setStateId = () => {
     const stateId = formsData?.states.find((state) =>

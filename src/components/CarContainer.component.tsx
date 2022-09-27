@@ -24,30 +24,22 @@ export const CarContainer = ({ data }: Props) => {
     setRenderedCars(cars);
   }, [cars]);
 
-  const mapCars = () => {
-    if (renderedCars?.length) {
-      return renderedCars?.map((car) => (
-        <CarInfo key={car.vin} car={car} img={`${IMG_URL}/${car.id}/300/200`} />
-      ));
-    } else {
-      return <Empty>There&apos;s nothing to show here!</Empty>;
-    }
-  };
+  if (loading) return <Loader />;
+
+  if (error)
+    return (
+      <ValidationText>Couldn&apos;t load data - Try again later</ValidationText>
+    );
+
+  if (!renderedCars?.length) {
+    return <Empty>There&apos;s nothing to show here!</Empty>;
+  }
 
   return (
     <Container>
-      {loading || error ? (
-        <>
-          {loading && <Loader />}
-          {error && (
-            <ValidationText>
-              Couldn&apos;t load data - Try again later
-            </ValidationText>
-          )}
-        </>
-      ) : (
-        mapCars()
-      )}
+      {renderedCars?.map((car) => (
+        <CarInfo key={car.vin} car={car} img={`${IMG_URL}/${car.id}/300/200`} />
+      ))}
     </Container>
   );
 };

@@ -30,10 +30,7 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (loggedUser) navigate("/", REPLACE);
-    if (!data) return;
-    if (!data?.users.length) {
-      return;
-    }
+    if (!data || !data?.users.length) return;
     setLoggedUser(data?.users[0]);
     navigate("/");
     setUserInStorage(data?.users[0]);
