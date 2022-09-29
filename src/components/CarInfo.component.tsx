@@ -17,7 +17,7 @@ import { FlexColumn, FlexRow, H4, P } from "./styled";
 
 export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
   const { loggedUser } = useContext(UserContext);
-  const [isFav, setIsFavorite] = useState<boolean>(car.isFavorite ?? false);
+  const [isFav, setIsFavorite] = useState<boolean>(car.isFavorite);
   const [createUserCar, { loading: favLoading }] = useMutation(CREATE_USER_CAR);
   const [deleteUserCar, { loading: unfavLoading }] =
     useMutation(DELETE_USER_CAR);
@@ -25,16 +25,16 @@ export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
   const now = new Date();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setIsFavorite(!!car.isFavorite);
-  }, [car.isFavorite]);
+  // useEffect(() => {
+  //   setIsFavorite(!!car.isFavorite);
+  // }, [car.isFavorite]);
 
   async function toggleFavorite() {
     if (!loggedUser) {
       return navigate(PATHNAME.LOGIN);
     }
     try {
-      if (isFav) {
+      if (car.isFavorite) {
         await deleteUserCar({
           variables: deleteCarVariables(loggedUser.id, car.id!),
           update(cache) {
@@ -80,7 +80,7 @@ export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
         <Title>{car.title}</Title>
         <P>{car.batch}</P>
         <FavoriteButton
-          fav={isFav}
+          fav={car.isFavorite}
           onClick={() => toggleFavorite()}
           loading={favLoading || unfavLoading}
         />

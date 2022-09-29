@@ -18,11 +18,6 @@ interface Props {
 
 export const CarContainer = ({ data }: Props) => {
   const { cars, error, loading } = data;
-  const [renderedCars, setRenderedCars] = useState<CarRowInfo[] | null>(null);
-
-  useEffect(() => {
-    setRenderedCars(cars);
-  }, [cars]);
 
   if (loading) return <Loader />;
 
@@ -31,13 +26,13 @@ export const CarContainer = ({ data }: Props) => {
       <ValidationText>Couldn&apos;t load data - Try again later</ValidationText>
     );
 
-  if (!renderedCars?.length) {
+  if (!cars?.length) {
     return <Empty>There&apos;s nothing to show here!</Empty>;
   }
 
   return (
     <Container>
-      {renderedCars?.map((car) => (
+      {cars?.map((car) => (
         <CarInfo key={car.vin} car={car} img={`${IMG_URL}/${car.id}/300/200`} />
       ))}
     </Container>

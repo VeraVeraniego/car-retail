@@ -10,7 +10,7 @@ export interface FiltersState {
 export interface CarsAndFiltersState extends CarsState, FiltersState {}
 export interface CarRowInfo {
   id?: string | number;
-  isFavorite?: boolean;
+  isFavorite: boolean;
   img?: string;
   title: string;
   batch: string;

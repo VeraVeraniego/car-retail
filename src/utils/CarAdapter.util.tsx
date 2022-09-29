@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { Cars, User_Cars } from "../graphql/generated/graphql";
 import { CarRowInfo } from "../interfaces/Car";
 
@@ -24,6 +25,7 @@ export function responseCarToCarComponent(queryCar: Cars) {
     damageType: queryCar.damage_type ? queryCar.damage_type : "",
     saleDate: queryCar.sale_date,
     place: `${queryCar.city.name}-${queryCar.city.state.name}`,
+    isFavorite: false,
   };
   return shapedCar;
 }
@@ -36,10 +38,14 @@ export function adaptResponse(cars: Cars[], userCars: User_Cars[]) {
   });
   return mapped;
 }
+
 export function removeFavorites(cars: CarRowInfo[]) {
-  const cleaned = cars.map(({ isFavorite, ...car }) => car);
+  const cleaned = cars.map((car) => {
+    return { ...car, isFavorite: false };
+  });
   return cleaned;
 }
+
 export function adaptFavorites(cars: Cars[], userCars: User_Cars[]) {
   const filtered = cars.filter((car) => {
     return userCars.find((fav) => car.id === fav.car_id);

@@ -11,27 +11,29 @@ interface Props {
 }
 
 export const FavoriteButton = ({ fav, onClick, loading }: Props) => {
-  if (loading)
-    return (
-      <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
-        Loading...
-      </FavButton>
-    );
+  let buttonContent: React.ReactElement;
+  if (loading) buttonContent = <>Loading...</>;
 
   if (fav)
-    return (
-      <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
+    buttonContent = (
+      <>
         <UnwatchIcon />
         Unwatch
-      </FavButton>
+      </>
     );
   else
-    return (
-      <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
+    buttonContent = (
+      <>
         <WatchIcon />
         Watch
-      </FavButton>
+      </>
     );
+
+  return (
+    <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
+      {buttonContent}
+    </FavButton>
+  );
 };
 
 const WatchIcon = styled(AiOutlineEye)`

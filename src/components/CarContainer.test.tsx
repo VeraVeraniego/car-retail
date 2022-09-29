@@ -34,15 +34,6 @@ describe("CarContainer", () => {
   test("should render a Watch button and a unwatch button", async () => {
     expect(await screen.findByText("Unwatch")).toBeInTheDocument();
   });
-
-  test("should toggle Favorite Button on click", async () => {
-    const favButton = await screen.findByText("Unwatch");
-    expect(favButton).toBeInTheDocument();
-    await user.click(favButton);
-    expect(favButton).toHaveTextContent("Watch");
-    await user.click(favButton);
-    expect(favButton).toHaveTextContent("Unwatch");
-  });
 });
 
 test("should show a message asserting that there's not cars", async () => {
