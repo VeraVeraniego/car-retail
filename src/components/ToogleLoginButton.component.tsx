@@ -26,7 +26,7 @@ export const ToogleLoginButton = () => {
       {loggedUser ? (
         <NavButton onClick={handleLogout}>LOGOUT</NavButton>
       ) : (
-        <NavButton onClick={handleLogin}>LOGIN</NavButton>
+        <NavButton onClick={() => navigate(PATHNAME.LOGIN)}>LOGIN</NavButton>
       )}
     </>
   );

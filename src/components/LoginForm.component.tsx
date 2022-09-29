@@ -31,6 +31,7 @@ export const LoginForm = () => {
   useEffect(() => {
     if (loggedUser) navigate("/", REPLACE);
     if (!data || !data?.users.length) return;
+    // TODO: REPLACE WITH CUSTOMHOOK LOGIN FUNCTION
     setLoggedUser(data?.users[0]);
     navigate("/");
     setUserInStorage(data?.users[0]);
