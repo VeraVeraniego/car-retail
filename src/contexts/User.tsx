@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { toast } from "react-toastify";
 
 import { useLocalStorage } from "../hooks/useLocalStorage";
@@ -15,7 +15,7 @@ interface Props {
   children: React.ReactElement;
 }
 
-export const UserContext = createContext<UserContext | null>(null);
+export const LoggedUserContext = createContext<UserContext | null>(null);
 
 export const UserProvider = ({ children }: Props) => {
   const [userInStorage, setUserInStorage] = useLocalStorage(
@@ -27,11 +27,25 @@ export const UserProvider = ({ children }: Props) => {
     setUserLogged(user);
     setUserInStorage(user);
   };
+
   const logout = () => {
     window.localStorage.clear();
     setUserLogged(null);
     toast.success("Logged out successfully");
   };
+
   const value = { userLogged, login, logout };
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return (
+    <LoggedUserContext.Provider value={value}>
+      {children}
+    </LoggedUserContext.Provider>
+  );
+};
+
+export const useUser = () => {
+  const context = useContext(LoggedUserContext);
+  if (!context) {
+    throw new Error("useUser must be used with in a UserProvider");
+  }
+  return context;
 };

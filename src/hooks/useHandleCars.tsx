@@ -80,14 +80,6 @@ export const useHandleCars = (key: Key) => {
     }
   }, [data, userCarsData]);
 
-  useEffect(() => {
-    if (!data) return;
-    if (!loggedUser) {
-      const removedFavorites = removeFavorites(cars as CarRowInfo[]);
-      setCars(removedFavorites);
-    }
-  }, [loggedUser]);
-
   async function toggleOrder() {
     let orderToSet: Order_By;
     if (sortInUrl === Order_By.Asc) {
