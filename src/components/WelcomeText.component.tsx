@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 
+import { useUser } from "../contexts/User";
 import { UserContext } from "../contexts/UserContext";
 import { defaultTheme } from "../theme";
 
 export const WelcomeText = () => {
-  const { loggedUser } = useContext(UserContext);
+  const { userLogged } = useUser();
   const fullname =
-    loggedUser && loggedUser.first_name + " " + loggedUser.last_name;
+    userLogged && userLogged.first_name + " " + userLogged.last_name;
 
   const userWelcome = (
     <span>
@@ -17,7 +18,7 @@ export const WelcomeText = () => {
 
   const callToLogin = <span>Log in to see your favorite cars!</span>;
 
-  return <Text>{loggedUser ? userWelcome : callToLogin}</Text>;
+  return <Text>{userLogged ? userWelcome : callToLogin}</Text>;
 };
 
 const Text = styled.span`

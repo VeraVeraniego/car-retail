@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { useUser } from "../contexts/User";
 import { UserContext } from "../contexts/UserContext";
 import { VALIDATE_EMAIL } from "../graphql/queries";
 import { useLocalStorage } from "../hooks/useLocalStorage";
@@ -18,7 +19,7 @@ function isValidEmail(email: string) {
 }
 
 export const LoginForm = () => {
-  const { loggedUser, setLoggedUser } = useContext(UserContext);
+  // const { loggedUser, setLoggedUser } = useContext(UserContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [, setUserInStorage] = useLocalStorage(STORAGE_KEY.USER, "");
@@ -27,13 +28,17 @@ export const LoginForm = () => {
     EmailVars
   >(VALIDATE_EMAIL);
   const navigate = useNavigate();
+  const { userLogged, login } = useUser();
 
   useEffect(() => {
-    if (loggedUser) navigate("/", REPLACE);
+    if (userLogged) {
+      navigate("/", REPLACE);
+    }
     if (!data || !data?.users.length) return;
     // TODO: REPLACE WITH CUSTOMHOOK LOGIN FUNCTION
-    setLoggedUser(data?.users[0]);
-    setUserInStorage(data?.users[0]);
+    login(data?.users[0]);
+    // setLoggedUser(data?.users[0]);
+    // setUserInStorage(data?.users[0]);
     navigate("/");
   }, [data]);
 

@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
+import { useUser } from "../contexts/User";
 import { UserContext } from "../contexts/UserContext";
 import { GlobalStyle, defaultTheme } from "../theme";
 import { PATHNAME, REPLACE } from "../utils/constants";
@@ -13,14 +14,14 @@ import { H1, NavButton } from "./styled";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
-  const { loggedUser } = useContext(UserContext);
-
+  // const { loggedUser } = useContext(UserContext);
+  const { userLogged } = useUser();
   return (
     <PageContainer>
       <BarContainer>
         <GlobalStyle />
         <TitleH1>COOLCARS.COM</TitleH1>
-        {loggedUser && (
+        {userLogged && (
           <NavButton onClick={() => navigate(PATHNAME.WATCH_LIST, REPLACE)}>
             FAVORITES
           </NavButton>

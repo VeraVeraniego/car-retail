@@ -11,9 +11,9 @@ const App = () => {
   const [loggedUser, setLoggedUser] = useState<UserState>(storedUser);
 
   return (
-    <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
-      <AppRouter />
-    </UserContext.Provider>
+    // <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
+    <AppRouter />
+    // </UserContext.Provider>
   );
 };
 

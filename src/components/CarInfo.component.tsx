@@ -5,8 +5,9 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
+import { useUser } from "../contexts/User";
 import { UserContext } from "../contexts/UserContext";
-import { User_Cars } from "../graphql/generated/graphql";
+import { User_Cars, useUsersLazyQuery } from "../graphql/generated/graphql";
 import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
 import { deleteCarVariables } from "../graphql/variables";
 import { CarRowInfo } from "../interfaces/Car";
@@ -16,7 +17,8 @@ import { FavoriteButton } from "./FavoriteButton.component";
 import { FlexColumn, FlexRow, H4, P } from "./styled";
 
 export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
-  const { loggedUser } = useContext(UserContext);
+  const { userLogged } = useUser();
+  // const { loggedUser } = useContext(UserContext);
   const [isFav, setIsFavorite] = useState<boolean>(car.isFavorite);
   const [createUserCar, { loading: favLoading }] = useMutation(CREATE_USER_CAR);
   const [deleteUserCar, { loading: unfavLoading }] =
@@ -30,13 +32,13 @@ export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
   // }, [car.isFavorite]);
 
   async function toggleFavorite() {
-    if (!loggedUser) {
+    if (!userLogged) {
       return navigate(PATHNAME.LOGIN);
     }
     try {
       if (car.isFavorite) {
         await deleteUserCar({
-          variables: deleteCarVariables(loggedUser.id, car.id!),
+          variables: deleteCarVariables(userLogged.id, car.id!),
           update(cache) {
             cache.modify({
               fields: {
@@ -52,7 +54,7 @@ export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
         setIsFavorite(false);
       } else {
         await createUserCar({
-          variables: { object: { car_id: car.id, user_id: loggedUser.id } },
+          variables: { object: { car_id: car.id, user_id: userLogged.id } },
           update(cache, { data }) {
             cache.modify({
               fields: {

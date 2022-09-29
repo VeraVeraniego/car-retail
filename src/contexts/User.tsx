@@ -22,7 +22,7 @@ export const UserProvider = ({ children }: Props) => {
     STORAGE_KEY.USER,
     ""
   );
-  const [userLogged, setUserLogged] = useState<UserState>(null);
+  const [userLogged, setUserLogged] = useState<UserState>(userInStorage);
   const login = (user: User) => {
     setUserLogged(user);
     setUserInStorage(user);
