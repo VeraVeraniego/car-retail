@@ -6,9 +6,7 @@ import { InputStyle } from "../../components/styled";
 import { defaultTheme } from "../../theme";
 
 type MapElement = { id: number; name: string };
-interface State extends MapElement {
-  cities: Array<MapElement>;
-}
+
 interface Props {
   label: string;
   register: UseFormRegisterReturn;
@@ -17,7 +15,12 @@ interface Props {
   onBlur?: React.FocusEventHandler<HTMLSelectElement>;
   onChange?: (e: React.ChangeEvent) => void;
   data?: Array<any>;
+  nestedData?: "cities";
   disabled?: boolean;
+}
+
+interface State extends MapElement {
+  cities: Array<MapElement>;
 }
 export const FormSelectInput = ({
   label,
@@ -27,19 +30,20 @@ export const FormSelectInput = ({
   onChange,
   loading,
   data,
+  nestedData = undefined,
   disabled,
 }: Props) => {
   let selectBody: React.ReactElement;
 
   if (loading) selectBody = <option value="">Loading..</option>;
 
-  if (label === "Cities")
+  if (nestedData) {
     selectBody = (
       <>
-        <option value="">{"Select an option"}</option>
+        <option value="">Select an option</option>
         {data?.map((state: State) => (
           <optgroup key={state.id} label={state.name}>
-            {state.cities.map((city: MapElement) => (
+            {state[nestedData].map((city: MapElement) => (
               <option key={city.id} value={city.id}>
                 {city.name}
               </option>
@@ -48,7 +52,7 @@ export const FormSelectInput = ({
         ))}
       </>
     );
-  else
+  } else {
     selectBody = (
       <>
         <option value="">{loading ? "Loading..." : "Select an option"}</option>
@@ -61,6 +65,7 @@ export const FormSelectInput = ({
         </optgroup>
       </>
     );
+  }
 
   return (
     <Select

@@ -176,6 +176,7 @@ export const PublishCarForm = () => {
             })}
             loading={loading}
             data={formsData?.states}
+            nestedData="cities"
             onBlur={() => setStateId()}
           />
 
