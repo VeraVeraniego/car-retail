@@ -12,7 +12,6 @@ interface Props {
 
 export const FavoriteButton = ({ fav, onClick, loading }: Props) => {
   let buttonContent: React.ReactElement;
-  if (loading) buttonContent = <>Loading...</>;
 
   if (fav)
     buttonContent = (
@@ -29,6 +28,7 @@ export const FavoriteButton = ({ fav, onClick, loading }: Props) => {
       </>
     );
 
+  if (loading) buttonContent = <>Loading...</>;
   return (
     <FavButton fav={fav} disabled={loading} onClick={() => onClick()}>
       {buttonContent}

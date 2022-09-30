@@ -1,9 +1,8 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { useUser } from "../contexts/User";
-import { UserContext } from "../contexts/UserContext";
 import { Cars, Order_By, User_Cars } from "../graphql/generated/graphql";
 import { GET_CARS, GET_USER_CARS } from "../graphql/queries";
 import {
@@ -13,11 +12,7 @@ import {
   searchByVinAndTitleVariables,
 } from "../graphql/variables";
 import { CarRowInfo } from "../interfaces/Car";
-import {
-  adaptFavorites,
-  adaptResponse,
-  removeFavorites,
-} from "../utils/CarAdapter.util";
+import { adaptFavorites, adaptResponse } from "../utils/CarAdapter.util";
 import { URL_PARAMS } from "../utils/constants";
 
 function isUUID(text: string | null) {
@@ -32,7 +27,6 @@ export const useHandleCars = (key: Key) => {
   const [search, setSearch] = useSearchParams();
   const sortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT) as Order_By;
   const searchInUrl = search.get(URL_PARAMS.SEARCH);
-  // const { loggedUser: userLogged } = useContext(UserContext);
   const { userLogged } = useUser();
   const [getCars, { data, error, loading, refetch }] = useLazyQuery(GET_CARS, {
     fetchPolicy: "cache-and-network",

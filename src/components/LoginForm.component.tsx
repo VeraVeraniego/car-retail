@@ -1,15 +1,12 @@
 import { useLazyQuery } from "@apollo/client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { useUser } from "../contexts/User";
-import { UserContext } from "../contexts/UserContext";
 import { VALIDATE_EMAIL } from "../graphql/queries";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { EmailVars, Response } from "../interfaces/User";
 import { GlobalStyle } from "../theme";
-import { REPLACE, STORAGE_KEY } from "../utils/constants";
 import { Button, Form, H1, Input, ValidationText } from "./styled";
 
 function isValidEmail(email: string) {
@@ -19,10 +16,8 @@ function isValidEmail(email: string) {
 }
 
 export const LoginForm = () => {
-  // const { loggedUser, setLoggedUser } = useContext(UserContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailInput, setEmailInput] = useState("");
-  const [, setUserInStorage] = useLocalStorage(STORAGE_KEY.USER, "");
   const [validateEmail, { loading, error, data }] = useLazyQuery<
     Response,
     EmailVars
@@ -32,13 +27,10 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (userLogged) {
-      navigate("/", REPLACE);
+      navigate("/");
     }
     if (!data || !data?.users.length) return;
-    // TODO: REPLACE WITH CUSTOMHOOK LOGIN FUNCTION
     login(data?.users[0]);
-    // setLoggedUser(data?.users[0]);
-    // setUserInStorage(data?.users[0]);
     navigate("/");
   }, [data]);
 

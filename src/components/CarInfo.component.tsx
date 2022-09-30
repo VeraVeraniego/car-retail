@@ -1,13 +1,11 @@
 import { useMutation } from "@apollo/client";
-import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 
 import { useUser } from "../contexts/User";
-import { UserContext } from "../contexts/UserContext";
-import { User_Cars, useUsersLazyQuery } from "../graphql/generated/graphql";
+import { User_Cars } from "../graphql/generated/graphql";
 import { CREATE_USER_CAR, DELETE_USER_CAR } from "../graphql/mutations";
 import { deleteCarVariables } from "../graphql/variables";
 import { CarRowInfo } from "../interfaces/Car";
@@ -18,18 +16,12 @@ import { FlexColumn, FlexRow, H4, P } from "./styled";
 
 export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
   const { userLogged } = useUser();
-  // const { loggedUser } = useContext(UserContext);
-  const [isFav, setIsFavorite] = useState<boolean>(car.isFavorite);
   const [createUserCar, { loading: favLoading }] = useMutation(CREATE_USER_CAR);
   const [deleteUserCar, { loading: unfavLoading }] =
     useMutation(DELETE_USER_CAR);
 
   const now = new Date();
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   setIsFavorite(!!car.isFavorite);
-  // }, [car.isFavorite]);
 
   async function toggleFavorite() {
     if (!userLogged) {
@@ -51,7 +43,6 @@ export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
             });
           },
         });
-        setIsFavorite(false);
       } else {
         await createUserCar({
           variables: { object: { car_id: car.id, user_id: userLogged.id } },
@@ -66,7 +57,6 @@ export const CarInfo = ({ img, car }: { img: string; car: CarRowInfo }) => {
             });
           },
         });
-        setIsFavorite(true);
       }
     } catch (error) {
       const err = error as Error;

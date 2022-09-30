@@ -15,7 +15,7 @@ interface Props {
   children: React.ReactElement;
 }
 
-export const LoggedUserContext = createContext<UserContext | null>(null);
+export const UserContext = createContext<UserContext | null>(null);
 
 export const UserProvider = ({ children }: Props) => {
   const [userInStorage, setUserInStorage] = useLocalStorage(
@@ -23,6 +23,7 @@ export const UserProvider = ({ children }: Props) => {
     ""
   );
   const [userLogged, setUserLogged] = useState<UserState>(userInStorage);
+
   const login = (user: User) => {
     setUserLogged(user);
     setUserInStorage(user);
@@ -35,15 +36,11 @@ export const UserProvider = ({ children }: Props) => {
   };
 
   const value = { userLogged, login, logout };
-  return (
-    <LoggedUserContext.Provider value={value}>
-      {children}
-    </LoggedUserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => {
-  const context = useContext(LoggedUserContext);
+  const context = useContext(UserContext);
   if (!context) {
     throw new Error("useUser must be used with in a UserProvider");
   }
