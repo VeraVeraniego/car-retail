@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -28,7 +28,7 @@ export const useHandleCars = (key: Key) => {
   const sortInUrl = search.get(URL_PARAMS.SALE_DATE_SORT) as Order_By;
   const searchInUrl = search.get(URL_PARAMS.SEARCH);
   const { userLogged } = useUser();
-  const [getCars, { data, error, loading, refetch }] = useLazyQuery(GET_CARS, {
+  const { data, error, loading, refetch } = useQuery(GET_CARS, {
     fetchPolicy: "cache-and-network",
   });
 
@@ -41,13 +41,13 @@ export const useHandleCars = (key: Key) => {
     if (!data || !userCarsData) {
       let filterQuery: Record<string, unknown>;
       if (!searchInUrl && !sortInUrl) {
-        getCars();
+        refetch();
         return;
       }
       if (isUUID(searchInUrl))
         filterQuery = searchByBatchVariables(searchInUrl!);
       else filterQuery = searchByVinAndTitleVariables(searchInUrl ?? "");
-      getCars({
+      refetch({
         variables: {
           ...orderVariables(sortInUrl),
           ...filterQuery,
@@ -93,7 +93,7 @@ export const useHandleCars = (key: Key) => {
   async function searchInInventory(searchText: string) {
     let filterQuery: Record<string, unknown>;
     if (!searchText) {
-      await getCars();
+      await refetch(searchByVinAndTitleVariables(""));
       return;
     }
     if (isUUID(searchText)) {
@@ -102,7 +102,6 @@ export const useHandleCars = (key: Key) => {
       filterQuery = searchByVinAndTitleVariables(searchText);
     }
     try {
-      // DEBUG: Why line below won't work with a lazy function call?
       await refetch(filterQuery);
     } catch (error) {
       const err = error as Error;
