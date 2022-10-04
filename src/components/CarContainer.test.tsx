@@ -3,7 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 
-import { UserContext } from "../contexts/UserContext";
+import { UserProvider } from "../contexts/User";
 import {
   createDeleteMocks,
   dataMock,
@@ -16,13 +16,14 @@ describe("CarContainer", () => {
   const user = userEvent.setup();
   beforeEach(() => {
     render(
-      <UserContext.Provider value={mockUser}>
-        <MemoryRouter>
-          <MockedProvider mocks={createDeleteMocks} addTypename={false}>
+      // <UserContext.Provider value={mockUser}>
+      <MemoryRouter>
+        <MockedProvider mocks={createDeleteMocks} addTypename={false}>
+          <UserProvider>
             <CarContainer data={dataMock} />
-          </MockedProvider>
-        </MemoryRouter>
-      </UserContext.Provider>
+          </UserProvider>
+        </MockedProvider>
+      </MemoryRouter>
     );
   });
 
@@ -40,7 +41,9 @@ test("should show a message asserting that there's not cars", async () => {
   render(
     <MemoryRouter>
       <MockedProvider>
-        <CarContainer data={emptydataMock} />
+        <UserProvider>
+          <CarContainer data={emptydataMock} />
+        </UserProvider>
       </MockedProvider>
     </MemoryRouter>
   );

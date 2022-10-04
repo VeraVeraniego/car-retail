@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 // import * as router from "react-router-dom";
 import { MemoryRouter } from "react-router-dom";
 
+import { UserProvider } from "../contexts/User";
 import {
   acceptedEmail,
   rejectedEmail,
@@ -18,7 +19,9 @@ describe("LoginForm basic rendering", () => {
     render(
       <MemoryRouter>
         <MockedProvider>
-          <LoginForm />
+          <UserProvider>
+            <LoginForm />
+          </UserProvider>
         </MockedProvider>
       </MemoryRouter>
     );
@@ -50,7 +53,9 @@ describe("LoginForm connection to API", () => {
     render(
       <MemoryRouter>
         <MockedProvider mocks={validationMock} addTypename={false}>
-          <LoginForm />
+          <UserProvider>
+            <LoginForm />
+          </UserProvider>
         </MockedProvider>
       </MemoryRouter>
     );

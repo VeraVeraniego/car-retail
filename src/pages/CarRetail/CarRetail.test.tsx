@@ -1,12 +1,11 @@
 import { MockedProvider } from "@apollo/client/testing";
-import { render, renderHook, screen, waitFor } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { render } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { CarRetail } from ".";
 import { Dashboard } from "../../components/Dashboard.component";
+import { UserProvider } from "../../contexts/User";
 import { GET_CARS } from "../../graphql/queries";
-import { useHandleCars } from "../../hooks/useHandleCars";
 import { PATHNAME } from "../../utils";
 
 const carsMock = [
@@ -81,11 +80,13 @@ describe("Car Retail Test Suite", () => {
     render(
       <MemoryRouter>
         <MockedProvider mocks={carsMock} addTypename={false}>
-          <Routes>
-            <Route path="/" element={<Dashboard />}>
-              <Route path={PATHNAME.RETAIL_CARS} element={<CarRetail />} />
-            </Route>
-          </Routes>
+          <UserProvider>
+            <Routes>
+              <Route path="/" element={<Dashboard />}>
+                <Route path={PATHNAME.RETAIL_CARS} element={<CarRetail />} />
+              </Route>
+            </Routes>
+          </UserProvider>
         </MockedProvider>
       </MemoryRouter>
     );
