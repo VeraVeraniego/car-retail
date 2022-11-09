@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { UserProvider } from "./contexts/User";
+import { AppRouter } from "./routes/AppRouter";
 
-function App() {
-  return <div></div>;
-}
+const App = () => {
+  return (
+    <UserProvider>
+      <AppRouter />
+    </UserProvider>
+  );
+};
 
 export default App;
